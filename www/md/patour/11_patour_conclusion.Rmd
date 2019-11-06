@@ -1,0 +1,27 @@
+---
+output:
+  html_fragment  
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+
+
+#### Safeguarding the Resilience of Protected Areas under Climate Change: the 4 Cs of Cores, Corridors, Carnivores, and Climate Resilience
+The Yellowstone-to-Yukon (Y2Y) conservation initiative provides an example of how practitioners can use conceptual rules based on broad-scale spatial patterns and drivers of climate-change-related threats to inform regional conservation priorities under climate change. There are many stages at which information on climate exposure and resilience can be incorporated into the planning process, as shown in the figure below from [Morelli et al. 2016](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0159909).
+```{r, out.width = "60%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/morellietal2016b.png",dpi=NA)
+```
+<br>
+Although many climate refugia in North America are located in protected landscapes, a focus on intact landscapes alone will not in itself protect areas important for landscape-level climate resilience. Restoration of degraded areas, often at low elevations, will be needed. 
+Climate resilience metrics such as we describe in this tour can be key information sources for prioritizing areas for protection, especially in montane boreal landscapes such as northern Y2Y. The intensity of climate exposure projected to occur in the boreal region underlines the value of expansion of the protected area network there. Many of these areas are currently the focus of conservation planning processes involving the Canadian government and indigenous First Nations. 
+<br>
+In more developed landscapes with fewer remaining options for new protected areas, climate resilience can nonetheless be enhanced by expanding existing protection to better represent elevational, latitudinal, and ecosystem gradients. The climate exposure data reviewed above suggest several rules of thumb regarding the vulnerability of existing protected areas based on their landscape position. Alpine and upper montane areas may experience high levels of climate exposure and loss of native species, with montane areas at the southern end of major ranges especially impacted. However, these areas in turn will provide refugia for foothill and lowland species shifting upward in elevation. The eastern slopes of the Rocky Mountains provide an example of a key area for north-south climate connectivity, which is poorly represented within existing parks. Additionally, interior basins of western North America are projected to experience high climate exposure and velocity, and merit greater conservation attention. 
+```{r, out.width = "70%",out.extra='style="float:right; padding:20px"',fig.cap="",echo=FALSE}
+knitr::include_graphics("../img/gillison.jpg",dpi=NA)
+```
+<br>
+<br>
+The figure to the right from [Gillison et al. 2013](https://www.sciencedirect.com/science/article/abs/pii/S0169534712002698) provides suggestions for how management strategies might vary between protected areas with differing climate-change-related threat levels. For more information on the metrics considered here, see the Climate Resilience Data Viewer's Climate Metrics Tour and Climate Metrics Explorer. To explore climate resilience data for protected areas and other management units throughout North America, see the Protected Area Explorer. All spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org).
+

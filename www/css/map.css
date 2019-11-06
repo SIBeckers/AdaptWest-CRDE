@@ -1,0 +1,49 @@
+/* map css */
+
+.ddownBttn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  left: auto;
+  bottom: auto;
+}
+
+#global {
+  width: 44px;
+  height: 44px;
+  line-height: 40px;
+  padding-top: 4px;
+  padding-left: 8px;
+}
+#locate {
+  width: 44px;
+  height: 44px;
+  line-height: 40px;
+  padding-top: 4px;
+  padding-left: 8px;
+
+}
+
+.leaflet-bar:nth-child(n+2){
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  top: 10px;
+}
+
+.leaflet-control-zoom {
+  width: 44px;
+  top: 12px;
+}
+
+.leaflet-control-layers {
+  top: 10px;
+}
+
+.leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  font-size: 30px;
+  font-weight: 900;
+  padding-top: 8px;
+}

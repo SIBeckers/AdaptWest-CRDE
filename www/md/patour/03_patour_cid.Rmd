@@ -1,0 +1,25 @@
+---
+output:
+  html_fragment
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **2. Central Idaho's Salmon-Selway wilderness complex**
+
+Central Idaho's River-of-No-Return (RONR) Wilderness (established in 1980) and Selway-Bitterroot Wilderness (established 1964) together form a wilderness complex of 15,000 sq. km. in size, the largest wild area in the United States outside of Alaska.
+
+```{r, out.width = c("34.8%","39%"),out.height="70%",fig.align="center",fig.show='hold',fig.cap="Idaho's Salmon River and Selway Bitterroot Wilderness. Photo credit: Wikimedia",echo=FALSE}
+knitr::include_graphics(c("../img/2_Salmon_River_Idaho.jpg","../img/2_SelwayBitterroot.jpg"))
+```
+In the starplot, we can see that the Salmon-Selway region shows less threat in terms of forward climatic velocity than does the GYE, because it is less isolated, being better connected to other protected area to the north and south than is the GYE. The Salmon-Selway also shows higher intactness (less fragmentation by development) than does the GYE, and scores higher in terms of the amount of aboveground carbon it protects. However, although the GYE's forests have less carbon and biomass, they do provide somewhat greater value as refugia for tree species than does the Salmon-Selway.
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/2_starplot.jpg",dpi=NA)
+```
+
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>
+

@@ -1,0 +1,29 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### AdaptWest Climate Metrics Tour
+### Intactness
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+The map on the right shows intactness (the inverse of human land use intensity). Red shades represent high values, and blue shades represent low values of the metric. The spatial data can be downloaded [here](https://figshare.com/articles/Global_Human_Modification/7283087).
+<br>
+
+</div>
+The effects of climate stressors on natural systems interact with and can be magnified by other human-caused stressors such as land conversion and development. Human modification of the landscape shows a strong latitudinal gradient in North America, increasing in intensity from the boreal region to mid-latitudes. In much of the boreal region, development corridors are embedded within a more intact matrix. In mid-latitude regions, large protected area complexes and other wild areas appear as islands within a more developed matrix. The intensity of anthropogenic stressors has been termed the **human footprint** or **human modification index** ([Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549)). We represent this metric here as intactness, the inverse of anthropogenic landuse intensity, so that, as with other climate resilience metrics described here, increasing values of the metric correspond to increasing resilience.  The figure below shows the specific data used by [Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549) to produce a composite human modification index.
+
+```{r, out.width = "65%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/hmdata.jpg",dpi=NA)
+```
+<p align="center">
+Figure from [Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549)
+</p>

@@ -1,0 +1,30 @@
+---
+output:
+  html_fragment
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+
+```{r, out.width = "50%",out.extra='style="float:right; padding:20px"',echo=FALSE}
+knitr::include_graphics("../img/watsonventer.jpg",dpi=NA)
+```
+<br>
+Expansion of the global protected area network and more effective placement of new protected areas are increasingly seen as critical measures to counter threats arising from the twin crises of accelerating climate change and species extinction. A key step in increasing the effectiveness of protected area expansion is a better understanding of how threats to biodiversity from climate change impact the ability of protected areas to sustain species and ecosystems. In 1998, conservation biologists Michael Soule and Reed Noss identified three features that characterize what they termed rewilding:
+
+
+  * Large protected **core reserves**;
+  * **Connectivity**;
+  * Keystone species, often large **carnivores** with extensive area requirements.
+
+
+In the subsequent two decades, we have become increasingly aware of the threat that climate change poses to species and ecosystems. This has prompted addition of a 4th C to the list above:
+
+  * **Climate resilience**, including conservation of climate refuges and climate corridors.
+
+The goals of the Yellowstone-to-Yukon Protected Area Tour are to familiarize conservation practitioners with the landscape-level characteristics that can help in evaluating climate-change-related threats to the integrity of protected areas, and conversely the role such areas may play in enhancing the climate resilience of the broader region. As shown in the figure at the right from [Watson and Venter 2017](https://www.nature.com/articles/nature24144), highlights three ways in which climate resilience data can aid protected area strategies by informing prioritization of new areas for protection or contributing to vulnerability assessments and management strategies for existing protected areas.
+<br>
+<br>
+In this tour, we consider landscape metrics related to both climate mitigation (safeguarding ecosystems in their ability to store above- and below-ground carbon) and climate adaptation and resilience (for example, the ability of an area to provide climate refugia). For more information on the metrics considered here, see the Climate Resilience Data Viewer's Climate Metrics Tour and Climate Metrics Explorer.
+

@@ -1,0 +1,35 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### AdaptWest Climate Metrics Tour
+### Biotic velocity
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+The map on the right shows refugia based on climatic niche models for songbirds (left panel) and trees (right panel). Red shades represent high values and blue shades represent low values of the metric. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds).
+<br>
+Move the slider from left to right to compare patterns of the two metrics.
+</div>
+
+**Biotic velocity** is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.  
+Biotic velocities provide a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported on a per-species basis or averaged across a taxa group.
+
+```{r, out.width = "65%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/bioticvelocity.png",dpi=NA)
+```
+Figure from [Carroll et al. 2015](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0140486)
+
+Backward biotic velocity provides a  species-specific refugia index.
+When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions, such as California and the southern Appalachians, more biodiverse than expected based on climate alone. 
+Biotic-velocity-based refugia vary depending on the species considered. Stralberg et al. 2018 mapped refugia for 592 songbird and tree species.
+
+```{r, out.width = "95%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/stralbergetal2018.png",dpi=NA)
+```

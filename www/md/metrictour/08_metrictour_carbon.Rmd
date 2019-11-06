@@ -1,0 +1,32 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### AdaptWest Climate Metrics Tour
+### Aboveground and soil carbon
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+The map on the right shows above-ground carbon stored in tree biomass (left panel) and below-ground soil carbon (right panel). Red shades represent high values, and blue shades represent low values of the metric. The spatial data can be downloaded [here](http://globbiomass.org/wp-content/uploads/GB_Maps/Globbiomass_global_dataset.html) and [here](https://data.isric.org/geonetwork/srv/eng/catalog.search#/metadata/c02ddf8b-cbfb-4533-a9c3-7bf0790fd042).
+<br>
+Move the slider from left to right to compare patterns of the two metrics.
+
+</div>
+Climate adaptation planning addresses the impacts of climate change via efforts to increase landscape resilience and other strategies. However, it is important to place climate adaptation strategies within a larger context which includes mitigation strategies to address the causes of climate change by reducing accumulation of greenhouse gases in the atmosphere. An example of such a dual adaptation/mitigation strategy is a recent conservation proposal termed the Global Deal for Nature. The Global Deal for Nature proposes that protected area networks be expanded to include areas that hold large reserves of aboveground (biomass) and belowground (soil and biomass) carbon, with the aim of reducing disturbances that accelerate release of stored carbon ([Dinerstein et al. 2019](http://doi.org/10.1126/sciadv.aaw2869)). The figure below shows how the transition from land use as a net carbon source to land restoration as a net carbon sink can play a key role in meeting the targets set by the Paris accord and other agreements designed to prevent the Earth from exceeding critical climate thresholds. 
+
+```{r, out.width = "65%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carbon.jpg",dpi=NA)
+```
+<p align="center">
+Figure from [Teske 2019](https://link.springer.com/content/pdf/10.1007/978-3-030-05843-2.pdf)
+</p>
+
+The sliding view in the map to the right allows comparison of the distribution of aboveground tree carbon (left hand panel) and soil carbon (right hand panel). In North America, soil carbon is generally at highest levels in large boreal peatlands, implying that protection of large boreal landscapes is critical for conserving areas of high soil carbon. Patterns of above-ground carbon are complex and vary based on several broad-scale climatic and other factors. A strong longitudinal precipitation gradient is evident in North America, as predominantly west-to-east atmospheric circulation interacts with north-south cordilleras such as the Rocky Mountains. More mesic forested ecosystems to the west of these ranges generally support higher levels of aboveground carbon in terms of tree biomass. Although grassland ecosystems can also support high levels of belowground carbon in their root mass, we have not yet located comprehensive spatial data representing carbon levels for North American grassland systems.

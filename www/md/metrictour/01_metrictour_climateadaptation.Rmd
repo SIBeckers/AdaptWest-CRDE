@@ -1,0 +1,28 @@
+---
+output:
+  html_fragment:
+    fig_caption: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### AdaptWest Climate Metrics Tour
+### How can we assess landscape-level vulnerability to climate change?
+
+
+The ultimate goal of landscape-level conservation planning under climate change is to facilitate persistence of species and ecosystem processes by increasing the adaptive capacity of landscapes and regions. The **ESAC** framework, developed by the IPCC [(McCarthy et al. 2001)](https://www.ipcc.ch/ipccreports/tar/wg2/pdf/wg2TARfrontmatter.pdf), proposes that climate Exposure and Sensitivity interact and are mediated by Adaptive Capacity, resulting in the degree of vulnerability of the system to climate change.
+Most of the data considered here are measures of climate **exposure**. Data, such as the location of climate refugia for individual species, which incorporates information on a species' climatic tolerances or niche, also addresses climate **sensitivity**. The ultimate goal of providing such information to planners is to support conservation management that, by protecting key areas identified by the data, increases the **adaptive capacity** of the landscape and its ability to support native species and ecosystems into the future.
+
+```{r, out.width = "80%",fig.align="center", echo=FALSE}
+knitr::include_graphics("../img/vuln.png",dpi=NA)
+```
+
+A diversity of conservation strategies is needed to address climate change adaptation challenges. Among the most important are identification and protection of climate refugia (areas buffered from climate change where organisms can persist) and climate corridors (areas that play a key role in facilitating
+dispersal under climate change).
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/tingleyetal2014.png",dpi=NA)
+```
+<p align="center">
+_Figure from [Tingley et al. 2014](https://nyaspubs.onlinelibrary.wiley.com/doi/abs/10.1111/nyas.12484) illustrates a variety of climate adaptation strategies._
+</p>

@@ -1,0 +1,27 @@
+---
+output:
+  html_fragment   
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **3. Northern Continental Divide Ecosystem**
+The Northern Continental Divide Ecosystem (NCDE) is centered around Waterton Lakes National Park in Canada (established 1895) and the Glacier National Park in the United States (established 1910). These parks were originally established to protect scenic values, but also serve as important refuges for threatened wildlife species including the grizzly bear.
+
+```{r, out.width = c("34.8%","51%"),fig.align="center",fig.show='hold',fig.cap="Hidden Lake (Glacier National Park) and Waterton Lake. Photo credit: Wikimedia",echo=FALSE}
+knitr::include_graphics(c("../img/3_HiddenLake.jpg","../img/3_WatertonLake.jpg"))
+```
+
+The NCDE shows relatively low forward climatic velocity due to substantial connectivity with montane areas to the north and south.
+The NCDE's high topographic diversity suggests it has a high number of microrefugia. The region has lower refugia value for individual tree and songbird species than does the Salmon-Selway and GYE, but as in the case with the Salmon-Selway, its forests protect large amounts of above-ground carbon.
+The NCDE, especially its eastern edge along the Rocky Mountain Front, is highly important for both forward and backward climate connectivity (a metric not shown in the starplot).
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/3_starplot.jpg",dpi=NA)
+```
+
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>
+

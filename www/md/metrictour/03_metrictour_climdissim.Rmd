@@ -1,0 +1,31 @@
+---
+output:
+  html_fragment:
+    fig_caption: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### AdaptWest Climate Metrics Tour
+### Measuring the pace of climate change: climatic dissimilarity
+
+The most fundamental measure of exposure to climate change is **climate dissimilarity**, i.e., how different will the future climate at a location be from its current climate? When measured in terms of mean annual temperature, we see the well-known pattern of more rapid warming (amplification of the pace of climate change) at high latitudes. The map on the right shows the pace of climate change in multivariate climate space (PCA1 and PCA2). Areas with lower values (less change) are shown in blue, and those with higher values in orange and red. The pattern of rapid warming at high latitudes is evident. Rapid change in alpine areas of the Rocky Mountains is caused by changes in both temperature and precipitation. 
+
+```{r, out.width = "70%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/climdissim8585sm.png",dpi=NA)
+```
+_Dissimilarity in multivariate climate space (PCA1 and PCA2) between current (1981-2010) climate normals and future (2071-2100) projected climate under RCP 8.5._
+
+Climate dissimilarity, although the most basic climate exposure metric, has complex aspects. Recent studies have proposed that in addition to the absolute magnitude of dissimilarity between current and future climates at a location, it is also relevant to understand how that dissimilarity compares to the year-to-year (interannual) variation in climate at that location in the recent past. If the biota in an area was adapted to large interannual climate variations, it might be less sensitive to future climate change. 
+The map on the right shows data on relative climatic dissimilarity developed by Mahony et al. 2017. As in the previous map, low values are in blue and high values in orange/red. Montane areas experience high interannual climate variation and thus have lower relative dissimilarity. Conversely, because areas of the southeastern US now experience low climate variability between years, they will in the future experience relatively low absolute dissimilarity but high relative dissimilarity. Relative dissimilarity does not show the strong pattern of increasing values at high latitudes that was evident in the previous map. Absolute and relative dissimilarity describe different aspects of climate exposure and should be seen as complementary.
+
+```{r, out.width = "100%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/mahonyetal2017.png",dpi=NA)
+```
+
+_Figure from [Mahony et al. 2017](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.13645)._
+
+```{r, out.width = "70%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/reldissimrcp85sm.png",dpi=NA)
+```
+_Relative dissimilarity in multivariate climate space between 1971-2000 climate normals and future (2071-2100) projected climate under RCP 8.5. Data developed by [Mahony et al. (2017)](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.13645)._

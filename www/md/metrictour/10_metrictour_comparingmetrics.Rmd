@@ -1,0 +1,27 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### Comparing and integrating climate resilience metrics
+
+The wide variety of climate exposure and refugia metrics can seem confusing. However, there are several ways to integrate information from diverse metrics.
+As discussed previously, coarse-resolution velocity metrics can be combined with fine-resolution diversity metrics in order to leverage the respective strengths of the two groups of metrics as tools for identification of potential macro-and microrefugia that in combination help maximize both transient and long-term resilience to climate change.
+Alternately, planners can integrate multiple climate exposure metrics for an area of interest into a single diagram to produce a composite "fingerprint" representing factors affecting climate resilience.
+[Garcia et al. 2014](http://science.sciencemag.org/content/344/6183/1247579) developed the concept of using a star plot to show the varying magnitudes of different climate metrics.
+A star plot provides a compact way to communicate contrasts between the intensity of different climate exposure stressors in a region.
+<br>
+<br>
+The figure below compares starplot patterns for 9 major protected area complexes within the Yellowstone-to-Yukon (Y2Y) region. The contrast in starplot patterns between southern (e.g., Yellowstone) and northern (e.g., Nahanni) protected areas within Y2Y reflects the long-noted dichotomy between centers of species diversity (hotspots) and wild landscapes (coldspots). Northern protected areas within Y2Y score highly in intactness and protection of soil carbon, whereas southerly protected areas play a greater role in providing macrorefugia as defined by both species models and climatic velocity.
+For more information on patterns of climate resilience within North American protected areas, see this app's **Protected Area Tour** tab. To view and compare maps of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** tab.
+
+```{r, out.width = "100%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/parks9forviewer.jpg",dpi=NA)
+```
+
+
+
+

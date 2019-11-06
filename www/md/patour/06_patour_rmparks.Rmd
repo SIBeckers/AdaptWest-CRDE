@@ -1,0 +1,28 @@
+---
+output:
+  html_fragment   
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **5. Rocky Mountain Parks**
+This large complex of protected areas includes Banff, Jasper, and Kootenay National Parks. Banff National Park, established in 1885, is Canada's oldest national park.
+
+
+```{r, out.width = "70%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/5_MoraineLake.jpg")
+```
+<p align="center">
+_Moraine Lake. Photo credit: Wikimedia_
+</p>
+
+The starplot for this region indicates that the Rocky Mountain Parks have high value as macrorefugia based on both backward climatic velocity and species models. 
+The region's high topodiversity also supports abundant microrefugia. However, because the mountains to the north of the Rocky Mountain parks are of lower elevation, alpine ecosystems in this area show high levels of threat as measured by forward climatic velocity.
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/5_starplot.jpg",dpi=NA)
+```
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>

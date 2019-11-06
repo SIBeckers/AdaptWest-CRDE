@@ -1,0 +1,276 @@
+/* main App css */
+/*-----------------------------------------------------------------
+                    CSS THAT APPLIES TO ENTIRE WEBPAGE
+-------------------------------------------------------------------*/
+.col-sm-12:nth-child(1){
+  height: 8vh;
+}
+body, h1, h2, h3, h4, h5, h6, p, li {
+  font-family: "Roboto","Helvetica Neue", sans-serif !important;
+}
+#tourbttn{
+ position: absolute;
+ top: auto;
+ bottom: 40px;
+ left: auto;
+ right: 15px;
+ color: #df1515;
+}
+
+
+#paragraph{
+  white-space: pre-wrap;
+}
+
+body {
+  overflow-y: hidden;
+}
+
+html, body {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+/* Some Weirdness happening with navbar color changing when on Protected Areas Tour Tab, these lines fix it. */
+.navbar .navbar-default .navbar-nav {
+  	color: #ffffff;
+	  background-color: #178acc;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  	color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a{
+  	color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  	color: #ffffff;
+	  background-color: #178acc;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+	color: #ffffff;
+	background-color: #178acc;
+}
+
+header{
+ font-family: "Roboto" "Helvetica Neue", sans-serif !important;; 
+}
+
+.panel {
+  border: 0;
+  box-shadow: 0;
+}
+.panel-body {
+  border: 0;
+  box-shadow: 0;
+}
+
+#show_inputs{
+  width: 25%;
+  height: 80vh;
+}
+
+.mysidebar{
+  height: calc(96vh - 115px);
+  overflow-y: auto;
+}
+
+.selectize-input { 
+	font-size: 16px; 
+	line-height: 16px;
+	padding-right: 15px;
+} 
+
+.selectize-dropdown { 
+	font-size: 16px; 
+	line-height: 16px; 
+	padding-right: 15px;
+} 
+
+.control-label, .selectize-control.single{ 
+	font-size: 16px; 
+	line-height: 16px;
+	padding-right: 15px;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+.titleimg {
+	position: relative;
+	float: right;
+	height: 50px;
+	top: -15px;
+	bottom: 0;
+	padding-left: 10px;
+	margin-top: 1.5px;
+}
+
+/*-----------------------------------------------------------------
+                    HOME TAB CSS
+-------------------------------------------------------------------*/
+.homegridl {
+ 	border-block: #39a8e8;
+	border-right-width: 3px;
+	border-right-style: solid;
+	border-right-color:#39a8e8;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
+	border-bottom-color:#39a8e8;
+	width: 50%;
+	padding-bottom: 10px;
+}
+
+.homegridlb {
+ 	border-block: #39a8e8;
+	border-right-width: 3px;
+	border-right-style: solid;
+	border-right-color:#39a8e8;
+}
+.homegridr {
+ 	border-block: #39a8e8;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
+	border-bottom-color:#39a8e8;
+	width: 50%;
+	padding-right: 18px;
+	padding-bottom: 10px;
+}
+
+.homeText {
+ font-size: 16px !important;
+ font-family: Roboto, "Helvetica Neue", sans-serif !important;
+ line-height: 1.2;
+}
+
+#homeSidebar{
+  text-align: center;
+  position: relative;
+   height: calc(100vh - 115px);
+}
+
+
+
+#homeSidebarR2{
+  padding: 5px;
+}
+#homeSidebarR1{
+  text-align:left;
+}
+
+#homeMain {
+  height: calc(100vh - 115px);
+}
+
+/*-----------------------------------------------------------------
+                    Climate Metrics Tour CSS
+-------------------------------------------------------------------*/
+
+#climtourMain{
+  height: calc(100vh - 115px);
+}
+
+
+/*-----------------------------------------------------------------
+                    Climate Metrics Exploter CSS
+-------------------------------------------------------------------*/
+#climexpSide{
+  min-width: 10%;
+  max-width: 100%;
+  /*overflow-y: auto;*/
+  min-height: auto;
+  height: auto;
+  max-height: 88vh;
+  
+}
+/*
+#climexpPanel{
+  background-color: rgb(255, 255, 255);
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  transition: opacity 50ms 50ms;
+  border: 1px solid;
+  border-radius: 15px;
+  z-index: 1200;
+  height: calc(100vh - 115px);
+}
+*/
+#climexpMain{
+  height: calc(100vh - 115px);
+
+}
+
+/*-----------------------------------------------------------------
+                    PA TOUR CSS
+-------------------------------------------------------------------*/
+
+/*
+#patourPanel{
+  background-color: rgb(255, 255, 255);
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  transition: opacity 50ms 50ms;
+  border: 1px solid;
+  border-radius: 15px;
+  z-index: 1200;
+  height: calc(100vh - 115px);
+}
+*/
+#patourMain {
+  height: calc(100vh - 115px);
+}
+
+/*-----------------------------------------------------------------
+                    PA Explorer CSS
+-------------------------------------------------------------------*/
+
+#paexpPanel{
+  background-color: rgb(255, 255, 255);
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  transition: opacity 50ms 50ms;
+  border: 1px solid;
+  border-radius: 15px;
+  z-index: 1200;
+  
+}
+
+#paexpMain {
+  height: calc(100vh - 115px);
+}
+
+/*-----------------------------------------------------------------
+                    Stuff for smaller screens
+-------------------------------------------------------------------*/
+
+@media (max-width: 1900px){
+  .titleimg {
+    display: none;
+  }
+}
+@media only screen and (max-width: 900px) {
+  #homeSidebar{
+    display:none;
+    overflow-y: auto;
+  }
+  #homeMain {
+    overflow-y: auto;
+  }
+  #climtourMain{
+    overflow-y: auto;
+  }
+  #patourMain {
+    overflow-y: auto;
+  }
+  #climexpMain{
+    overflow-y: auto;
+  }
+  #paexpMain {
+    overflow-y: auto;
+  }
+}

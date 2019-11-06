@@ -1,0 +1,25 @@
+---
+output:
+  html_fragment    
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **4. Columbia Mountains**
+Several national parks and protected areas lie in close proximity in the Columbia Mountains, located along the upper Columbia River in southeastern British Columbia. Most of these parks were established in late 1800s and early 1900s in connection with expansion of railroads and associated tourism into the region. This area also forms part of BC's "Inland Temperate Rainforest".
+
+```{r, out.width = c("23.2%","46%"),fig.align="center",fig.show='hold',fig.cap="Mount Revelstoke and Glacier National Parks, British Columbia. Photo credit: Wikimedia",echo=FALSE}
+knitr::include_graphics(c("../img/4_Mount_Revelstoke_National_Park.jpg","../img/4_GlacierNPCanada.jpg"))
+```
+
+The starplot indicates that the rugged mountains of this region support high topographic diversity and microrefugia potential. The region also has high value in terms of macrorefugia defined by both backward climatic velocity and tree and songbird habitat models. However, these conservation values are impacted by the relatively low intactness of the region, linked to the fact that the group of montane parks is fragmented by lower-elevation developed areas. The region, although relatively low in soil carbon, supports high volumes of aboveground forest carbon.  
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/4_starplot.jpg",dpi=NA)
+```
+
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>
+

@@ -1,0 +1,28 @@
+---
+output:
+  html_fragment  
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **9. Peel watershed**
+
+The Peel River watershed is a 67,000 sq. km. area in Canada's Yukon Territory. The Peel watershed was the focus of a comprehensive land use planning process beginning in 2004, which resulted in a recommendation to protect ~80% of the area from development. As of 2019, this recommendation has been officially accepted and is being implemented by governmental agencies and First Nations.
+
+```{r, out.width = "70%",fig.align="center",fig.cap="Peel River. Photo credit: Alex Hutchinson, New York Times",echo=FALSE}
+knitr::include_graphics(c("../img/9_Peel_AlexHutchinsonNYT.jpg"))
+```
+The Peel watershed is characterized by its high intactness and high potential for protection of soil carbon.
+The area's potential to provide macrorefugia (based on species models and backward climatic velocity) is lower than in areas to the south, due to the faster pace of climate change in boreal ecosystems. 
+Additionally, the Peel watershed shows lower topodiversity and microrefugia potential than do areas such as Nahanni National Park, highlighting the challenges posed by climate change to conservation in boreal ecosystems.
+However, to an even greater extent than the Nahanni, the Peel does encompass climate corridors which will be important to species shifting their distribution in response to climate change.
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/9_starplot.jpg",dpi=NA)
+```
+
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>
+

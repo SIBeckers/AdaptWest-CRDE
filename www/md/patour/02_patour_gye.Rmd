@@ -1,0 +1,33 @@
+---
+output:
+  html_fragment
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+### **1. Greater Yellowstone Ecosystem**
+
+The Greater Yellowstone Ecosystem or GYE is the name given to the region surrounding Yellowstone National Park. Yellowstone, established in 1872, is the world's oldest national park.
+
+
+```{r, out.width = c("23.2%","26%"),out.height="50%",fig.align="center",fig.show='hold',fig.cap="Old Faithful geyser, Yellowstone Fall. Photo credit: Wikimedia",echo=FALSE}
+knitr::include_graphics(c("../img/1_OldFaithful.jpg","../img/1_Yellowstonefall.jpg"))
+```
+
+Starplots (also called radarplots) provide a useful tool for comparing the relative intensities of climate exposure and resilience in different regions. In this tour, we will compare these starplot patterns for 7 of Y2Y's major protected area complexes, in order to illustrate the combined effect of gradients in different climate resilience metrics across Y2Y. 
+
+The Greater Yellowstone Ecosystem, as the most southerly of Y2Y's major protected areas, is to some extent an island of wilderness within a rapidly developing landscape matrix. This can be seen from the low intactness score it receives in the starplot. 
+Because this area lies at the southern end of the US Northern Rocky Mountains, it shows high forward climatic velocity values. This implies that the area may experience high species turnover due to climate change in the coming decades. However, the GYE at the same time scores highly in terms of its climate refugia role, measured by both species models and in terms of backward climatic velocity.
+The GYE also has high potential for microrefugia (small areas with locally favorable environments within otherwise unsuitable climates) due to its complex topography.
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/1_starplot.jpg",dpi=NA)
+```
+
+<p align="center">
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. 
+<br>
+All spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+</p>
+

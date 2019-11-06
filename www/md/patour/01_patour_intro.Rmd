@@ -1,0 +1,17 @@
+---
+output:
+  html_fragment
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### **Yellowstone-to-Yukon Protected Area Tour**
+```{r, out.width = "30%",out.extra='style="float:right; padding:30px"',echo=FALSE}
+knitr::include_graphics("../img/0_y2ymap.jpg",dpi=NA)
+```
+<br>
+The **Yellowstone-to-Yukon (Y2Y)** region spans the mountain ranges stretching from Yellowstone National Park to the Yukon, traversing two countries, five American states, two Canadian provinces, two Canadian territories, and the traditional lands of over 30 First Nations [(more info here)](http://www.y2y.net). In 1993, Harvey Locke, a lawyer and environmentalist, had an idea for a vast wildlife corridor connecting this region, which would link protected wildlife areas to each other so that wildlife species, especially wide ranging mammals like grizzly bears and other large carnivores, could move safely between them. **Y2Y** has been named by the IUCN-World Conservation Union as one of the planet's leading mountain conservation initiatives.
+Much of the inspiration for Y2Y was based on the wide-ranging movements of _Pluie_, a wolf that in the 1990s moved across a 100,000-square-kilometer area spanning the US/Canada boundary. Conservation scientists began to realize that in order for protected areas to provide refuges for species, they needed to be connected. 
+
+During this tour, as we move northward from the Greater Yellowstone Ecosystem at Y2Y's southern boundary to the Peel watershed in northern Y2Y, we will see the effects of latitudinal and other gradients in the landscape metrics discussed here. For more information on the metrics considered here, see the Climate Resilience Data Viewer's Climate Metrics Tour and Climate Metrics Explorer.
+

@@ -1,0 +1,72 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### AdaptWest Climate Metrics Tour
+### Identifying microrefugia using topodiversity data
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+The map on the right shows topographic diversity. Red shades represent high values and blue shades represent low values of the metric. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/environmental-diversity-north-america).
+</div>
+Many approaches to identifying areas that will be refuges for biodiversity under climate change are based on predicting future climate. Other approaches use only information on the current environment. Species distributions, communities, ecosystems, and broader patterns of biodiversity are known to be influenced by abiotic drivers such as soils, geology, and topography.
+Refugia also span a range of spatial scales. Coarse-resolution metrics such as climatic velocity which identify **macrorefugia** (areas where broad-scale climate is relatively stable and suitable for persistence) can be complemented with other information that helps identify fine-scale **microrefugia** (small areas with locally favorable environments within otherwise unsuitable climates), as shown in the figure below.  
+  
+  
+
+```{r, out.width = "70%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2017b.png",dpi=NA)
+```
+  
+Micro-scale climate refugia can be created by terrain-related factors, as shown in the figure below from [Morelli et al. (2016).](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0159909)
+Topographic diversity (topodiversity) data are useful for identifying areas where a heterogeneous physical environment (e.g., steep elevation gradients or diverse aspects) increases the likelihood that species will be able to find nearby suitable habitat as climate changes.  
+  
+  
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/morellietal2016.png",dpi=NA)
+```
+  
+Microrefugia occur both within and outside of macro-refugia (areas of lowest climate velocity).  
+  
+```{r, out.width = "60%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2017.png",dpi=NA)
+```
+_The bivariate distribution of elevational diversity and backward climatic velocity values for 1 km2 cells (pixels) in North America, indicating their relative value as macro- (y-axis) and microrefugia (x-axis)._
+
+Land facets are habitat types derived from soils and topography data. The "Conserving Nature's Stage"" or "Enduring Features"" approach seeks to protect a diversity of physical habitat types in order to foster a diversity of biota in the future. The land facet data shown in this viewer are based on landform, heatload index, and elevation (topofacets) with the addition of soils and geologic data for landfacets. 
+Facet-based environmental diversity metrics show the number of facet types within a spatial neighborhood, via the Gini-Simpson diversity index.
+
+Local climatic diversity additionally highlights areas with strong precipitation gradients (rainshadows) and other effects from global circulation systems. These gradients are extrapolated from the network of local weather observation data based on ClimateNA's local regression functions and PRISM modeling of the influence of terrain on climate. Thus, in contrast to topodiversity, climatic diversity is influenced by both macro- and micro-scale factors. 
+  
+
+```{r, out.width = "80%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2017c.png",dpi=NA)
+```
+_Contrasts between diversity and velocity metrics in their relationship with elevation zones: a) generalized additive model of relationship between metrics and elevation across North America, b) conceptual figure indicating elevational zones showing high values of the various metrics._
+
+__How do the various climate resilience related metrics differ?__   
+
+Considering how the different metrics vary with elevation provides one method of characterizing their contrasts and commonalities. The environmental diversity metrics that we consider here fall into three groups in terms of their correlation with elevation. Priorities developed from the two topographic diversity metrics tend to increase focus on high-elevation areas. In contrast, priorities derived from categorical landscape units rather than continuous variables distributed conservation priorities more broadly across elevation zones. Land facet and ecotypic diversity are similar in this effect, despite being based on different landscape classifications. This contrast is partly due to both the incorporation of additional non-topographic inputs (edaphic, climatic, and landcover data) into the categorical metrics. Additionally, the ecologically-informed class boundaries used to categorize the data, and the different index by which diversity was measured for categorical variables, contributed to shifting high diversity areas towards lower elevations. For example, low- to mid-elevation areas with high ecotypic diversity might include an ecotone originating from precipitation thresholds governing the shift from forest to grassland ecosystems. However, the ability of such landscape classifications to predict refugia depends in part on whether these thresholds retain their relevance to biota under future climates. Both current climatic diversity and backward climatic velocity showed an intermediate relationship with elevation when compared to the two previous groups. These metrics are influenced by topography (due to use of topographic data in the statistical downscaling process) but also by broad-scale factors such as prevailing circulation patterns, coastal proximity and orographic effectiveness of the terrain. Peak values of climatic diversity may, for example, occur in rain shadow areas on the leeward side of mountain tops.  
+
+```{r, out.width = "80%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2017c.png",dpi=NA)
+```
+
+
+__How can planners compensate for and address the contrasts between these metrics?__
+
+To address uncertainty created by the variation between different environmental diversity metrics, planners can combine priorities identified by alternative metrics at a single resolution and downweight areas of high variation between metrics. Alternately, coarse-resolution velocity metrics can be combined with fine-resolution diversity metrics in order to leverage the respective strengths of the two groups of metrics as tools for identification of potential macro- and micro-refugia that in combination maximize both transient and long-term resilience to climate change. The figure below illustrates the conceptual basis for such a multi-scale strategy. Planners can compare and integrate approaches that span a range of model complexity and spatial scale to match the range of ecological and physical processes influencing persistence of biodiversity and identify a conservation network resilient to threats operating at multiple scales.  
+
+
+```{r, out.width = "80%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2017d.png",dpi=NA)
+```
+_Conceptual diagram of a multi-scale prioritization strategy for refugia identification and landscape-level adaptation planning. A network of priority conservation areas would be designed to capture high-diversity microrefugia within areas of low climatic velocity, distributed across landscape types._

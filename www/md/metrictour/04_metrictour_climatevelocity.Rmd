@@ -1,0 +1,52 @@
+---
+output:
+  html_fragment:
+    fig_caption: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+### AdaptWest Climate Metrics Tour
+### Measuring the pace of climate change: Climatic velocity
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+The map on the right shows refugia based on forward (left panel) and backward (right panel) climatic velocity from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5). Red shades represent high values and blue shades represent low values of the metric. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/adaptwest-velocitywna).
+<br>
+Move the slider from left to right to compare patterns of the two metrics.
+
+</div>
+Climate velocity is the speed that an organism needs to travel to keep pace with climate. Climate refugia (areas of species persistence during climate change) are areas of low enough velocity that the organism can remain within their suitable climate.
+
+To calculate analog-based climatic velocity, climate is categorized into types, and the straight-line distance is measured between a site and the nearest site with the same climate type in a different time period. Climatic velocity is influenced by processes 
+at several scales: 
+
+* Local topography 
+* Regional topographic position 
+* Location on continent
+* Location in relationship to global climate circulation patterns
+
+
+```{r, out.width = "90%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2015.png",dpi=NA)
+```
+
+#### Forward vs. backward climatic velocity
+
+ **Forward climatic velocity** measures the straight-line distance between a site's current climate type and the nearest site with the same climate type under future climates. This represents the rate at which an organism currently at a location must move to find future suitable climate.  
+ **Backward climatic velocity** measures the straight-line distance between a site's future climate type and the nearest site with the same climate type under current climates. This represents the rate at which organisms adapted to a location's future climate will need to move to colonize that location. 
+
+
+```{r, out.width = "100%",fig.align="center",echo=FALSE}
+knitr::include_graphics("../img/carrolletal2015b.png",dpi=NA)
+```
+
+Forward climatic velocity provides information on the ability of resident species and ecosystems to persist regionally.
+Forward velocity will often be high in alpine areas because reaching the nearest analogous future climate may require dispersal to distant higher elevation mountaintops. 
+
+Backward velocity represents the distance and rate at which organisms adapted to a location's future climate will need to move to reach that location, and reflects a location's ability to serve as a refugium for species and ecosystems. 
+Backward velocity is generally low in alpine areas, because adapted organisms can reach the site from nearby downslope locations. Values are often high in valley bottom habitat because organisms must travel longer distances to colonize these locally new habitat conditions.
+
+Areas with low backward climatic velocity will have higher values as refugia, so we transform velocity values to a refugia index by multiplying the log transformation of velocity by negative 1. A log transformation is used because we are most interested in variation in the index at relatively low velocity values. 
