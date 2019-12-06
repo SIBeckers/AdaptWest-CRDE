@@ -1,0 +1,57 @@
+---
+title: "App To Do"
+author: "Justin F. Beckers, Canadian Forest Service"
+date: "27/11/2019"
+output: html_document
+---
+
+# Outlining steps/features/to-dos for the beta version
+1.	Home Tab
++	Harmonization of the look of the images (bottom two have shadows, etc).
++	Changes to improve look on smaller screens (maybe even on tablets)
+
+I've made some changes and it seems a bit beter to me now. I changed some text sizes and the order items are placed when the screen gets small.
+    
+	
+2.	Climate Metrics Tour
++	Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
++	Improve look of map buttons.
+3.	Climate Metrics Explorer
++	Force sidebar length to increase when drop down menu is entered.  Needs to be larger than drop down menu.
++ Fix radar plot axes scaling
++ Include additional data/summary data in radar plot
++ Sort out the xy plot.
++ Make the sidebar collapse and map expand.
+
+4.	PA Tour
++ Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
++ Improve look of map buttons.
++ Fix look and location of tile selector drop-down.
++ Drill down/up : maybe a simple refresh/back to ecoregions button is enough?
+
+5.	PA Explorer
++ Speed up
++ Could we do some sort of grouping for drill-down similar to ecoregions in the metrics tour? Or by some sort of category?
++ Fix loading of polygons on zoom
++ Need to fix polygons. 
++ Sort out radar plot
++ Sort out xyplot
+
+6.	Reporting
++ Will we be generating reports?
++ What should be in the report: 
++ What regions
++	do we produce separate reports for the Watersheds and PAs? 
++	Do we let the user select one or multiple watersheds or pas or both? 
++ Do we combine them if there are multiple selected
++	What content:
+++	Maps?
+++	RadarPlot?
+++	XY plot?
+++	Iterate through many options or just the user selected ones.
++	What else?
++	Format?
+                
+7.	Versioning/GitHub
++ I've created a private repository on github that I will start syncing to occasionally. Right now the data isn't there but the app structure etc is.
+

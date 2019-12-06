@@ -53,9 +53,9 @@ function(input, output, session) {
           )
         )
       } else{
-        removeModal()
+        removeModal(session)
       }
-    })
+    },priority=2)
   }
   # Common Reactives ----
   clickedIds <- reactiveValues(ids = vector())
@@ -68,6 +68,7 @@ function(input, output, session) {
   patourView <- reactiveValues(view = NULL,opacity = NULL)
   isSwipemetric <- reactiveVal(NULL)
   isSwipepa <- reactiveVal(NULL)
+  eregion <- reactiveValues(edata = NULL,bds = NULL)
   # Functions ----
   
 
@@ -164,8 +165,7 @@ function(input, output, session) {
       shinyjs::onclick("paexpLink",  updateNavbarPage(session, inputId = "tabs", selected = "paexpTab"))
       
     } else if (input$tabs == "climtourTab") {
-    # Y2Y TOUR----
-      #Y2Y Tour
+    # Metric TOUR----
       y2ytour <- callModule(tourPanel, "y2ytour", tourName = "y2y")
       shinyjs::click("y2ytour-stopBttn")
       callModule(ddownBttn,"y2ymapBttn") #Settings button on Y2Y Tour Map
@@ -195,7 +195,7 @@ function(input, output, session) {
     }
     
     else if (input$tabs == "patourTab") {
-      #PATour ----
+      #PA Tour ----
       patour <- callModule(tourPanel, "patour", tourName = "pa")
       shinyjs::click("y2ytour-stopBttn")
       callModule(map,"pamap", OSM = T)
@@ -247,11 +247,14 @@ function(input, output, session) {
       })
   
     } else if (input$tabs == "climexpTab") {
-      #Climate Metric Explorer ----
+      #Metric Explorer ----
+       #Settings button on Climate Metrics Explorer Map
+      wds <- readRDS("./Data/wds_comp.Rds")
       callModule(map, "climexpMap",OSM=F) # Climate Metrics Explorer Map
-      callModule(ddownBttn,"climexpMapBttn") #Settings button on Climate Metrics Explorer Map
-      wds <- read_sf("./Data/wds_comp.gpkg")
-      proxy <- leafletProxy("climexpMap-map") %>% hideGroup("Place Labels") %>%
+      callModule(ddownBttn,"climexpMapBttn")
+      proxy <- leafletProxy("climexpMap-map")
+      
+      proxy %>% hideGroup("Place Labels") %>%
         setView(lng = -100, lat = 55, zoom = 3) %>%
         addPolygons(
           data = ecos,
@@ -290,18 +293,43 @@ function(input, output, session) {
       })
       observeEvent(input$"climexpMap-map_shape_click", {
         click <- input$"climexpMap-map_shape_click"
-        print(click)
-        edata <- ecos[which(ecos$OID == click$id),]
+        # print(click)
+        
          #To be replaced by a simpler filter based on ecoregion id.
-        bds <- st_bbox(edata)
+       
         if (click$group == "ecoregions") {
-          pdata <- st_intersection(wds,edata)
-          rwds(pdata)
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = F)))
+          output$b2ecoBttn <- renderUI(
+            div(
+              class = "b2eBttn",
+              actionBttn(
+                inputId = "climExpB2E",
+                label = "Back to Ecoregions",
+                icon = icon("undo", class = "fas fas-lg", lib = "font-awesome"),
+                color = "primary", 
+                size = "md",
+                style = "unite",
+                block = F
+              )
+            )
+          )
+          eregion$edata <- ecos[which(ecos$OID == click$id),]
+          eregion$bds <- st_bbox(eregion$edata)
+          print(eregion$bds)
+          bds <- unname(eregion$bds)
+          rwds(st_intersection(wds,eregion$edata))
+          foo <- rwds()
+          if (any(is.na(foo$NEWNAME))) {
+            print(foo)
+            foo$NEWNAME <- paste0("Watershed: ", foo$FIDNUM2)
+            rwds(foo)
+          }
+          
           proxy %>% 
-              fitBounds(lng1 = bds$xmin,lat1 = bds$ymin,lng2 = bds$xmax,lat2 = bds$ymax) %>%
-              clearGroup("ecoregions") %>%
+            flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4]) %>%
+            clearGroup("ecoregions") %>%
               addPolygons(
-                data = pdata,
+                data = rwds(),
                 fillColor = NA,
                 fillOpacity = 0,
                 weight = 1,
@@ -311,58 +339,110 @@ function(input, output, session) {
                 layerId = ~FIDNUM2,
                 group = "wds"
               )
+          # print(ecol3dat)
+          # print(rwds())
+          eregion$edata <- ecol3stats[which(ecol3stats$ecoreg3 == click$id),]
+          
+          eregion$edata$NEWNAME <-  "Ecoregion Avg"
+          eregion$edata <- eregion$edata %>% select(-1)
+          eregion$edata <- rbind(eregion$edata,hucmin)
+          names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                            'Tree Carbon','Soil Carbon',"Name")
+          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = 10, live = F)
+          
         } else if (click$group == "wds" | click$group == "swds" ) {
+          # foo<-rwds()
+          # if (any(is.na(foo$NEWNAME))) {
+          #   foo$NEWNAME <- foo$FIDNUM2
+          # }
+          
           multiSelected_wds(
             selectMultiPolys(mapId = "climexpMap-map",data = rwds(),
-                             idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group="swds")
+                             idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
           )
-          print(multiSelected_wds())
-          callModule(appStarPlot,"climexp",data = multiSelected_wds(),namecol = "NEWNAME",removecols = c(2,11:16))
+          mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(11:14))
+          edata <- eregion$edata
+          # edata$NEWNAME <-  "Ecoregion Avg"
+          # edata <- edata %>% select(-1)
+          # print(mswds)
+          mswds <- mswds %>% select(-c(1,11)) %>% select(2:9,1)
+          names(mswds) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                            'Tree Carbon','Soil Carbon',"Name")
+          # print(mswds)
+          # print(edata)
+          spdat <- rbind(edata,mswds)
+          names(spdat) <- c('Intactness','Topodiversity','Fwds Climatic Refugia','Bwds Climatic Refugia','Bird Refugia','Tree Refugia',
+                           'Tree Carbon','Soil Carbon',"Name")
+          print(spdat)
+          callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = 10, live = F)
+          # output$renderUI(div(id="climExpStarPlot",appStarPlotUI("climexp",live=F))
         }
+        # bds<-eregion$bds
         # proxy %>% 
-        #   fitBounds(lng1=bds$xmin,lat1=bds$ymin,lng2=bds$xmax,lat2=bds$ymax) %>%
-        #   addPolygons(
-        #     data = pdata,
-        #     fillColor = NA,
-        #     fillOpacity = 0,
-        #     weight = 1,
-        #     color = "blue",
-        #     stroke = T,
-        #     label = ~htmlEscape(NEWNAME),
-        #     layerId = ~FIDNUM2,
-        #     group="ecoregions")
+        #   flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+      
       })
-      # observeEvent(input$"climexpMap-map_shape_click", {
+      observeEvent(input$climExpB2E,{
+        removeUI(selector = "div:has(>#climExpB2E)", session = session)
+        removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
+        output$climexpStarplotDiv <- NULL
+        # multiSelected_wds(NULL)
+        # eregion$bds <- NULL
+        # eregion$edata <- NULL
+        # spdat <- NULL
+        # edata <- NULL
+        # mswds <- NULL
+        proxy <- leafletProxy("climexpMap-map") %>% hideGroup("Place Labels") %>%
+          clearGroup("wds") %>%
+          clearGroup("swds") %>%
+          setView(lng = -100, lat = 55, zoom = 3) %>%
+          addPolygons(
+            data = ecos,
+            fillColor = NA,
+            fillOpacity = 0,
+            weight = 1,
+            color = "blue",
+            stroke = T,
+            label = ~htmlEscape(ecos$NA_L3NAME),
+            layerId = ~ecos$OID,
+            group = "ecoregions"
+          )
+        # removeUI(selector = "div:has(>#climExpB2E)", session = session)
+        # removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
+        # output$climexpStarplotDiv<-NULL
+        # multiSelected_wds(NULL)
+        # eregion$bds <- NULL
+        # eregion$edata <- NULL
+      })
       
     } else if (input$tabs == "paexpTab") {
-    #Protected Area Explorer ----
+    #PA Explorer ----
       inBounds_PAs <- reactive({
         if (is.null(input$"paexpMap-map_zoom"))
           return(pas[1,])
-        # if (is.null(input$"paexpMap-map_bounds"))
-        #   return(pas[1,])
-        # bbx <- input$"paexpMap-map_bounds"
+        if (is.null(input$"paexpMap-map_bounds"))
+          return(pas[1,])
+        bbx <- input$"paexpMap-map_bounds"
         # print(bbx)
         # if(bbx$west <= -180.) {bbx$west = -180}
         # if(bbx$east >= 180.) {bbx$east = 180}
-        # clip <- st_sfc(st_polygon(
-        #   x = list(rbind(
-        #     c(bbx$west,bbx$south),
-        #     c(bbx$east,bbx$south),
-        #     c(bbx$east,bbx$north),
-        #     c(bbx$west,bbx$north),
-        #     c(bbx$west,bbx$south)
-        #     )
-        #   )
-        # ),check_ring_dir = T)
-        # st_crs(clip) = 4326
+        clip <- st_sfc(st_polygon(
+          x = list(rbind(
+            c(bbx$west,bbx$south),
+            c(bbx$east,bbx$south),
+            c(bbx$east,bbx$north),
+            c(bbx$west,bbx$north),
+            c(bbx$west,bbx$south)
+            )
+          )
+        ),check_ring_dir = T)
+        st_crs(clip) = 4326
         data <- pas[pas$AREA >= zoomcuts[input$"paexpMap-map_zoom"],]
-        # data <- st_intersection(data,clip)
+        data <- st_intersection(data,clip)
         if (length(data) < 1) {
           data <- pas[1,]
         } 
         return(data)
-        # return(pas[1,])
       })
       callModule(map, "paexpMap", OSM=F) #Protected Areas Explorer Map
       proxy <- leafletProxy("paexpMap-map") #%>% setView(lng = -100, lat = 55, zoom = 3)

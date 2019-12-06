@@ -59,6 +59,11 @@ ecos <- read_sf("./Data/ecos_simp.gpkg")
 ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
 ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
 ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
+hucmin <- fread("./Data/hucminmax.csv")
+hucmin$NEWNAME = c("MIN","MAX")
+
+paminmax <- fread('./Data/paminmax.csv')
+paminmax$NEWNAME = c("MIN","MAX")
 
 # Map Settings ----
 minZoom = 0
@@ -155,6 +160,7 @@ source("./www/code/tourStep_v2.R")
 
 
 #List of resources for each tab, used to remove from other tabs/reload. I think this will speed things up. ----
+#Not even being implemented right now, so still performance gains to be made I think.
 homeTablist <- list()
 metricTourlist <- list()
 metricExplist <- list("ecos","ecol1stats","ecol2stats","ecol3stats","wds")

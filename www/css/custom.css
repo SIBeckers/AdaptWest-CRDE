@@ -91,6 +91,10 @@ header{
 	padding-right: 15px;
 } 
 
+.selectize-dropdown-content {
+  max-height: 25vh;
+}
+
 .control-label, .selectize-control.single{ 
 	font-size: 16px; 
 	line-height: 16px;
@@ -111,9 +115,15 @@ a:hover, a:focus {
 	margin-top: 1.5px;
 }
 
+
+#climexpacc-1-collapse{
+  min-height: 33vh;
+  
+}
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
+/*
 .homegridl {
  	border-block: #39a8e8;
 	border-right-width: 3px;
@@ -141,9 +151,9 @@ a:hover, a:focus {
 	padding-right: 18px;
 	padding-bottom: 10px;
 }
-
+*/
 .homeText {
- font-size: 16px !important;
+ /*font-size: 16px !important;*/
  font-family: Roboto, "Helvetica Neue", sans-serif !important;
  line-height: 1.2;
 }
@@ -165,6 +175,13 @@ a:hover, a:focus {
 
 #homeMain {
   height: calc(100vh - 115px);
+}
+.homeCol {
+  width: 48%;
+}
+
+#homeCol2 {
+  margin-left: 2%;
 }
 
 /*-----------------------------------------------------------------
@@ -248,11 +265,32 @@ a:hover, a:focus {
                     Stuff for smaller screens
 -------------------------------------------------------------------*/
 
-@media (max-width: 1900px){
+@media (max-width: 1920px){
+  
+  .homeText {
+    font-size: 16px;
+  }
+  
+}
+@media only screen and (max-width: 1440px) {
   .titleimg {
     display: none;
   }
 }
+@media only screen and (max-width: 1100px) {
+  #homeSidebar{
+    display:none;
+    overflow-y: auto;
+  }
+  #homeMain {
+    width: 100%;
+  }
+  .titleimg {
+    display: none;
+  }
+  
+}
+
 @media only screen and (max-width: 900px) {
   #homeSidebar{
     display:none;
@@ -260,6 +298,9 @@ a:hover, a:focus {
   }
   #homeMain {
     overflow-y: auto;
+  }
+  .homeCol {
+    width: 100%;
   }
   #climtourMain{
     overflow-y: auto;
@@ -272,5 +313,8 @@ a:hover, a:focus {
   }
   #paexpMain {
     overflow-y: auto;
+  }
+  .titleimg {
+    display: none;
   }
 }

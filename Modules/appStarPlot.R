@@ -1,5 +1,9 @@
-appStarPlot <- function(input, output, session, data, namecol = "", removecols = c(1)) {
+appStarPlot <- function(input, output, session, data, namecol = "", removecols = NULL, live = F) {
   source("./www/code/radarplot.R")
-  rplot <- radarplot(data = data, namecol = namecol, removecols = removecols, interactive = T)
-  output$appStarPlot <- renderPlotly(rplot)
+  rplot <- radarplot(data = data, namecol = namecol, removecols = removecols, interactive = live)
+  if (isTRUE(live)) {
+    output$appStarPlot <- renderPlotly(rplot)
+  } else {
+    output$appStarPlot <- renderPlot(rplot)
+  }
 }

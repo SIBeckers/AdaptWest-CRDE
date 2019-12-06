@@ -34,16 +34,16 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
    # } else {
      print("Creating new swipeable map")
      isSwipe = TRUE
-     if(isTRUE(OSM)) {
+     if (isTRUE(OSM)) {
       callModule(map, mapid, swipe = T,
                 layer1 = paste0("'", setup$tile1url,"'"),
                 layer2 = paste0("'", setup$tile2url,"'"),
-                opacity = opac, OSM=T)
+                opacity = opac, OSM = T)
      } else {
        callModule(map, mapid, swipe = T,
                   layer1 = paste0("'", setup$tile1url,"'"),
                   layer2 = paste0("'", setup$tile2url,"'"),
-                  opacity = opac, OSM=F)
+                  opacity = opac, OSM = F)
      }
      proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
      proxy %>% 
@@ -60,29 +60,23 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
       print("Modifying existing non-swipe map")
       isSwipe = FALSE
       proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
-      # if (isTRUE(setup$clear)) {
         proxy %>%
-          clearGroup("metrics")
-      # } else {
-        proxy %>%
-        # clearGroup("metric_polys") %>%
-        addTiles(
-          urlTemplate = setup$tile1url,
-          attribution = tilelist$tileAttribution[which(setup$tile1==tilelist$tileName)],
-          group = "metrics",
-          layerId = tilelist$tileGroup[which(setup$tile1==tilelist$tileName)],
-          options = tileOptions(
-            tms = T,
-            minZoom = minZoom,
-            maxZoom = maxZoom,
-            unloadInvisibleTiles = T,
-            noWrap = T,
-            opacity = opac,
-            zIndex = 9000
-          )
-        ) #%>%
-          # flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
-      # }
+          clearGroup("metrics") %>%
+          addTiles(
+            urlTemplate = setup$tile1url,
+            attribution = tilelist$tileAttribution[which(setup$tile1 == tilelist$tileName)],
+            group = "metrics",
+            layerId = tilelist$tileGroup[which(setup$tile1 == tilelist$tileName)],
+            options = tileOptions(
+              tms = T,
+              minZoom = minZoom,
+              maxZoom = maxZoom,
+              unloadInvisibleTiles = T,
+              noWrap = T,
+              opacity = opac,
+              zIndex = 9000
+            )
+          ) 
     } else if (isTRUE(isolate(rSwipe))) {
       if (!is.na(setup$tile1)) {
         print("Creating new non-swipe map")
@@ -98,9 +92,9 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
           proxy %>%
           addTiles(
             urlTemplate = setup$tile1url,
-            attribution = tilelist$tileAttribution[which(setup$tile1==tilelist$tileName)],
+            attribution = tilelist$tileAttribution[which(setup$tile1 == tilelist$tileName)],
             group = "metrics",
-            layerId = tilelist$tileGroup[which(setup$tile1==tilelist$tileName)],
+            layerId = tilelist$tileGroup[which(setup$tile1 == ilelist$tileName)],
             options = tileOptions(
               tms = T,
               minZoom = minZoom,
@@ -110,25 +104,18 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
               opacity = opac,
               zIndex = 9000
             )
-          )# %>% 
-            # flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
-        # }
+          )
       } else if (is.na(setup$tile1)) {
         
-        if(isTRUE(OSM)){
-          callModule(map, mapid, swipe = F,OSM=T)
+        if (isTRUE(OSM)) {
+          callModule(map, mapid, swipe = F,OSM = T)
         } else {callModule(map, mapid, swipe = F)}
-        # proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
-        # proxy %>% flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+      
         isSwipe = FALSE
       }
-      # isSwipe = FALSE
+      
     } 
   }
-  
-  
-  # if (!is.na(setup$polygon)) {
-  #   if (setup$swipe == F) {
     proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
     proxy %>%
       clearGroup("metric_polys") %>%
@@ -146,11 +133,6 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
       proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
       proxy %>% flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     }
-  #   }
-  # }
-    
-  
-  
-  
+
   return(isSwipe) 
 }

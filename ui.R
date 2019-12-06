@@ -27,17 +27,23 @@ ui <- function(request) {
     includeScript("www/lib/crosstalk-1.0.1/js/crosstalk.min.js"),
     includeCSS("www/lib/crosstalk-1.0.1/css/crosstalk.css"),
     includeCSS("www/lib/plotly-htmlwidgets-css-1.46.1/plotly-htmlwidgets.css"),
-    includeScript("www/lib/plotly-main-1.46.1/plotly-latest.min.js")
-    
+    includeScript("www/lib/plotly-main-1.46.1/plotly-latest.min.js"),
+    tags$script(
+      HTML(
+        '$(document).keyup(function(event) {
+            if ($("#password").is(":focus") && (event.key == "Enter")) {
+              $("#go").click();
+            }
+          });'
+      ))
   )
+  
   #Title ----
   title = div(
     id = "titlediv",
     "Climate Resilience Data Explorer",
     tags$a(href = "https://adaptwest.databasin.org/",
             tags$img(src = "./logos/adaptwestbanner.jpg", style = "height: 47px;"),
-           # p("AdaptWest - A Climate Adaptation Planning Database for Western North America",
-           #  style = "color: white; background-color: #2fa4e7; height: 50px; width: 15vw; font-size: 14px"),
       class = "titleimg")
   )
   
@@ -46,6 +52,7 @@ ui <- function(request) {
     shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
     shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
   )
+  
   #Home Tab ----
   homeTab <- tabPanel(
     title = "Home",
@@ -63,61 +70,61 @@ ui <- function(request) {
     ),
     mainPanel(
       id = "homeMain",
-      fluidRow(
-        column(
-          width = 6,
-          div(h4("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics."), id = "climtourLink", style = "cursor:pointer; text-align: justify; height:")
+      column(
+        width = 6,
+        id = "homeCol1",
+        class = "homeCol",
+        fluidRow(
+          div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeText"), 
+              id = "climtourLink", style = "cursor:pointer; text-align: justify;"),
+          style = "height: 7.5vh; max-height: 100%;"
         ), 
-        column(
-          width = 6,
-          div(h4("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region."), id = "patourLink", style = "cursor:pointer; text-align: justify;"),
-          style = "border-left-width: 3px; border-left-style: solid; border-left-color:#39a8e8; margin-left: -3px;"
-        )
-      ),
-      fluidRow(
-        column(
-          class = "homegridl",
-          width = 6,
-          # br(),
-          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumbnail.png",style = "cursor:pointer;  max-width: 20vw; height: auto;"),
-          style = "text-align: center;"
+        fluidRow(
+          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          style = "text-align: center; height: 36.625vh;"
         ),
-        column(
-          class = "homegridr",
-          width = 6,
-          img(id = "patourimg", src = "img/HomeScreen/patourthumbnail.png",style = "cursor:pointer; max-width: 20vw; height: auto;"),
-          style = "text-align: center;"
-        )
-      ),
-      fluidRow(
-        column(
-          width = 6,
-          div(h4("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed."), id = "climexpLink", style = "cursor:pointer;text-align: justify;")
-          
-        ), 
-        column(
-          width = 6,
-          div(h4("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas."), id = "paexpLink", style = "cursor:pointer;text-align: justify;"),
-          style = "border-left-width: 3px; border-left-style: solid; border-left-color:#39a8e8; margin-left: -3px;"
-        )
-      ),
-      fluidRow(
-        column(
-          class = "homegridlb",
-          width = 6,
-          img(id = "climexpimg", src = "img/HomeScreen/watershed.png",style = "cursor:pointer;max-width: 20vw; height: auto;"),
-          style = "text-align: center;"
-          
+        fluidRow(
+          div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeText"), 
+              id = "climexpLink", style = "cursor:pointer;text-align: justify"),
+          style = "height: 7.5vh; max-height: 100%;"
         ),
-        column(
-          class = "homegridrb",
-          width = 6,
-          img(id = "paexpimg", src = "img/HomeScreen/protectedarea.png",style = "cursor:pointer;max-width: 20vw; height: auto;"),
-          style = "text-align: center;"
+        fluidRow(
+          img(id = "climexpimg", src = "img/HomeScreen/watershed.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          style = "text-align: center; height: 36.625vh;"
+        )
+      ),
+      column(
+        width = 6,
+        id = "homeCol2",
+        class = "homeCol",
+        fluidRow(
+          id = "patourLink",
+          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeText"), 
+            style = "cursor:pointer; text-align: justify;"
+          ),
+          style = "height: 7.5vh; max-height: 100%;"
+        ),
+        fluidRow(
+          id = "patourimg", 
+          img(src = "img/HomeScreen/patourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          style = "text-align: center; height: 36.625vh;"
+        ),
+        fluidRow(
+          id = "paexpLink", 
+          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeText"), 
+            style = "cursor:pointer;text-align: justify;"
+          ),
+          style = "height: 7.5vh; max-height: 100%;"
+        ),
+        fluidRow(
+          id = "paexpimg", 
+          img(src = "img/HomeScreen/protectedarea.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          style = "text-align: center; height: 36.625vh;"
         )
       )
     )
   )
+  
   #Climate Metric Tour Tab ----
   climTourTab <- tabPanel(
     title = "Climate Metrics Tour",
@@ -136,12 +143,12 @@ ui <- function(request) {
       ddownBttnUI("y2ymapBttn")
     )
   )
+  
   #Climate Metric Explorer Tab ----
   climExpTab <- tabPanel(
     title = "Climate Metrics Explorer",
     value = "climexpTab",
     icon = NULL,
-    # tags$head(includeScript("www/js/togglePanelIcon.js")),
     sidebarPanel(
       id = "climexpSide",
       class = "mysidebar",
@@ -162,20 +169,20 @@ ui <- function(request) {
           bs_append(
             title = "Inputs", 
             content =
-              selectInput(
+              selectizeInput(
                 inputId = "climExpLayer",
                 label = NULL,
                 choices = c("Select metric: " = "", tilevect),
                 selected = NULL,
                 multiple  = F,
                 width = "auto",
-                selectize = T
+                options = list(maxOptions = 12)
               )
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "Outputs", 
-            content = appStarPlotUI("climexp")
+            content = uiOutput("climexpStarplotDiv",inline=T)
           )
       )
     ),
@@ -183,9 +190,11 @@ ui <- function(request) {
       width = 8,
       id = "climexpMain",
       mapUI("climexpMap"),
-      ddownBttnUI("climexpMapBttn")
+      ddownBttnUI("climexpMapBttn"),
+      uiOutput("b2ecoBttn")
     )
   )
+  
   #Protected Areas Tour Tab ----
   paTourTab <- tabPanel(
     title = "Protected Areas Tour",
@@ -231,6 +240,7 @@ ui <- function(request) {
       )
     )
   )
+  
   #Protected Areas Explorer Tab ----
   paExpTab <- tabPanel(
     title = "Protected Areas Explorer",
@@ -239,7 +249,7 @@ ui <- function(request) {
     # tags$head(includeScript("www/js/togglePanelIcon.js")),
     sidebarPanel(
       id = "paexpSide",
-      class="mysidebar",
+      class = "mysidebar",
       width = 4,
       fluidRow(
         id = "paexpSideR1",
@@ -271,7 +281,7 @@ ui <- function(request) {
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "Outputs", 
-            content = appStarPlotUI("paexp")
+            content = appStarPlotUI("paexp",live=F)
           )
       )
     ),
@@ -282,6 +292,7 @@ ui <- function(request) {
       ddownBttnUI("paexpMapBttn")
     )
   )
+  
   #NavBar Page ----
   tagList(
     useShinyjs(),
