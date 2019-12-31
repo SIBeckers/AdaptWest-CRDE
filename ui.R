@@ -182,7 +182,11 @@ ui <- function(request) {
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "Outputs", 
-            content = uiOutput("climexpStarplotDiv",inline=T)
+            content = 
+              list(
+                uiOutput("climexpStarplotDiv",inline = T),
+                uiOutput("climexpxyplotdiv",inline = T)
+              )
           )
       )
     ),
@@ -214,16 +218,16 @@ ui <- function(request) {
       ddownBttnUI("pamapBttn"),
       absolutePanel(
         id = "patourPanel",
-        top = 20,
-        left = 85,
+        top = 350,
+        left = 25,
         right = "auto",
         bottom = "auto",
         width = "19vw",
         height = "auto",
-        draggable = F,
+        draggable = T,
         fixed = F,
         cursor = "inherit",
-        HTML('<i class="fa fa-minus fa-lg mycolIcon" id="patourPanelIcon" data-toggle="collapse" data-target="#patourpaneldiv"></i><strong style="padding:2px"> Menu </strong>'),
+        HTML('<i class="fa fa-minus fa-lg mycolIcon" id="patourPanelIcon" data-toggle="collapse" data-target="#patourpaneldiv"></i><strong style="padding:2px"> Data Layer </strong>'),
         br(),
         tags$div(
           id = 'patourpaneldiv',  class = "collapse in",
@@ -281,7 +285,7 @@ ui <- function(request) {
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "Outputs", 
-            content = appStarPlotUI("paexp",live=F)
+            uiOutput("paexpStarplotDiv",inline = T),
           )
       )
     ),

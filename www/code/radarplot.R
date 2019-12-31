@@ -15,6 +15,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
   as_tibble(rownames = namecol) %>%
   select(-removecols)
   }
+  data[[namecol]]<-str_wrap(data[[namecol]],35)
   if (isFALSE(interactive)) {
     library(ggplot2)
     library(ggradar)
@@ -23,7 +24,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
     data <- data %>% mutate_at(vars(-namecol), rescale) %>% 
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
-    print(data)
+    # print(data)
     # p <- ggradar(
     #   data,
     #   legend.position = "bottom",
@@ -48,8 +49,9 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
       scale_y_continuous(breaks=seq(0, 1, 0.25),labels=seq(0, 1, 0.25),limits=c(-0.1,1),minor_breaks = seq(0,1,0.25))+
       annotate("text", x = seq(1,8),
                y = 1.0,
-               label = colnames(data[2:9]),angle=c(0,0,0,0,0,0,0,0),hjust=c(0.8,0.8,0.6,0.5,0.25,0.25,0.25,0),size=rel(3),vjust=0)+
+               label = colnames(data[2:9]),angle=c(0,0,0,0,0,0,0,0),hjust=c(0.8,0.5,0.75,0.5,0.25,0.25,0.25,0),size=rel(4),vjust=c(1,1,1,0,1,1,1,1))+
       theme_bw()+
+      guides(color = guide_legend(title.position="top",ncol=3,byrow=T))+
       theme(
         aspect.ratio=1,
         axis.text.y=element_blank(),

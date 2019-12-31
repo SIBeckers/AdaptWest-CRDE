@@ -94,7 +94,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
             urlTemplate = setup$tile1url,
             attribution = tilelist$tileAttribution[which(setup$tile1 == tilelist$tileName)],
             group = "metrics",
-            layerId = tilelist$tileGroup[which(setup$tile1 == ilelist$tileName)],
+            layerId = tilelist$tileGroup[which(setup$tile1 == tilelist$tileName)],
             options = tileOptions(
               tms = T,
               minZoom = minZoom,

@@ -24,7 +24,10 @@ library(plotly)
 library(leaflet.extras)
 library(shinyjs)
 library(data.table)
+library(dplyr)
+library(stringr)
 options(shiny.jquery.version = 1)
+
 
 
 # Global Resources ----
@@ -37,41 +40,35 @@ thepassword <- "DataBasin2019"
 loginMenu = F
 
 # Protected Areas Data ---- 
-#I moved loading the PAs into server.R
-# pas <- read_sf("./Data/napamerc_comp.gpkg")
-# pas <- read_sf("./Data/napamerc.gpkg")
-# pafields <- fread("./Data/protectedareafields.csv")
-# paatts <- fread("./Data/protectedareaattributes.csv")
-# pas <- merge(pas, pafields, by = "gridcode")
-# pas <- merge(pas, paatts, by = "gridcode")
-# pas <- pas[-c(pas$PA_NAME == "Wildlife Habitat Protection"),]
-# rm(pafields,patts)
+pafile = "./Data/pas_20191230.gpkg"
+ptsfile = "./Data/pas_centroids_20191230.gpkg"
+paminmax <- fread('./Data/paminmax.csv')
+paminmax$Name = c("MIN","MAX")
+names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                     'Tree Carbon','Soil Carbon',"Name")
+
 
 # Watersheds Data ----
-#I moved loading the Watersheds into server.R
-# wds <- read_sf("./Data/wds_comp.gpkg")
-# wds <- read_sf("./Data/wds.gpkg")
-# wdatts <- fread("./Data/watershedattributes.csv")
-# wds <- merge(wds,wdatts, by = "FIDNUM2")
+wdfile = "./Data/wds_20191230.gpkg"
 
 # Ecoregion Data ----
-ecos <- read_sf("./Data/ecos_simp.gpkg")
-ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
-ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
-ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
+# ecos <- read_sf("./Data/ecoregsimp2.gpkg")
+ecos <- read_sf('./Data/ecos_20191230.gpkg')
+# ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
+# ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
+# ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
 hucmin <- fread("./Data/hucminmax.csv")
 hucmin$NEWNAME = c("MIN","MAX")
 
-paminmax <- fread('./Data/paminmax.csv')
-paminmax$NEWNAME = c("MIN","MAX")
+
 
 # Map Settings ----
 minZoom = 0
 maxZoom = 9
 
 
-# zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,1)
-zoomcuts <- c(3500, 1350, 650, 390, 270, 200, 160, 130, 100,0)
+zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
+# zoomcuts <- c(3500, 1350, 650, 390, 270, 200, 160, 130, 100,0)
 
 # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
 tiledir <- "http://www.cacpd.org.s3-website-us-west-2.amazonaws.com/tiledirectory" #FOR ONLINE TILES
@@ -79,7 +76,9 @@ tilelist <- fread("./tilelist.txt") #Replaces above two lines.
 tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
 tilevect <- tilelist$tileName
 names(tilevect) <- tilelist$tileGroup
-
+metriclist <-names(hucmin)
+names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+  'Tree Carbon','Soil Carbon',"Name")
 
 
 
@@ -154,10 +153,11 @@ source("./Modules/ddownBttnUI.R")
 source("./Modules/ddownBttn.R")
 source("./Modules/appStarPlotUI.R")
 source("./Modules/appStarPlot.R")
-
+source("./Modules/xyPlotUI.R")
+source("./Modules/xyPlot.R")
 # Other Code -----
 source("./www/code/tourStep_v2.R")
-
+source("./www/code/myicon.R")
 
 #List of resources for each tab, used to remove from other tabs/reload. I think this will speed things up. ----
 #Not even being implemented right now, so still performance gains to be made I think.

@@ -120,6 +120,13 @@ a:hover, a:focus {
   min-height: 33vh;
   
 }
+
+.mystyle {
+  width: auto !important;
+}
+
+
+
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
@@ -203,25 +210,23 @@ a:hover, a:focus {
   min-height: auto;
   height: auto;
   max-height: 88vh;
-  
 }
-/*
-#climexpPanel{
-  background-color: rgb(255, 255, 255);
-  background-color: rgba(255,255,255,0.8);
-  padding: 10px;
-  transition: opacity 50ms 50ms;
-  border: 1px solid;
-  border-radius: 15px;
-  z-index: 1200;
-  height: calc(100vh - 115px);
-}
-*/
+
 #climexpMain{
   height: calc(100vh - 115px);
-
 }
 
+#climExpB2E.bttn-unite.bttn-primary:focus, #climExpB2E.bttn-unite.bttn-primary:hover {
+  color: white !important;
+}
+
+#climexp-getallSP, #climexp-resetSP, #climExpB2E {
+  color: #0078A8;
+}
+
+#climexp-getallSP {
+  float: right;
+}
 /*-----------------------------------------------------------------
                     PA TOUR CSS
 -------------------------------------------------------------------*/
@@ -238,9 +243,17 @@ a:hover, a:focus {
   height: calc(100vh - 115px);
 }
 */
+
+
 #patourMain {
   height: calc(100vh - 115px);
 }
+#patourPanel {
+  background-color: white;
+  padding:5px;
+  border-radius: 5px;
+}
+
 
 /*-----------------------------------------------------------------
                     PA Explorer CSS
@@ -259,6 +272,14 @@ a:hover, a:focus {
 
 #paexpMain {
   height: calc(100vh - 115px);
+}
+
+#paexp-getallSP, #paexp-resetSP{
+  color: #0078A8;
+}
+
+#paexp-getallSP {
+  float: right;
 }
 
 /*-----------------------------------------------------------------
