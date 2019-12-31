@@ -488,18 +488,21 @@ function(input, output, session) {
         rpas(inBounds_PAs())
         # print(multiSelected_pas())
         if(!is.null(rpas())){
-          proxy %>%
-            clearShapes() %>%
-            addPolygons(
-              data = rpas(),
-              fillOpacity = 0.5,
-              weight = 1,
-              color = "blue",
-              stroke = T,
-              label = ~htmlEscape(PA_NAME),
-              layerId = ~ gridcode,
-              group= "pas"
-            )
+          print(nrow(rpas()))
+          if(!is.null(nrow(rpas()))){
+            proxy %>%
+              clearShapes() %>%
+              addPolygons(
+                data = rpas(),
+                fillOpacity = 0.5,
+                weight = 1,
+                color = "blue",
+                stroke = T,
+                label = ~htmlEscape(PA_NAME),
+                layerId = ~ gridcode,
+                group= "pas"
+              )
+          }
         }
         
       })
