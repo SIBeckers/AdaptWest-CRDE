@@ -1,20 +1,22 @@
-xyPlot <- function(input, output, session,data){
+xyPlot <- function(input, output, session,data,namecol){
   source("./www/code/xyplot.R")
   # library(dplyr)
-  xvar <- reactiveVal(input$climExpX)
-  yvar <- reactiveVal(input$climExpY)
+  xvar <- reactiveVal(input$"X")
+  yvar <- reactiveVal(input$"Y")
   print(xvar())
   print(yvar())
   
-  # if (is.null(data)) {
-  #   return()
-  # } else {
-    # print(data)
-  data <- data %>% select(starts_with(xvar()),starts_with(yvar())) %>% st_drop_geometry() %>% mutate_all(funs(as.numeric))
-  print(data)
-  sctplot <- xyPlot(data = data, xvar = xvar(), yvar = yvar())
-  output$xyPlot <- renderPlot(sctplot)
-  # }
+  if (is.null(data) | is.null(xvar()) | is.null(yvar())) {
+    return()
+  } else if (xvar() != yvar()){
+    print(data)
+    data <- data %>% select(starts_with(xvar()),starts_with(yvar()),namecol) %>% mutate_at(.vars=1:2,funs(as.numeric)) %>% st_drop_geometry()
+    print(data)
+    sctplot <- xyplot(data = data, xvar = xvar(), yvar = yvar())
+    output$xyPlot <- renderPlot(sctplot)
+  } else{
+    return()
+  }
   
   # output$hoverInfo <- renderPrint({
   #   if(!is.null(input$plot_hover)){

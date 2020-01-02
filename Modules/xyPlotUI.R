@@ -7,7 +7,7 @@ xyPlotUI <- function(id) {
       ),
       fluidRow(
         selectizeInput(
-          inputId = ns("climExpX"),
+          inputId = ns("X"),
           label = "X-variable",
           choices = c("Select X axis: " = "", metriclist),
           selected = "elevdiv",
@@ -16,7 +16,7 @@ xyPlotUI <- function(id) {
           options = list(maxOptions = 12)
         ),
         selectizeInput(
-          inputId = ns("climExpY"),
+          inputId = ns("Y"),
           label = "Y-variable",
           choices = c("Select Y axis: " = "", metriclist),
           selected = "intact",

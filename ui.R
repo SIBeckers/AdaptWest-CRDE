@@ -181,11 +181,18 @@ ui <- function(request) {
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Outputs", 
+            title = "Plots and tables", 
             content = 
               list(
                 uiOutput("climexpStarplotDiv",inline = T),
-                uiOutput("climexpxyplotdiv",inline = T)
+                uiOutput("climexpXYplotdiv",inline = T)
+              )
+          )%>%
+          bs_set_opts(panel_type = "success", use_heading_link = T) %>%
+          bs_append(
+            title = "Generate Report", 
+            content = 
+              list(
               )
           )
       )
@@ -284,8 +291,19 @@ ui <- function(request) {
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Outputs", 
-            uiOutput("paexpStarplotDiv",inline = T),
+            title = "Plots and Tables", 
+            content=list(
+              uiOutput("paexpStarplotDiv",inline = T),
+              uiOutput("paexpXYplotdiv",inline = T)
+            )
+          )%>%
+          bs_set_opts(panel_type = "success", use_heading_link = T) %>%
+          bs_append(
+            title = "Generate Report", 
+            content = 
+              list(
+                
+              )
           )
       )
     ),
