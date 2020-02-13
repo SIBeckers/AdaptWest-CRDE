@@ -322,6 +322,7 @@ function(input, output, session) {
         spdat<-NULL
         clickedIds$ids<-NULL
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
+        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME")
       })
       
       #8e) Map Polygon Click Logic----
@@ -437,12 +438,26 @@ function(input, output, session) {
         # mswds <- NULL
       })
     #8g) Obersve xyplot inputs ----
-    observeEvent(input$"climexp-X",
-            callModule(xyPlot,"climexp",data=rwds(),namecol="NEWNAME")
-    )
-    observeEvent(input$"climexp-Y",
-            callModule(xyPlot,"climexp",data=rwds(),namecol="NEWNAME")
-    )
+    observeEvent(multiSelected_wds(),{
+      observeEvent(input$"climexp-X",{
+        if (is.null(multiSelected_wds())) {
+          print("IS NULL")
+          callModule(xyPlot,"climexp",data=rwds(),
+                     data2= NULL, namecol="NEWNAME")
+        } else {  
+          callModule(xyPlot,"climexp",data=rwds(),
+                    data2= multiSelected_wds(), namecol="NEWNAME")
+        }
+      })
+      observeEvent(input$"climexp-Y",{
+        if (is.null(multiSelected_wds())) {
+          print("IS NULL")
+          callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME")
+        } else {  
+          callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME")
+        }
+      })
+    })
     # observeEvent("")
     } else if (input$tabs == "paexpTab") {
     #9). PA Explorer Logic ----
@@ -584,10 +599,10 @@ function(input, output, session) {
         }
       )
       observeEvent(input$"paexp-X",
-                   callModule(xyPlot,"paexp",data=pas,namecol="PA_NAME")
+                   callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
       )
       observeEvent(input$"paexp-Y",
-                   callModule(xyPlot,"paexp",data=pas,namecol="PA_NAME")
+                   callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
       )
     }
   })

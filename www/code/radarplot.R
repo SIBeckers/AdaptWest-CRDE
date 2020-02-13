@@ -17,14 +17,17 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
   }
   data[[namecol]]<-str_wrap(data[[namecol]],35)
   if (isFALSE(interactive)) {
+   
     library(ggplot2)
     library(ggradar)
     library(ggiraphExtra)
     mname <- sym(namecol)
-    data <- data %>% mutate_at(vars(-namecol), rescale) %>% 
+    data <- data %>% mutate_at(vars(-namecol), rescale) %>% rownames_to_column("ROWID") %>%
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
-    # print(data)
+    print(head(data))
+    # data[[namecol]]<-factor(data[[namecol]],levels=1:nrow(data))
+    # print(levels(data[[namecol]]))
     # p <- ggradar(
     #   data,
     #   legend.position = "bottom",
@@ -36,13 +39,14 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
     #   group.line.width = 1,
     #   axis.label.size = 4,
     # )
-    p <- ggRadar(data = data,aes(color = !!mname,group = !!mname),
+    p <- ggRadar(data = data,aes(colour = ROWID),
+                label=data[[namecol]],
                 na.rm = T,
                 rescale = F,
-                legend.position = "bottom",
+                legend.position = "none",
                 alpha = 0,
                 use.label = F,
-                interactive = F)+
+                interactive = F,show.legend=F)+
       annotate("text", x = 1.5,
                y = seq(0, 1, 0.25),
                label = seq(0, 1, 0.25),size=rel(3)) +
@@ -51,7 +55,8 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
                y = 1.0,
                label = colnames(data[2:9]),angle=c(0,0,0,0,0,0,0,0),hjust=c(0.8,0.5,0.75,0.5,0.25,0.25,0.25,0),size=rel(4),vjust=c(1,1,1,0,1,1,1,1))+
       theme_bw()+
-      guides(color = guide_legend(title.position="top",ncol=3,byrow=T))+
+      # guides(color = guide_legend(title.position="top",ncol=3,byrow=T))+
+      # scale_color_discrete(labels=data[[namecol]],name="Area:") +
       theme(
         aspect.ratio=1,
         axis.text.y=element_blank(),
