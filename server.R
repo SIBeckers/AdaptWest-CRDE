@@ -294,14 +294,15 @@ function(input, output, session) {
       observeEvent(input$"climexp-getallSP",{
         multiSelected_wds(rwds())
         clickedIds$ids<-multiSelected_wds()$FIDNUM2
-        mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:15)) %>% mutate_at(2:9,funs(as.numeric))
+        
+        mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
         edata <- eregion$edata
         
         names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                           'Tree Carbon','Soil Carbon')
         spdat <- rbind(edata,mswds)
         
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = 10, live = F)
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
         proxy %>%
           addPolygons(
             data = multiSelected_wds(),
@@ -400,12 +401,13 @@ function(input, output, session) {
             selectMultiPolys(mapId = "climexpMap-map",data = rwds(),
                              idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
           )
-          mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:15)) %>% mutate_at(2:9,funs(as.numeric))
+          print("HELLO JUSTIN")
+          mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
           edata <- eregion$edata
           names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon')
           spdat <- rbind(edata,mswds)
-          callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = 10, live = F)
+          callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
         }
       
       })

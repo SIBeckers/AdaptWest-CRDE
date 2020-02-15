@@ -15,9 +15,8 @@ I've made some changes and it seems a bit beter to me now. I changed some text s
 	
 2.	Climate Metrics Tour
 +	Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
-+	Improve look of map buttons.
+
 3.	Climate Metrics Explorer
-+	Force sidebar length to increase when drop down menu is entered.  Needs to be larger than drop down menu.
 + Fix radar plot axes scaling
 + Include additional data/summary data in radar plot
 + Sort out the xy plot.
@@ -25,7 +24,7 @@ I've made some changes and it seems a bit beter to me now. I changed some text s
 
 4.	PA Tour
 + Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
-+ Improve look of map buttons.
+
 + Fix look and location of tile selector drop-down.
 + Drill down/up : maybe a simple refresh/back to ecoregions button is enough?
 

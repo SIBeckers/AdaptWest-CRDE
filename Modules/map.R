@@ -18,7 +18,8 @@ map <- function(input, output, session, swipe = F, mapbox = F,
             minZoom = minZoom,
             maxZoom = maxZoom,
             worldCopyJump = T,
-            preferCanvas = F
+            preferCanvas = F,
+            wheelDebounceTime = 100
           )
         ) %>%
         # mapOptions(zoomToLimits = "always") %>%

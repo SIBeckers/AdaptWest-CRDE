@@ -3,7 +3,7 @@ xyPlotUI <- function(id) {
   tagList(
     div(class = "xyplotdiv",
       fluidRow(
-        plotOutput(ns("xyPlot"),width = "100%")
+        plotOutput(ns("xyPlot"),width = "50%")
       ),
       fluidRow(
         selectizeInput(

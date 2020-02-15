@@ -19,13 +19,17 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
   if (isFALSE(interactive)) {
    
     library(ggplot2)
-    library(ggradar)
+    # library(ggradar)
     library(ggiraphExtra)
     mname <- sym(namecol)
     data <- data %>% mutate_at(vars(-namecol), rescale) %>% rownames_to_column("ROWID") %>%
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
     print(head(data))
+    ggplotColours <- function(n = nrow(data), h = c(0, 360)+15) {
+      if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
+      hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
+    }
     # data[[namecol]]<-factor(data[[namecol]],levels=1:nrow(data))
     # print(levels(data[[namecol]]))
     # p <- ggradar(
@@ -40,7 +44,6 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
     #   axis.label.size = 4,
     # )
     p <- ggRadar(data = data,aes(colour = ROWID),
-                label=data[[namecol]],
                 na.rm = T,
                 rescale = F,
                 legend.position = "none",
@@ -53,10 +56,10 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
       scale_y_continuous(breaks=seq(0, 1, 0.25),labels=seq(0, 1, 0.25),limits=c(-0.1,1),minor_breaks = seq(0,1,0.25))+
       annotate("text", x = seq(1,8),
                y = 1.0,
-               label = colnames(data[2:9]),angle=c(0,0,0,0,0,0,0,0),hjust=c(0.8,0.5,0.75,0.5,0.25,0.25,0.25,0),size=rel(4),vjust=c(1,1,1,0,1,1,1,1))+
+               label = colnames(data[3:10]),angle=c(0,0,0,0,0,0,0,0),hjust=c(0.5,0.5,0.7,0.35,0.5,0.5,0.5,0.5),size=rel(4),vjust=c(1,1,1,0,1,1,1,1))+
       theme_bw()+
-      # guides(color = guide_legend(title.position="top",ncol=3,byrow=T))+
-      # scale_color_discrete(labels=data[[namecol]],name="Area:") +
+      guides(color = guide_legend(title.position="top",ncol=3,byrow=T))+
+      scale_fill_manual(values=ggplotColours(n=length(data$ROWID)),labels=data[[namecol]],name="Area:",aesthetics = c("color",'fill')) +
       theme(
         aspect.ratio=1,
         axis.text.y=element_blank(),
