@@ -1,4 +1,4 @@
-xyplot <- function(data,data2,xvar, yvar,nam) {
+xyplot <- function(data,data2,xvar, yvar,nam,offset=0) {
   library(ggplot2)
   source("./www/code/colours.R")
   library(viridis)
@@ -9,7 +9,7 @@ xyplot <- function(data,data2,xvar, yvar,nam) {
   #STILL NEED TO FIX THE COLOURS!
   if (!is.null(data2)) {
     fcol <- rep(NA,nrow(data2))
-    col2 <- ggplotColours(n=(nrow(data2)+1))[2:(1+nrow(data2))]
+    col2 <- ggplotColours(n=(nrow(data2)+offset))[(1+offset):(offset+nrow(data2))]
     print(col2)
     print(nrow(data2))
     if (ncol(data) == 3) {

@@ -95,12 +95,15 @@ function(input, output, session) {
             addPolygons(
               data = multipolys,
               fillColor = "red",
+              fillOpacity = 0.05,
               weight = 5,
               color = "black",
               stroke = T,
               label = ~multipolys[[nameField]],
               layerId = paste0(newId,multipolys[[idfield]]),
-              group = group
+              group = group,
+              highlightOptions=highlightOptions(
+                color="white",weight=1.5)
             )
         }
       }
@@ -263,7 +266,10 @@ function(input, output, session) {
           stroke = T,
           label = ~htmlEscape(ecos$NA_L3NAME),
           layerId = ~ecos$ecoreg3,
-          group = "ecoregions"
+          group = "ecoregions",
+          highlightOptions=highlightOptions(
+            color="white",weight=1.5
+          )
         )
       #8b) Add tiles----
       observe({
@@ -307,12 +313,15 @@ function(input, output, session) {
           addPolygons(
             data = multiSelected_wds(),
             fillColor = "red",
+            fillOpacity = 0.05,
             weight = 5,
             color = "black",
             stroke = T,
             label = ~NEWNAME,
             layerId = ~paste0("mp_",FIDNUM2),
-            group = "swds"
+            group = "swds",
+            highlightOptions=highlightOptions(
+              color="white",weight=1.5)
           )
       })
       #8d) Clear All button press in Output ----
@@ -323,7 +332,7 @@ function(input, output, session) {
         spdat<-NULL
         clickedIds$ids<-NULL
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
-        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME")
+        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
       })
       
       #8e) Map Polygon Click Logic----
@@ -411,7 +420,7 @@ function(input, output, session) {
         }
       
       })
-      #8f) If the back to ecoregions button is pressed ----
+        #8f) If the back to ecoregions button is pressed ----
       observeEvent(input$climExpB2E,{
         removeUI(selector = "div:has(>#climExpB2E)", session = session)
         removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
@@ -439,33 +448,35 @@ function(input, output, session) {
         # edata <- NULL
         # mswds <- NULL
       })
-    #8g) Obersve xyplot inputs ----
-    observeEvent(multiSelected_wds(),{
-      observeEvent(input$"climexp-X",{
-        if (is.null(multiSelected_wds())) {
-          print("IS NULL")
-          callModule(xyPlot,"climexp",data=rwds(),
-                     data2= NULL, namecol="NEWNAME")
-        } else {  
-          callModule(xyPlot,"climexp",data=rwds(),
-                    data2= multiSelected_wds(), namecol="NEWNAME")
-        }
+      #8g) Obersve xyplot inputs ----
+      observeEvent(multiSelected_wds(),{
+        observeEvent(input$"climexp-X",{
+          if (is.null(multiSelected_wds())) {
+            print("IS NULL")
+            callModule(xyPlot,"climexp",data=rwds(),
+                       data2= NULL, namecol="NEWNAME",offset=1)
+          } else {  
+            callModule(xyPlot,"climexp",data=rwds(),
+                      data2= multiSelected_wds(), namecol="NEWNAME",offset=1)
+          }
+        })
+        observeEvent(input$"climexp-Y",{
+          if (is.null(multiSelected_wds())) {
+            print("IS NULL")
+            callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME",offset=1)
+          } else {  
+            callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME",offset=1)
+          }
+        })
       })
-      observeEvent(input$"climexp-Y",{
-        if (is.null(multiSelected_wds())) {
-          print("IS NULL")
-          callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME")
-        } else {  
-          callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME")
-        }
-      })
-    })
     # observeEvent("")
     } else if (input$tabs == "paexpTab") {
     #9). PA Explorer Logic ----
       callModule(map, "paexpMap", OSM=F) #Protected Areas Explorer Map
       proxy <- leafletProxy("paexpMap-map") #%>% setView(lng = -100, lat = 55, zoom = 3)
       callModule(ddownBttn,"paexpMapBttn") #Settings button on Protected Areas Explorer Map
+      output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp")))
+      
       pas <- read_sf(pafile)
       pts <- read_sf(ptsfile)
       pas <- pas[-c(pas$PA_NAME == "Wildlife Habitat Protection"),]
@@ -509,13 +520,15 @@ function(input, output, session) {
               clearShapes() %>%
               addPolygons(
                 data = rpas(),
-                fillOpacity = 0.5,
+                fillOpacity = 0.05,
                 weight = 1,
                 color = "blue",
                 stroke = T,
                 label = ~htmlEscape(PA_NAME),
                 layerId = ~ gridcode,
-                group= "pas"
+                group= "pas",
+                highlightOptions=highlightOptions(
+                  color="white",weight=1.5)
               )
           }
         }
@@ -571,7 +584,7 @@ function(input, output, session) {
       #9e) iii. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
       observeEvent(input$"paexpMap-map_shape_click", {
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = F,all=F,reset=T)))
-        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp")))
+        # output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp")))
         multiSelected_pas(
           selectMultiPolys(mapId = "paexpMap-map",data = rpas(),
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
@@ -584,12 +597,12 @@ function(input, output, session) {
         print(nrow(padat))
         if (nrow(padat) > 2){
           print(multiSelected_pas())
-          callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = 10, live = F)
+          callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = F)
   
         }
         # callModule(appStarPlot,"paexp",data=multiSelected_pas(),namecol="PA_NAME",removecols=c(2:7))
       })
-      #9e) iv. Logic to handle if no polygons are selected but where in the past
+      #9e) iv. Logic to handle if no polygons are selected but were in the past
       observe(
         if (!is.null(multiSelected_pas())) {
           if (nrow(multiSelected_pas()) == 0) {
@@ -600,12 +613,35 @@ function(input, output, session) {
           } 
         }
       )
-      observeEvent(input$"paexp-X",
-                   callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
-      )
-      observeEvent(input$"paexp-Y",
-                   callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
-      )
+      
+      
+      observeEvent(multiSelected_pas(),{
+        observeEvent(input$"paexp-X",{
+          if (is.null(multiSelected_pas())) {
+            print("IS NULL")
+            callModule(xyPlot,"paexp",data=pas,
+                       data2= NULL, namecol="PA_NAME",offset=0)
+          } else {  
+            callModule(xyPlot,"paexp",data=pas,
+                       data2= multiSelected_pas(), namecol="PA_NAME",offset=0)
+          }
+        })
+        observeEvent(input$"paexp-Y",{
+          if (is.null(multiSelected_pas())) {
+            print("IS NULL")
+            callModule(xyPlot,"paexp",data=pas,data2=NULL,namecol="PA_NAME",offset=0)
+          } else {  
+            callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME",offset=0)
+          }
+        })
+      })
+      
+      # observeEvent(input$"paexp-X",
+      #              callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
+      # )
+      # observeEvent(input$"paexp-Y",
+      #              callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME")
+      # )
     }
   })
 }

@@ -157,6 +157,9 @@ source("./Modules/appStarPlotUI.R")
 source("./Modules/appStarPlot.R")
 source("./Modules/xyPlotUI.R")
 source("./Modules/xyPlot.R")
+source("./Modules/reportUI.R")
+source("./Modules/report.R")
+
 # Other Code -----
 source("./www/code/tourStep_v2.R")
 source("./www/code/myicon.R")

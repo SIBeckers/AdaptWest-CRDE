@@ -19,22 +19,16 @@ I've made some changes and it seems a bit beter to me now. I changed some text s
 3.	Climate Metrics Explorer
 + Fix radar plot axes scaling
 + Include additional data/summary data in radar plot
-+ Sort out the xy plot.
+
 + Make the sidebar collapse and map expand.
 
 4.	PA Tour
 + Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
 
-+ Fix look and location of tile selector drop-down.
-+ Drill down/up : maybe a simple refresh/back to ecoregions button is enough?
 
 5.	PA Explorer
 + Speed up
 + Could we do some sort of grouping for drill-down similar to ecoregions in the metrics tour? Or by some sort of category?
-+ Fix loading of polygons on zoom
-+ Need to fix polygons. 
-+ Sort out radar plot
-+ Sort out xyplot
 
 6.	Reporting
 + Will we be generating reports?

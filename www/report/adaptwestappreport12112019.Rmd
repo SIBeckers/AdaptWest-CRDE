@@ -37,6 +37,10 @@ output:
 urlcolor: blue
 sansfont: Calibri    
 ---
+<!-- inster this into r code chunks and set update amount.
+if (identical(rmarkdown::metadata$runtime, "shiny"))
+  shiny::setProgress(0.5)  # set progress to 50%
+-->
 
 ### Climate Resilience Metric Report for `r params$park`
 

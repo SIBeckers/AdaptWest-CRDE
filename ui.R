@@ -192,7 +192,7 @@ ui <- function(request) {
           bs_append(
             title = "Generate Report", 
             content = 
-              list(
+              list(reportUI('climReport')
               )
           )
       )
@@ -301,7 +301,7 @@ ui <- function(request) {
           bs_append(
             title = "Generate Report", 
             content = 
-              list(
+              list(reportUI('paReport')
                 
               )
           )
