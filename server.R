@@ -595,7 +595,7 @@ function(input, output, session) {
                         'Tree Carbon','Soil Carbon',"Name")
         padat <- rbind(paminmax,mspas)
         print(nrow(padat))
-        if (nrow(padat) > 2){
+        if (nrow(padat) > 1){
           print(multiSelected_pas())
           callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = F)
   

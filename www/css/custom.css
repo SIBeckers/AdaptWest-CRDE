@@ -5,6 +5,14 @@
 .col-sm-12:nth-child(1){
   height: 8vh;
 }
+.footer {
+  text-align: right;
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 56vh;
+}
+
 body, h1, h2, h3, h4, h5, h6, p, li {
   font-family: "Roboto","Helvetica Neue", sans-serif !important;
 }
@@ -125,8 +133,22 @@ a:hover, a:focus {
   width: auto !important;
 }
 
+a.btn:hover, a.btn:focus, a.btn.focus {
+  color: #178acc;
+  text-decoration: none;
 
+}
+.fa-twitter {
+  font-size: 1.33333333em;
+  line-height: .75em;
+  vertical-align: -15%;
+}
 
+.fa-github {
+  font-size: 1.33333333em;
+  line-height: .75em;
+  vertical-align: -15%;
+}
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
@@ -168,7 +190,7 @@ a:hover, a:focus {
 #homeSidebar{
   text-align: center;
   position: relative;
-   height: calc(100vh - 115px);
+   height: 82vh;
 }
 
 
@@ -181,7 +203,7 @@ a:hover, a:focus {
 }
 
 #homeMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
 }
 .homeCol {
   width: 48%;
@@ -209,11 +231,11 @@ a:hover, a:focus {
   /*overflow-y: auto;*/
   min-height: auto;
   height: auto;
-  max-height: 88vh;
+  max-height: 81vh;
 }
 
 #climexpMain{
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
 }
 
 #climExpB2E.bttn-unite.bttn-primary:focus, #climExpB2E.bttn-unite.bttn-primary:hover {
@@ -246,7 +268,7 @@ a:hover, a:focus {
 
 
 #patourMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
 }
 #patourPanel {
   background-color: white;
@@ -270,8 +292,17 @@ a:hover, a:focus {
   
 }
 
+#paexpSide {
+  min-width: 10%;
+  max-width: 100%;
+  overflow-y: auto;
+  min-height: auto;
+  height: auto;
+  max-height: 82vh;
+}
+
 #paexpMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
 }
 
 #paexp-getallSP, #paexp-resetSP{

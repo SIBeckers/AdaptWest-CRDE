@@ -49,8 +49,10 @@ ui <- function(request) {
   
   #Footer ----
   footer = tagList(
-    shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
-    shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
+    div(class="footer",
+      shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
+      shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
+    )
   )
   
   #Home Tab ----
@@ -77,20 +79,20 @@ ui <- function(request) {
         fluidRow(
           div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeText"), 
               id = "climtourLink", style = "cursor:pointer; text-align: justify;"),
-          style = "height: 7.5vh; max-height: 100%;"
+          style = "height: 10.5vh; max-height: 100%;"
         ), 
         fluidRow(
           img(id = "climtourimg", src = "img/HomeScreen/metrictourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 36.625vh;"
+          style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
           div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeText"), 
               id = "climexpLink", style = "cursor:pointer;text-align: justify"),
-          style = "height: 7.5vh; max-height: 100%;"
+          style = "height: 10.5vh; max-height: 100%;"
         ),
         fluidRow(
           img(id = "climexpimg", src = "img/HomeScreen/watershed.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 36.625vh;"
+          style = "text-align: center; height: 33.625vh;"
         )
       ),
       column(
@@ -102,24 +104,24 @@ ui <- function(request) {
           div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeText"), 
             style = "cursor:pointer; text-align: justify;"
           ),
-          style = "height: 7.5vh; max-height: 100%;"
+          style = "height: 10.5vh; max-height: 100%;"
         ),
         fluidRow(
           id = "patourimg", 
           img(src = "img/HomeScreen/patourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 36.625vh;"
+          style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
           id = "paexpLink", 
           div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeText"), 
             style = "cursor:pointer;text-align: justify;"
           ),
-          style = "height: 7.5vh; max-height: 100%;"
+          style = "height: 10.5vh; max-height: 100%;"
         ),
         fluidRow(
           id = "paexpimg", 
           img(src = "img/HomeScreen/protectedarea.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 36.625vh;"
+          style = "text-align: center; height: 33.625vh;"
         )
       )
     )

@@ -33,8 +33,8 @@ options(shiny.jquery.version = 1)
 
 
 # Global Resources ----
-aw_gh <- "http://github.com" #github link
-aw_tw <- "http://twitter.com/adaptwest"
+aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
+aw_tw <- "https://twitter.com/adaptwest"
 enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
