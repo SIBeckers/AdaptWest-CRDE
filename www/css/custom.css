@@ -136,8 +136,17 @@ a:hover, a:focus {
 a.btn:hover, a.btn:focus, a.btn.focus {
   color: #178acc;
   text-decoration: none;
-
 }
+
+#climexp-getallSP.bttn-jelly.bttn-success {
+  background: #73a839;
+  color: #ffffff;
+}
+
+#climexp-resetSP.bttn-jelly.bttn-warning {
+  color: #ffffff;
+}
+
 .fa-twitter {
   font-size: 1.33333333em;
   line-height: .75em;
@@ -149,6 +158,8 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   line-height: .75em;
   vertical-align: -15%;
 }
+
+
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
@@ -190,9 +201,9 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 #homeSidebar{
   text-align: center;
   position: relative;
-   height: 82vh;
+  height: calc(100vh - 115px);
+  max-height: calc(100vh - 115px);
 }
-
 
 
 #homeSidebarR2{
@@ -218,8 +229,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 -------------------------------------------------------------------*/
 
 #climtourMain{
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
+  max-height: calc(100vh - 80px);
+  
 }
+
 
 
 /*-----------------------------------------------------------------
@@ -231,7 +245,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   /*overflow-y: auto;*/
   min-height: auto;
   height: auto;
-  max-height: 81vh;
+  max-height: calc(100vh - 115px);
 }
 
 #climexpMain{
@@ -249,6 +263,13 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 #climexp-getallSP {
   float: right;
 }
+
+#climexp-bttnRow {
+  padding-left: 15px;
+  padding-right: 15px;
+  
+}
+
 /*-----------------------------------------------------------------
                     PA TOUR CSS
 -------------------------------------------------------------------*/
@@ -298,7 +319,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   overflow-y: auto;
   min-height: auto;
   height: auto;
-  max-height: 82vh;
+  max-height: calc(100vh - 115px);
 }
 
 #paexpMain {
@@ -313,6 +334,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   float: right;
 }
 
+#paexp-bttnRow {
+  padding-left: 15px;
+  padding-right: 15px;
+  
+}
 /*-----------------------------------------------------------------
                     Stuff for smaller screens
 -------------------------------------------------------------------*/
