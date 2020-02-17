@@ -38,7 +38,7 @@ rsconnect/
 
 #AdaptWest App Data
 **/Data
-**/img
+
 **/logos
 *.Rds
 
