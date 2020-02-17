@@ -200,7 +200,7 @@ function(input, output, session) {
       #7). PA Tour Logic ----
       patour <- callModule(tourPanel, "patour", tourName = "pa")
       shinyjs::click("y2ytour-stopBttn")
-      callModule(map,"pamap", OSM = T)
+      callModule(map,"pamap", OSM = F)
       callModule(ddownBttn,"pamapBttn") #Settings button on Protected Areas Tour Map
       shinyjs::click("patour-stopBttn")
       observeEvent(patour$id(),{runjs("window.scrollTo(0,0)")})
@@ -581,12 +581,13 @@ function(input, output, session) {
       observeEvent(input$"paexpMap-map_shape_click", {
         shinyjs::click(id = "paexpacc-2-heading")
       },once=T)
+      
       #9e) iii. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
       observeEvent(input$"paexpMap-map_shape_click", {
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = F,all=F,reset=T)))
         # output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp")))
         multiSelected_pas(
-          selectMultiPolys(mapId = "paexpMap-map",data = rpas(),
+          selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
         )
 
@@ -602,6 +603,7 @@ function(input, output, session) {
         }
         # callModule(appStarPlot,"paexp",data=multiSelected_pas(),namecol="PA_NAME",removecols=c(2:7))
       })
+      
       #9e) iv. Logic to handle if no polygons are selected but were in the past
       observe(
         if (!is.null(multiSelected_pas())) {
