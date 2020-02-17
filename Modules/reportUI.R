@@ -1,6 +1,7 @@
 reportUI <- function(id) {
   ns <- NS(id)
   tagList(
+    uiOutput(ns("selPolys")),
     prettyRadioButtons(
       inputId = ns("reportFormat"),
       label = "Report Format",

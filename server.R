@@ -410,13 +410,17 @@ function(input, output, session) {
             selectMultiPolys(mapId = "climexpMap-map",data = rwds(),
                              idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
           )
-          print("HELLO JUSTIN")
+          
+          # print("HELLO JUSTIN")
           mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
           edata <- eregion$edata
           names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon')
           spdat <- rbind(edata,mswds)
-          callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
+          if (nrow(spdat) > 1){
+            callModule(report,"climReport",polys=rwds(),data=wds,namecol="NEWNAME",pa=F)
+            callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
+          }
         }
       
       })
@@ -452,7 +456,7 @@ function(input, output, session) {
       observeEvent(multiSelected_wds(),{
         observeEvent(input$"climexp-X",{
           if (is.null(multiSelected_wds())) {
-            print("IS NULL")
+            # print("IS NULL")
             callModule(xyPlot,"climexp",data=rwds(),
                        data2= NULL, namecol="NEWNAME",offset=1)
           } else {  
@@ -462,7 +466,7 @@ function(input, output, session) {
         })
         observeEvent(input$"climexp-Y",{
           if (is.null(multiSelected_wds())) {
-            print("IS NULL")
+            # print("IS NULL")
             callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME",offset=1)
           } else {  
             callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME",offset=1)
@@ -590,14 +594,15 @@ function(input, output, session) {
           selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
         )
-
+        
         mspas <- st_drop_geometry(multiSelected_pas()) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
         names(mspas) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                         'Tree Carbon','Soil Carbon',"Name")
         padat <- rbind(paminmax,mspas)
-        print(nrow(padat))
+        # print(nrow(padat))
         if (nrow(padat) > 1){
-          print(multiSelected_pas())
+          callModule(report,"paReport",polys=multiSelected_pas(),data=pas)
+          # print(multiSelected_pas())
           callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = F)
   
         }
@@ -608,7 +613,7 @@ function(input, output, session) {
       observe(
         if (!is.null(multiSelected_pas())) {
           if (nrow(multiSelected_pas()) == 0) {
-            print("here")
+            # print("here")
             removeUI(selector = "div:has(>#paexp-appStarPlot)", session = session)
             shinyjs::click(id = "paexpacc-0-heading")
             output$paexpStarplotDiv <- NULL
@@ -620,7 +625,7 @@ function(input, output, session) {
       observeEvent(multiSelected_pas(),{
         observeEvent(input$"paexp-X",{
           if (is.null(multiSelected_pas())) {
-            print("IS NULL")
+            # print("IS NULL")
             callModule(xyPlot,"paexp",data=pas,
                        data2= NULL, namecol="PA_NAME",offset=0)
           } else {  
@@ -630,7 +635,7 @@ function(input, output, session) {
         })
         observeEvent(input$"paexp-Y",{
           if (is.null(multiSelected_pas())) {
-            print("IS NULL")
+            # print("IS NULL")
             callModule(xyPlot,"paexp",data=pas,data2=NULL,namecol="PA_NAME",offset=0)
           } else {  
             callModule(xyPlot,"paexp",data=pas,data2=multiSelected_pas(),namecol="PA_NAME",offset=0)

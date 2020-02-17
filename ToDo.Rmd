@@ -8,27 +8,21 @@ output: html_document
 # Outlining steps/features/to-dos for the beta version
 1.	Home Tab
 +	Harmonization of the look of the images (bottom two have shadows, etc).
-+	Changes to improve look on smaller screens (maybe even on tablets)
-
-I've made some changes and it seems a bit beter to me now. I changed some text sizes and the order items are placed when the screen gets small.
-    
 	
 2.	Climate Metrics Tour
-+	Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
++	Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place. Works okay for the single maps, but not for the double map.
 
 3.	Climate Metrics Explorer
 + Fix radar plot axes scaling
-+ Include additional data/summary data in radar plot
-
-+ Make the sidebar collapse and map expand.
++ Include additional data/summary data
++ Selector for Report.
 
 4.	PA Tour
-+ Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place.
++ Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place. Works okay for the single maps, but not for the double map.
 
 
 5.	PA Explorer
-+ Speed up
-+ Could we do some sort of grouping for drill-down similar to ecoregions in the metrics tour? Or by some sort of category?
++ Selector for report
 
 6.	Reporting
 + Will we be generating reports?

@@ -1,5 +1,42 @@
-report<- function(input, output, session,paramslist,outname="AdaptWest_Metrics_Report") {
+report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",paramslist,outname="AdaptWest_Metrics_Report") {
 
+  observeEvent(!is.null(polys),{
+    print(names(data))
+    if(isTRUE(pa)){
+      output$selPolys<-renderUI({
+        selectizeInput(
+          inputId = "selPoly4Report",
+          label = "",
+          choices = list(
+            "Select protected area for report..." ="",
+            "Selected in map"=as.list(polys[[namecol]]),
+            "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
+          ),
+          multiple=F,
+          selected="",
+          width="100%",
+          options=list(maxOptions=4000,hideSelected=T)
+        )
+      })
+    } else {
+      output$selPolys<-renderUI({
+        selectizeInput(
+          inputId = "selPoly4Report",
+          label = "",
+          choices = list(
+            "Select watershed for report..." ="",
+            "Selected in map"=as.list(polys[[namecol]]),
+            "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
+          ),
+          multiple=F,
+          selected="",
+          width="100%",
+          options=list(maxOptions=3000)
+        )
+      })
+    }
+  })
+  
   outputDir<-"./www/report" #Should work when running the app locally.
   #outputDir <- normalizePath(tempdir()) #For when loading to shinyapps.io
   output$storymap <- downloadHandler(
