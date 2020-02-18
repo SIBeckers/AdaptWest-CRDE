@@ -26,11 +26,7 @@ library(shinyjs)
 library(data.table)
 library(dplyr)
 library(stringr)
-# library(crosstalk)
-# library(scatterD3)
 options(shiny.jquery.version = 1)
-
-
 
 # Global Resources ----
 aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
@@ -38,7 +34,6 @@ aw_tw <- "https://twitter.com/adaptwest"
 enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
-
 loginMenu = F
 
 # Protected Areas Data ---- 
@@ -49,20 +44,16 @@ paminmax$Name = c("MIN","MAX")
 names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                      'Tree Carbon','Soil Carbon',"Name")
 
-
 # Watersheds Data ----
 wdfile = "./Data/wds_20191230.gpkg"
 
 # Ecoregion Data ----
-# ecos <- read_sf("./Data/ecoregsimp2.gpkg")
 ecos <- read_sf('./Data/ecos_20191230.gpkg')
 # ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
 # ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
 # ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
 hucmin <- fread("./Data/hucminmax.csv")
 hucmin$NEWNAME = c("MIN","MAX")
-
-
 
 # Map Settings ----
 minZoom = 0
@@ -82,8 +73,6 @@ metriclist <-names(hucmin)
 names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
   'Tree Carbon','Soil Carbon',"Name")
 
-
-
 # Climate Metrics Tour Data -----
 y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
 y2ybds <- st_bbox(y2yshp)
@@ -95,8 +84,6 @@ y2y$tourFileName <- file.path("./www/md/metrictour",y2y$tourFileName)
 y2y$tile1url <- ifelse(!is.na(y2y$tile1),file.path(tiledir,paste0(y2y$tile1,"/{z}/{x}/{y}.png")),NA)
 y2y$tile2url <- ifelse(!is.na(y2y$tile2),file.path(tiledir,paste0(y2y$tile2,"/{z}/{x}/{y}.png")),NA)
 y2y$swipe <- ifelse(!is.na(y2y$tile1) & !is.na(y2y$tile2),T,F)
-
-
 
 # Protected Areas Tour Data ----
 pashp <- y2yshp
