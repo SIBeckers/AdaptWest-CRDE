@@ -3,7 +3,7 @@ xyPlot <- function(input, output, session,data,data2,namecol,offset=0){
   # library(dplyr)
   xvar <- reactiveVal(input$"X")
   yvar <- reactiveVal(input$"Y")
-  print(xvar() == yvar())
+  # print(xvar() == yvar())
   if (is.null(data) | is.null(xvar()) | is.null(yvar())) {
     return()
   } else if (!is.null(data) & !is.null(data2) & xvar() != yvar()) {

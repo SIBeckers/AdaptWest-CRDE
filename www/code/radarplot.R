@@ -25,7 +25,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
     data <- data %>% mutate_at(vars(-namecol), rescale) %>% rownames_to_column("ROWID") %>%
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
-    print(head(data))
+    # print(head(data))
     ggplotColours <- function(n = nrow(data), h = c(0, 360)+15) {
       if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
       hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)

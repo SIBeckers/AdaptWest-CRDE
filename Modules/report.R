@@ -1,11 +1,13 @@
 report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",paramslist,outname="AdaptWest_Metrics_Report") {
-
+  ROIdata<-reactiveValues(roi=NULL)
+  
   observeEvent(!is.null(polys),{
-    print(names(data))
+    # print(names(data))
     if(isTRUE(pa)){
       output$selPolys<-renderUI({
+        ns <- session$ns
         selectizeInput(
-          inputId = "selPoly4Report",
+          inputId = ns("selPoly4Report"),
           label = "",
           choices = list(
             "Select protected area for report..." ="",
@@ -20,8 +22,9 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
       })
     } else {
       output$selPolys<-renderUI({
+        ns <- session$ns
         selectizeInput(
-          inputId = "selPoly4Report",
+          inputId = ns("selPoly4Report"),
           label = "",
           choices = list(
             "Select watershed for report..." ="",
@@ -36,6 +39,14 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
       })
     }
   })
+  
+  observe({
+    foo<-input$selPoly4Report
+    ROIdata$roi <- na.omit(data[data[[namecol]]==foo,])
+    print(ROIdata$roi)
+  })
+  
+  
   
   outputDir<-"./www/report" #Should work when running the app locally.
   #outputDir <- normalizePath(tempdir()) #For when loading to shinyapps.io

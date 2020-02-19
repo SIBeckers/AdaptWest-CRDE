@@ -6,7 +6,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
   shp <- shpdata[which(shpdata$TOURID == setup$polygon),]
   # print(shp)
   bds <- unname(st_bbox(shp))
-  print(bds)
+  # print(bds)
   
   # print(setup)
   isSwipe = NULL
@@ -32,7 +32,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
     #     shinyjs::runjs(str)
    # isSwipe = TRUE
    # } else {
-     print("Creating new swipeable map")
+     # print("Creating new swipeable map")
      isSwipe = TRUE
      if (isTRUE(OSM)) {
       callModule(map, mapid, swipe = T,
@@ -57,7 +57,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
    # }
   } else if (isFALSE(setup$swipe)) {
     if (isFALSE(isolate(rSwipe))) {
-      print("Modifying existing non-swipe map")
+      # print("Modifying existing non-swipe map")
       isSwipe = FALSE
       proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
         proxy %>%
@@ -79,7 +79,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
           ) 
     } else if (isTRUE(isolate(rSwipe))) {
       if (!is.na(setup$tile1)) {
-        print("Creating new non-swipe map")
+        # print("Creating new non-swipe map")
         isSwipe = FALSE
         if (isTRUE(OSM)) {
           callModule(map, mapid, swipe = F,OSM = T)
