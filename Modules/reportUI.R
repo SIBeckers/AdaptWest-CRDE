@@ -14,6 +14,22 @@ reportUI <- function(id) {
       bigger=T,
       animation="pulse"
     ),
+    conditionalPanel(
+      condition="input.reportFormat=='HTML'",
+      ns=ns,
+      switchInput(
+        inputId=ns("reportInteractive"),
+        label="Interactive HTML?",
+        value=F,
+        onLabel="YES",
+        offLabel="NO",
+        onStatus="primary",
+        offStatus="default",
+        labelWidth="50%",
+        inline=T,
+        width="100%"
+      )
+    ),
     div(style="text-align: center",
       downloadBttn(
         outputId=ns("reportBttn"),

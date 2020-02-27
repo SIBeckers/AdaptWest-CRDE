@@ -9,6 +9,7 @@
 #
 # Libraries ----
 library(shinythemes)
+library(mapview)
 library(shiny)
 library(shinyWidgets)
 library(htmltools)
@@ -26,6 +27,7 @@ library(shinyjs)
 library(data.table)
 library(dplyr)
 library(stringr)
+library(kableExtra)
 options(shiny.jquery.version = 1)
 
 # Global Resources ----
@@ -49,9 +51,9 @@ wdfile = "./Data/wds_20191230.gpkg"
 
 # Ecoregion Data ----
 ecos <- read_sf('./Data/ecos_20191230.gpkg')
-# ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
-# ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
-# ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
+ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
+ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
+ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
 hucmin <- fread("./Data/hucminmax.csv")
 hucmin$NEWNAME = c("MIN","MAX")
 
