@@ -44,7 +44,9 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
     foo<-input$selPoly4Report
     bar <- na.omit(data[data[[namecol]]==foo,])
     rm(foo)
-    names(bar)[which(names(bar)==namecol)]<-"NAME"  
+    names(bar)[which(names(bar)==namecol)]<-"Name"  
+    print(bar %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,
+                                                       treec,soilc))
     ROIdata$roi<-bar
     rm(bar)
   })
@@ -53,11 +55,11 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
   
   outputDir<-"./www/report" #Should work when running the app locally.
   #outputDir <- normalizePath(tempdir()) #For when loading to shinyapps.io
-  print(outname)
+  
   
   output$reportBttn <- downloadHandler(
     filename = function() {
-      paste0(outname,".",
+      paste0(outname,"_",ROIdata$roi$Name,".",
              switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",RMD="Rmd"))
     },
     content = function(file) {
@@ -71,7 +73,8 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
         "l2data" = T,
         "l3data" = T,
         "printCode" = FALSE,
-        "html" = input$reportInteractive
+        "html" = input$reportInteractive,
+        "RBS" = T
       )
       print(paramslist)
       withProgress(message = "Generating report ...",{
@@ -79,14 +82,12 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
         file.copy("report_.Rmd", tempReport, overwrite = TRUE)
         params <- paramslist
         
-        out <- rmarkdown::render(
+       rmarkdown::render(
           tempReport,
+          output_file = file,
           params = params,
           envir = new.env(parent = globalenv())
         )
-        file.copy(file.path(outputDir,paste0("report.",switch(input$reportFormat,PDF="pdf",Word="docx",
-                                             Powerpoint="pptx",HTML="html",
-                                             RMD = "Rmd"))),out)
       })
     }
   )

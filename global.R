@@ -51,9 +51,9 @@ wdfile = "./Data/wds_20191230.gpkg"
 
 # Ecoregion Data ----
 ecos <- read_sf('./Data/ecos_20191230.gpkg')
-ecol1stats <- fread("./Data/ecoregionlevel1mean.csv")
-ecol2stats <- fread("./Data/ecoregionlevel2mean.csv")
-ecol3stats <- fread("./Data/ecoregionlevel3mean.csv")
+ecol1stats <- fread("./Data/ecoregionlevel1mean.csv",colClasses=list(character=1,numeric=2:9))
+ecol2stats <- fread("./Data/ecoregionlevel2mean.csv",colClasses=list(character=1,numeric=2:9))
+ecol3stats <- fread("./Data/ecoregionlevel3mean.csv",colClasses=list(character=1,numeric=2:9))
 hucmin <- fread("./Data/hucminmax.csv")
 hucmin$NEWNAME = c("MIN","MAX")
 
