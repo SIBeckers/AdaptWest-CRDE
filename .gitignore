@@ -38,7 +38,7 @@ rsconnect/
 
 #AdaptWest App Data
 *.gpkg
-*.png
+www/report/*.png
 **/logos
 *.Rds
 **www/report/tmp
