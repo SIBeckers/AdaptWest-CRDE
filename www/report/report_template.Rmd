@@ -22,10 +22,6 @@ urlcolor: blue
 sansfont: Calibri    
 ---
 
-<!-- inster this into r code chunks and set update amount.
-if (identical(rmarkdown::metadata$runtime, "shiny"))
-  shiny::setProgress(0.5)  # set progress to 50%
--->
 ```{r SETUP, include=FALSE}
 # set this option in the first code chunk in the document
 knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
@@ -42,6 +38,9 @@ if(isTRUE(params$html)) {
   chunktype = "asis"
 } else {
   chunktype = "final"
+}
+if(isTRUE(params$RBS)){
+  shiny::setProgress(0.04)
 }
 ```
 
@@ -77,6 +76,9 @@ For further information and citation refer to:
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.11)
 }
 ```
 
@@ -158,7 +160,10 @@ AdaptWest, Canadian Forest Service
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
-}  
+}
+if (params$RBS){
+  shiny::setProgress(0.23)
+}
 ```
 
 ## Map of forwards climate refugia for `r params$poly$Name`
@@ -188,14 +193,18 @@ m <- m %>% addPolygons(
 ) %>%
 fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/fwsvel.html",
-  file="./fwsvel.png",
-  remove_url=T,
-  selfcontained=T
-)
-knitr::include_graphics("./fwsvel.png")
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/fwsvel.html",
+    file="./fwsvel.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics("./fwsvel.png")
+} else {
+  m
+}
 if (params$RBS){
   shiny::setProgress(0.28)
 }
@@ -221,6 +230,9 @@ fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
 }
+if (params$RBS){
+  shiny::setProgress(0.34)
+}
 ```
 ## Map of backwards climate refugia for `r params$poly$Name`
 ```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center',eval=T}
@@ -241,14 +253,18 @@ m <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/bwsvel.html",
-  file="./bwsvel.png",
-  remove_url=T,
-  selfcontained=T
-)
-knitr::include_graphics("./bwsvel.png")
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/bwsvel.html",
+    file="./bwsvel.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics("./bwsvel.png")
+} else {
+  m
+}
 if (params$RBS){
   shiny::setProgress(0.36)
 }
@@ -265,6 +281,9 @@ The map above shows refugia based on backward climatic velocity from current to 
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.40)
 }
 ```
 
@@ -288,14 +307,18 @@ m <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/elevdiv.html",
-  file="./elevdiv.png",
-  remove_url=T,
-  selfcontained=T
-)
-knitr::include_graphics("./elevdiv.png")
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/elevdiv.html",
+    file="./elevdiv.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics("./elevdiv.png")
+} else{
+  m
+}
 if (params$RBS){
   shiny::setProgress(0.45)
 }
@@ -314,6 +337,9 @@ The map above shows topographic diversity. The spatial data can be downloaded [h
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.49)
 }
 ```
 ## Map of Biotic Velocity for `r params$poly$Name`
@@ -335,13 +361,15 @@ m <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/birdref.html",
-  file="./birdref.png",
-  remove_url=T,
-  selfcontained=T
-)
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/birdref.html",
+    file="./birdref.png",
+    remove_url=T,
+    selfcontained=T
+  )
+}
 
 ind<-which(tilelist$tileName=="treeref500")
 m2 <- m %>%
@@ -360,15 +388,19 @@ m2 <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m2,
-  url = "./tmp/treeref.html",
-  file="./treeref.png",
-  remove_url=T,
-  selfcontained=T
-)
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m2,
+    url = "./tmp/treeref.html",
+    file="./treeref.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics(c("./birdref.png","./treeref.png"))
+} else {
+  m;
+}
 
-knitr::include_graphics(c("./birdref.png","./treeref.png"))
 if (params$RBS){
   shiny::setProgress(0.53)
 }
@@ -386,6 +418,9 @@ The map above shows refugia based on climatic niche models for songbirds (left p
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.60)
 }
 ```
 ## Map of Climate Connectivity for `r params$poly$Name`
@@ -407,13 +442,15 @@ m <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/fwshpath.html",
-  file="./fwshpath.png",
-  remove_url=T,
-  selfcontained=T
-)
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/fwshpath.html",
+    file="./fwshpath.png",
+    remove_url=T,
+    selfcontained=T
+  )
+}
 
 ind<-which(tilelist$tileName=="bwshpath")
 m2 <- m %>%
@@ -432,15 +469,19 @@ m2 <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m2,
-  url = "./tmp/bwshpath.html",
-  file="./bwshpath.png",
-  remove_url=T,
-  selfcontained=T
-)
-
-knitr::include_graphics(c("./fwshpath.png","./bwshpath.png"))
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m2,
+    url = "./tmp/bwshpath.html",
+    file="./bwshpath.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  
+  knitr::include_graphics(c("./fwshpath.png","./bwshpath.png"))
+} else {
+  m;m2
+}
 if (params$RBS){
   shiny::setProgress(0.62)
 }
@@ -455,6 +496,9 @@ The map above shows forward (left panel) and backward (right panel) climatic con
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.68)
 }
 ```
 ## Map of Above- and Below-Ground Carbon for `r params$poly$Name`
@@ -478,13 +522,15 @@ m <- m %>%
     )
   ) 
 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/soilc.html",
-  file="./soilc.png",
-  remove_url=T,
-  selfcontained=T
-)
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/soilc.html",
+    file="./soilc.png",
+    remove_url=T,
+    selfcontained=T
+  )
+}
 
 ind<-which(tilelist$tileName=="treena500")
 m2 <- m %>% 
@@ -503,15 +549,18 @@ m2 <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m2,
-  url = "./tmp/treena.html",
-  file="./treena.png",
-  remove_url=T,
-  selfcontained=T
-)
-
-knitr::include_graphics(c("./treena.png","./soilc.png"))
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m2,
+    url = "./tmp/treena.html",
+    file="./treena.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics(c("./treena.png","./soilc.png"))
+} else{
+  m;m2
+}
 if (params$RBS){
   shiny::setProgress(0.7)
 }
@@ -525,6 +574,9 @@ The map above shows above-ground carbon stored in tree biomass (left panel) and 
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.77)
 }
 ```
 ## Map of Intactness for `r params$poly$Name`
@@ -546,15 +598,18 @@ m <- m %>%
       zIndex = 9000
     )
   ) 
-mapview::mapshot(
-  x= m,
-  url = "./tmp/intact.html",
-  file="./intact.png",
-  remove_url=T,
-  selfcontained=T
-)
-
-knitr::include_graphics(c("./intact.png"))
+if(isFALSE(params$html)){
+  mapview::mapshot(
+    x= m,
+    url = "./tmp/intact.html",
+    file="./intact.png",
+    remove_url=T,
+    selfcontained=T
+  )
+  knitr::include_graphics(c("./intact.png"))
+} else {
+  m
+}
 if (params$RBS){
   shiny::setProgress(0.79)
 }
@@ -570,6 +625,9 @@ The map above shows intactness (the inverse of human land use intensity). The sp
 fmt <- rmarkdown::default_output_format(knitr::current_input())$name
 if (fmt == "pdf_document") {
   cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.85)
 }
 ```
 
@@ -594,10 +652,13 @@ For more information on patterns of climate resilience within North American pro
 
 <!-- <p style = "page-break-before: always"> -->
 ```{r, results = 'asis', echo = F}
-# fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-# if (fmt == "pdf_document") {
-  # cat('\\pagebreak')
-# }
+fmt <- rmarkdown::default_output_format(knitr::current_input())$name
+if (fmt == "pdf_document") {
+cat('\\pagebreak')
+}
+if (params$RBS){
+  shiny::setProgress(0.94)
+}
 ```
 ## Climate Resilience Metric Scatterplots for `r params$poly$Name`
 ```{r scatterplot, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center',eval=F}

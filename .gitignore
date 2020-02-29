@@ -37,11 +37,11 @@ vignettes/*.pdf
 rsconnect/
 
 #AdaptWest App Data
-**/Data
-
+*.gpkg
+*.png
 **/logos
 *.Rds
-
+**www/report/tmp
 # Shiny Apps Manifest
 *.dcf 
 *.7z

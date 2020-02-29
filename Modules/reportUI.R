@@ -20,7 +20,7 @@ reportUI <- function(id) {
       switchInput(
         inputId=ns("reportInteractive"),
         label="Interactive HTML?",
-        value=F,
+        value=T,
         onLabel="YES",
         offLabel="NO",
         onStatus="primary",
