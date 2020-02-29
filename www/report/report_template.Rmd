@@ -30,14 +30,15 @@ knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
 source("./mapFunction.R")
 source("../code/radarplot.R")
 source("../code/xyplot.R")
+if(!dir.exists("./report/tmp")){dir.create("./report/tmp")}
 
 bds <- st_bbox(params$poly)
 bds <- unname(bds)
 
 if(isTRUE(params$html)) {
-  chunktype = "asis"
+  chunktype = "hold"
 } else {
-  chunktype = "final"
+  chunktype = "asis"
 }
 if(isTRUE(params$RBS)){
   shiny::setProgress(0.04)
@@ -125,9 +126,10 @@ if(isTRUE(params$l3data)) {
   # names(polydata)[1]<-"Name"
   polydata<-rbind(polydata,l3data,use.names=F)
 }
-names(polydata)<-names(paminmax)
+
+names(polydata)<-names(paminmax)[c(9,1:8)]
 setDF(polydata)
-polydata<-polydata[,c(9,1:8)]
+
 knitr::kable(
   polydata,
   row.names=F,
@@ -257,7 +259,7 @@ if(isFALSE(params$html)){
   mapview::mapshot(
     x= m,
     url = "./tmp/bwsvel.html",
-    file="./bwsvel.png",
+    file=".bwsvel.png",
     remove_url=T,
     selfcontained=T
   )
@@ -398,7 +400,7 @@ if(isFALSE(params$html)){
   )
   knitr::include_graphics(c("./birdref.png","./treeref.png"))
 } else {
-  m;
+  m;m2
 }
 
 if (params$RBS){
@@ -480,7 +482,8 @@ if(isFALSE(params$html)){
   
   knitr::include_graphics(c("./fwshpath.png","./bwshpath.png"))
 } else {
-  m;m2
+  m
+  m2
 }
 if (params$RBS){
   shiny::setProgress(0.62)
@@ -559,7 +562,8 @@ if(isFALSE(params$html)){
   )
   knitr::include_graphics(c("./treena.png","./soilc.png"))
 } else{
-  m;m2
+  m
+  m2
 }
 if (params$RBS){
   shiny::setProgress(0.7)

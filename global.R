@@ -29,6 +29,7 @@ library(dplyr)
 library(stringr)
 library(kableExtra)
 options(shiny.jquery.version = 1)
+# library(webshot)
 
 # Global Resources ----
 aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
@@ -72,8 +73,9 @@ tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
 tilevect <- tilelist$tileName
 names(tilevect) <- tilelist$tileGroup
 metriclist <-names(hucmin)
-names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
-  'Tree Carbon','Soil Carbon',"Name")
+names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
+                       'Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                       'Tree Carbon','Soil Carbon',"Name")
 
 # Climate Metrics Tour Data -----
 y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
