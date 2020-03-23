@@ -88,6 +88,7 @@ function(input, output, session) {
       if (is.null(nameField)) {
         nameField = idfield
       }
+      print(multipolys)
       #Do we actually want to add the polygon to the map? or just capture them?
       if (isTRUE(addPolys)) {
         if(nrow(multipolys)>0){
@@ -192,10 +193,10 @@ function(input, output, session) {
       shinyjs::click("patour-stopBttn")
       observeEvent(patour$id(),{runjs("window.scrollTo(0,0)")})
       observeEvent(input$"pamap-map_shape_click", {
-        multiSelected(
-          selectMultiPolys(mapId = "pamap-map",data = pashp[which(pashp$TOURID == patour$id()),],
-                           idfield = "TOURID", addPolys = T, newId = "mp_")
-        )
+         multiSelected(
+            selectMultiPolys(mapId = "pamap-map",data = pashp[which(pashp$TOURID == patour$id()),],
+                             idfield = "TOURID", addPolys = T, newId = "mp_")
+          )
       })
       observe({
         if (!is.null(input$"pamap-map_bounds")) {
@@ -206,7 +207,7 @@ function(input, output, session) {
           patourView$opacity = input$"pamapBttn-opacity"}
       })
       observe({isSwipepa(tourStep(mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),view=isolate(patourView$view),shpdata=pashp,
-                                opac=patourView$opacity, OSM = T))
+                                opac=patourView$opacity, OSM = T, showAll=T))
       })
       observe({
         proxy <- leafletProxy(mapId = "pamap-map")

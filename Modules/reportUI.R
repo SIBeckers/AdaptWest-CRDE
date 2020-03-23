@@ -5,7 +5,7 @@ reportUI <- function(id) {
     prettyRadioButtons(
       inputId = ns("reportFormat"),
       label = "Report Format",
-      choices = c("PDF","Word","Powerpoint","HTML","RMD"),
+      choices = c("PDF","Word","Powerpoint","HTML","Markdown"),
       inline = T,
       selected = "Word",
       status="success",

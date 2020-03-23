@@ -1,9 +1,21 @@
-tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = NULL,opac = NULL, OSM = F){
+tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, 
+                     shpdata = NULL,opac = NULL, OSM = F,showAll = F){
  
   #Setup a map proxy object that we can use to modify the map.
-  setup <- tourinfo[tourId == tourid,]
+  #START HERE ON MONDAY TO ADD POLYGONS TO TOUR STEP 1.#
+  if(isTRUE(showAll)){
+    if(tourid <=2) {
+      setup <- tourinfo
+      shp <- shpdata
+    } else {
+      setup <- tourinfo[tourId == tourid,]
+      shp <- shpdata[which(shpdata$TOURID == setup$polygon),]
+    }
+  } else {
+      setup <- tourinfo[tourId == tourid,]
+      shp <- shpdata[which(shpdata$TOURID == setup$polygon),]
+  }
   
-  shp <- shpdata[which(shpdata$TOURID == setup$polygon),]
   # print(shp)
   bds <- unname(st_bbox(shp))
   # print(bds)
@@ -124,6 +136,7 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, shpdata = N
         data = shp, 
         fillColor = NULL, 
         weight = 2,color = "blue",
+        layerId = paste0("shp",shp$TOURID),
         fillOpacity = 0.0
       )
     if (isFALSE(setup$zoomTo)) {

@@ -60,7 +60,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
   output$reportBttn <- downloadHandler(
     filename = function() {
       paste0(outname,"_",ROIdata$roi$Name,".",
-             switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",RMD="Rmd"))
+             switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",Markdown="md"))
     },
     content = function(file) {
       paramslist<-list(
@@ -76,15 +76,21 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
         "html" = input$reportInteractive,
         "RBS" = T
       )
+      rpfm =  switch(input$reportFormat,PDF="pdf_document",Word="word_document",
+                     Powerpoint="powerpoint_presentation",HTML="html_document",
+                     MD="md_document")
       print(paramslist)
       withProgress(message = "Generating report ...",{
         tempReport <- file.path(outputDir, "report_template.Rmd")
-        file.copy("report_.Rmd", tempReport, overwrite = TRUE)
+        file.copy("report_template.Rmd", tempReport, overwrite = TRUE)
         params <- paramslist
         
        rmarkdown::render(
           tempReport,
+          output_format = rpfm,
+          clean = T,
           output_file = file,
+          intermediates_dir = "/www/report/tmp",
           params = params,
           envir = new.env(parent = globalenv())
         )

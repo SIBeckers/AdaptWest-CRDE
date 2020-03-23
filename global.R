@@ -28,6 +28,7 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(kableExtra)
+library(gridExtra)
 options(shiny.jquery.version = 1)
 # library(webshot)
 
