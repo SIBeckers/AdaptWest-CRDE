@@ -29,6 +29,9 @@ library(dplyr)
 library(stringr)
 library(kableExtra)
 library(gridExtra)
+library(lubridate)
+library(rdrop2)
+library(readr)
 options(shiny.jquery.version = 1)
 # library(webshot)
 
@@ -166,3 +169,26 @@ paexplist <- list("pas")
 globallist <- list("aw_gh","aw_tw","minZoom","maxZoom","theuser","thepassword","zoomcuts","tiledir",
                  "tilelist","tilevect","LeafletSideBySidePlugin","registerPlugin","tourStep")
 
+reportdir<-"./www/report"
+reptmpdir<-"./www/report/tmp"
+
+token <- readRDS("./token.rds")
+
+mydownloads <- drop_read_csv("downloadfrequency.csv",dest="",dtoken=token)
+
+# mydownloads <- data.table(Name=character(),Date=numeric(),stringsAsFactors = F)
+
+
+onStop(function() {
+  frequency <- mydownloads %>% group_by(Name) %>% tally()
+  write_csv(frequency,"downloadfrequency.csv")
+  drop_upload(file = 'downloadfrequency.csv',dtoken=token)
+
+  if(sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size))
+    dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
+    htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
+    pngs<-list.files(path=reportdir,full.names=T,recursive=F,pattern=".png")
+    #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
+    #I'm hoping this is never kicked on but we don't really want to get too big now do we.
+    
+})

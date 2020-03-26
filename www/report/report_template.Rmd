@@ -32,8 +32,8 @@ knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
 source("./mapFunction.R")
 source("../code/radarplot.R")
 source("../code/xyplot.R")
-if(!dir.exists("./report/tmp")){dir.create("./report/tmp")}
-
+if(!dir.exists("./tmp")){dir.create("./tmp")}
+print(params$p)
 bds <- st_bbox(params$poly)
 bds <- unname(bds)
 
@@ -159,42 +159,78 @@ if (params$RBS){
 
 ## Map of forwards climate refugia for `r params$poly$Name`
 ```{r fwdvel, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
-ind<-which(tilelist$tileName=="fwvel500")
-m<-mapFunction(swipe=F)
-m <- m %>% addPolygons(
-  data = params$poly,
-  fillColor = NULL,
-  fillOpacity = 0.00,
-  weight = 5,
-  color = "black",
-  stroke = T
-) %>% addTiles(
-  urlTemplate = tilelist$tileSubdir[ind],
-  attribution = tilelist$tileAttribution[ind],
-  group = "metrics",
-  options = tileOptions(
-    tms = T,
-    minZoom = minZoom,
-    maxZoom = maxZoom,
-    unloadInvisibleTiles = T,
-    noWrap = T,
-    opacity = 0.9,
-    zIndex = 9000
-  )
-) %>%
-fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
-
 if(isFALSE(params$html)){
-  mapview::mapshot(
-    x= m,
-    url = "./tmp/fwsvel.html",
-    file="./fwsvel.png",
-    remove_url=T,
-    selfcontained=T
-  )
-  knitr::include_graphics("./fwsvel.png")
+  if(file.exists(paste0("./fwsvel_",params$poly$Name,".png"))){
+    knitr::include_graphics(paste0("./fwsvel_",params$poly$Name,".png"))
+  } else if(file.exists(paste0("./fwsvel_",params$poly$Name,".png")) & !file.exists(paste0("./tmp/fwsvel_",params$poly$Name,".html"))) {
+    webshot::webshot(
+      url = paste0("./tmp/fwsvel_",params$poly$Name,".html"),
+      file=paste0("./fwsvel_",params$poly$Name,".png"),
+    )
+  }else {
+    ind<-which(tilelist$tileName=="fwvel500")
+    m<-mapFunction(swipe=F)
+    m <- m %>% addPolygons(
+      data = params$poly,
+      fillColor = NULL,
+      fillOpacity = 0.00,
+      weight = 5,
+      color = "black",
+      stroke = T
+    ) %>% addTiles(
+      urlTemplate = tilelist$tileSubdir[ind],
+      attribution = tilelist$tileAttribution[ind],
+      group = "metrics",
+      options = tileOptions(
+        tms = T,
+        minZoom = minZoom,
+        maxZoom = maxZoom,
+        unloadInvisibleTiles = T,
+        noWrap = T,
+        opacity = 0.9,
+        zIndex = 9000
+      )
+    ) %>%
+    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    mapview::mapshot(
+      x= m,
+      url = paste0("./tmp/fwsvel_",params$poly$Name,".html"),
+      file=paste0("./fwsvel_",params$poly$Name,".png"),
+      remove_url=F,
+      selfcontained=T
+    )
+    knitr::include_graphics(paste0("./fwsvel_",params$poly$Name,".png"))
+  }
 } else {
-  m
+
+  # else {
+    ind<-which(tilelist$tileName=="fwvel500")
+    m<-mapFunction(swipe=F)
+    m <- m %>% addPolygons(
+      data = params$poly,
+      fillColor = NULL,
+      fillOpacity = 0.00,
+      weight = 5,
+      color = "black",
+      stroke = T
+    ) %>% 
+    addTiles(
+      urlTemplate = tilelist$tileSubdir[ind],
+      attribution = tilelist$tileAttribution[ind],
+      group = "metrics",
+      options = tileOptions(
+        tms = T,
+        minZoom = minZoom,
+        maxZoom = maxZoom,
+        unloadInvisibleTiles = T,
+        noWrap = T,
+        opacity = 0.9,
+        zIndex = 9000
+      )
+    ) %>%
+    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    m
+  # }
 }
 if (params$RBS){
   shiny::setProgress(0.28)
@@ -226,7 +262,7 @@ if (params$RBS){
 }
 ```
 ## Map of backwards climate refugia for `r params$poly$Name`
-```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
+```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="bwvel500")
 m <- m %>%
   clearGroup("metrics") %>%
@@ -249,7 +285,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/bwsvel.html",
     file="bwsvel.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   knitr::include_graphics("./bwsvel.png")
@@ -279,7 +315,7 @@ if (params$RBS){
 ```
 
 ## Map of Microrefugia Potential for `r params$poly$Name`
-```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
+```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="elevdiv500")
 
 m <- m %>% 
@@ -303,7 +339,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/elevdiv.html",
     file="./elevdiv.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   knitr::include_graphics("./elevdiv.png")
@@ -334,7 +370,7 @@ if (params$RBS){
 }
 ```
 ## Map of Biotic Velocity for `r params$poly$Name`
-```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = '50%', fig.align = 'center',eval=T}
+```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = '50%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="birdref500")
 m <- m %>% 
   clearGroup("metrics") %>%
@@ -357,7 +393,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/birdref.html",
     file="./birdref.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
 }
@@ -384,7 +420,7 @@ if(isFALSE(params$html)){
     x= m2,
     url = "./tmp/treeref.html",
     file="./treeref.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   # knitr::include_graphics(c("./birdref.png","./treeref.png"))
@@ -396,7 +432,7 @@ if (params$RBS){
   shiny::setProgress(0.53)
 }
 ```
-![Bird Refugia Map](./birdref.png){width="50%"}![Tree Refugia Map](./treeref.png){width="50%"}
+<!-- ![Bird Refugia Map](./birdref.png){width="50%"}![Tree Refugia Map](./treeref.png){width="50%"} -->
 
 **Biotic velocity** is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.  
 Biotic velocities provide a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported on a per-species basis or averaged across a taxa group.
@@ -416,7 +452,7 @@ if (params$RBS){
 }
 ```
 ## Map of Climate Connectivity for `r params$poly$Name`
-```{r climate_connectivity, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
+```{r climate_connectivity, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="fwshpath")
 m <- m %>%
   clearGroup("metrics") %>%
@@ -439,7 +475,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/fwshpath.html",
     file="./fwshpath.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
 }
@@ -466,7 +502,7 @@ if(isFALSE(params$html)){
     x= m2,
     url = "./tmp/bwshpath.html",
     file="./bwshpath.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   
@@ -479,7 +515,7 @@ if (params$RBS){
   shiny::setProgress(0.62)
 }
 ```
-![Forwards Shortest Path Climate Connectivity Map](./fwshpath.png){width="50%"}![Backwards Shortest Path Climate Connectivity Map](./bwshpath.png){width="50%"}
+<!-- ![Forwards Shortest Path Climate Connectivity Map](./fwshpath.png){width="50%"}![Backwards Shortest Path Climate Connectivity Map](./bwshpath.png){width="50%"} -->
 
 
 **Climate connectivity** - The persistence of many species under climate change will depend areas that facilitate dispersal to newly climatically suitable habitat. **Climate connectivity areas** or "climate corridors" are areas that form the best route between current climate types and where those climates will occur in the future under climate change. Climate connectivity areas are distinct from refugia and thus poorly captured by many existing conservation strategies. Because dispersing organisms may need to avoid hostile climates, these routes are often circuitous rather than the straight-line paths, as is assumed when measuring standard climatic velocity [Dobrowski and Parks 2016](https://www.nature.com/articles/ncomms12349). Several methods exist for identifying climate corridors. [Carroll et al. 2018](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.14373) used centrality metrics to identify areas where many potential dispersal paths overlap.
@@ -497,7 +533,7 @@ if (params$RBS){
 }
 ```
 ## Map of Above- and Below-Ground Carbon for `r params$poly$Name`
-```{r carbon, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
+```{r carbon, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="soilc500")
 
 m <- m %>%
@@ -522,7 +558,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/soilc.html",
     file="./soilc.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
 }
@@ -549,7 +585,7 @@ if(isFALSE(params$html)){
     x= m2,
     url = "./tmp/treena.html",
     file="./treena.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   knitr::include_graphics(c("./treena.png","./soilc.png"))
@@ -576,7 +612,7 @@ if (params$RBS){
 }
 ```
 ## Map of Intactness for `r params$poly$Name`
-```{r intactness, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=T}
+```{r intactness, echo = params$printCode, results = chunktype, out.width = '100%', fig.align = 'center',eval=F}
 ind<-which(tilelist$tileName=="intact500")
 m <- m %>% 
   clearGroup("metrics") %>%
@@ -599,7 +635,7 @@ if(isFALSE(params$html)){
     x= m,
     url = "./tmp/intact.html",
     file="./intact.png",
-    remove_url=T,
+    remove_url=F,
     selfcontained=T
   )
   knitr::include_graphics(c("./intact.png"))
@@ -628,9 +664,10 @@ if (params$RBS){
 ```
 
 ## Climate Resilience Metric Star Plot for `r params$poly$Name`
-```{r starplot, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center',eval=F}
-knitr::include_graphics(params$starplot)
-br()
+```{r starplot, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center', eval=params$starplot}
+print(polydata)
+p<-radarplot(polydata,namecol="Name")
+
 if (params$RBS){
   shiny::setProgress(0.87)
 }

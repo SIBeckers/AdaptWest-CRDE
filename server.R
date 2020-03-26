@@ -70,6 +70,7 @@ function(input, output, session) {
   isSwipemetric <- reactiveVal(NULL)
   isSwipepa <- reactiveVal(NULL)
   eregion <- reactiveValues(edata = NULL,bds = NULL)
+  fillColor <-reactiveValues(fill = NULL)
   # Common Functions ----
     selectMultiPolys <- function(mapId,
                                data = y2yshp[y2yshp$TOURID %in% y2y$tourId[y2ytour$id()],],
@@ -95,7 +96,7 @@ function(input, output, session) {
           proxy %>%
             addPolygons(
               data = multipolys,
-              fillColor = "red",
+              fillColor = NULL,
               fillOpacity = 0.05,
               weight = 5,
               color = "black",
@@ -280,6 +281,9 @@ function(input, output, session) {
             )
           )
         }
+      })
+      observeEvent(input$climFillPolys,{
+        print(input$climFillPolys)
       })
       #8c) Get All button press in Outputs ----
       observeEvent(input$"climexp-getallSP",{

@@ -45,7 +45,9 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
     bar <- na.omit(data[data[[namecol]]==foo,])
     rm(foo)
     names(bar)[which(names(bar)==namecol)]<-"Name"  
-    print(bar %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,
+    print(bar %>% 
+            # st_drop_geometry() %>% 
+            select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,
                                                        treec,soilc))
     ROIdata$roi<-bar
     rm(bar)
@@ -54,7 +56,9 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
   print(paste0("Report Bttn Value: ",input$reportBttn))
   
   outputDir<-"./www/report" #Should work when running the app locally.
-  #outputDir <- normalizePath(tempdir()) #For when loading to shinyapps.io
+ 
+  
+
   
   
   output$reportBttn <- downloadHandler(
@@ -63,6 +67,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
              switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",Markdown="md"))
     },
     content = function(file) {
+      mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()))),use.names=F,fill = F)
       paramslist<-list(
         "poly" = ROIdata$roi,
         "table" = TRUE,
@@ -88,13 +93,14 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
        rmarkdown::render(
           tempReport,
           output_format = rpfm,
-          clean = T,
+          # clean = T,
           output_file = file,
-          intermediates_dir = "/www/report/tmp",
+          # intermediates_dir = "/www/report/tmp",
           params = params,
           envir = new.env(parent = globalenv())
         )
       })
+       
     }
   )
 }

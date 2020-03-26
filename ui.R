@@ -171,14 +171,26 @@ ui <- function(request) {
           bs_append(
             title = "Inputs", 
             content =
-              selectizeInput(
-                inputId = "climExpLayer",
-                label = NULL,
-                choices = c("Select metric: " = "", tilevect),
-                selected = NULL,
-                multiple  = F,
-                width = "auto",
-                options = list(maxOptions = 12)
+              list(
+                selectizeInput(
+                  inputId = "climExpLayer",
+                  label = NULL,
+                  choices = c("Select metric: " = "", tilevect),
+                  selected = NULL,
+                  multiple  = F,
+                  width = "auto",
+                  options = list(maxOptions = 12)
+                ),
+                selectizeInput(
+                  inputId = "climFillPolys",
+                  label = NULL,
+                  choices = c("Fill visible polygons with ..." = "",
+                              tilevect),
+                  selected = NULL,
+                  multiple = F,
+                  width = "auto",
+                  options = list(maxOptions = 12)
+                )
               )
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
