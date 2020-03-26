@@ -32,6 +32,7 @@ library(gridExtra)
 library(lubridate)
 library(rdrop2)
 library(readr)
+library(utils)
 options(shiny.jquery.version = 1)
 # library(webshot)
 
@@ -119,28 +120,6 @@ pa$swipe <- ifelse(!is.na(pa$tile1) & !is.na(pa$tile2),T,F)
 # pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
 # pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
 
-
-# Setup leaflet sidebyside plugin ----
-LeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
-                                          src = c("www/js/leaflet-side-by-side-gh-pages"),
-                                          script = "leaflet-side-by-side.js")
-
-
-registerPlugin <- function(map, plugin) {
-  map$dependencies <- c(map$dependencies, list(plugin))
-  map
-}
-
-# Experimental & NOT WORKING-----
-# mapdepends <- function(map) {
-#   map$dependencies
-# }
-# deregisterPlugin <- function(map){
-#   map$dependencies <- mapdepends
-#   map
-# }
-
-
 # Modules ----
 source("./Modules/tourPanelUI.R") #The story map user interface
 source("./Modules/tourPanel.R") #The story map server code
@@ -156,8 +135,25 @@ source("./Modules/reportUI.R")
 source("./Modules/report.R")
 
 # Other Code -----
-source("./www/code/tourStep_v2.R")
-source("./www/code/myicon.R")
+source("www/code/tourStep_v2.R")
+source("www/code/myicon.R")
+# source("www/code/radarplot.R")
+# source("www/code/xyplot.R")
+
+
+# Setup leaflet sidebyside plugin ----
+myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
+                                          src = c("www/js/leaflet-side-by-side-gh-pages"),
+                                          script = "leaflet-side-by-side.js")
+
+
+registerPlugin <- function(map, plugin) {
+  map$dependencies <- c(map$dependencies, list(plugin))
+  map
+}
+
+
+
 
 #List of resources for each tab, used to remove from other tabs/reload. I think this will speed things up. ----
 #Not even being implemented right now, so still performance gains to be made I think.
@@ -171,10 +167,10 @@ globallist <- list("aw_gh","aw_tw","minZoom","maxZoom","theuser","thepassword","
 
 reportdir<-"./www/report"
 reptmpdir<-"./www/report/tmp"
-
+repimgdir<-"./www/report/imgs"
 token <- readRDS("./token.rds")
 
-mydownloads <- drop_read_csv("downloadfrequency.csv",dest="",dtoken=token)
+mydownloads <- drop_read_csv("downloadfrequency.csv",dest="./",dtoken=token)
 
 # mydownloads <- data.table(Name=character(),Date=numeric(),stringsAsFactors = F)
 
@@ -183,12 +179,13 @@ onStop(function() {
   frequency <- mydownloads %>% group_by(Name) %>% tally()
   write_csv(frequency,"downloadfrequency.csv")
   drop_upload(file = 'downloadfrequency.csv',dtoken=token)
-
-  if(sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size))
-    dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
-    htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
-    pngs<-list.files(path=reportdir,full.names=T,recursive=F,pattern=".png")
+  reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+  if(reps_size>1E4){
+    print(utils:::format.object_size(reps_size, units="MB"))
+    # dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
+    # htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
+    # pngs<-list.files(path=repimgdir,full.names=T,recursive=F,pattern=".png")
     #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
     #I'm hoping this is never kicked on but we don't really want to get too big now do we.
-    
+  }
 })

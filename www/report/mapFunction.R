@@ -1,7 +1,8 @@
-mapFunction<-function(swipe = F, mapbox = F, 
-                      opacity=0.75,
-                      OSM=F) {
-  m <- leaflet(
+mapFunction<-function(opacity=0.75,
+                      OSM=F,
+                      width=NULL,
+                      height=NULL) {
+  m <- leaflet(width=width,height=height,
     options = leafletOptions(
       minZoom = minZoom,
       maxZoom = maxZoom,

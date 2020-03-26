@@ -179,7 +179,7 @@ map <- function(input, output, session, swipe = F, mapbox = F,
           collapsedHeight = 30,
           position = "bottomleft"
         ) %>%
-        registerPlugin(LeafletSideBySidePlugin) %>%
+        registerPlugin(myLeafletSideBySidePlugin) %>%
         onRender(paste0("function(el,x) {
             var mylayer1 = L.tileLayer(",
                    layer1,
