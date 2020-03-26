@@ -76,7 +76,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
     # p <- ggplotly(p)
   } else {
     library(plotly)
-    data <- data %>% mutate_at(vars(-namecol), rescale) %>% filter(NEWNAME != "MIN" & NEWNAME != "MAX")
+    data <- data %>% mutate_at(vars(-namecol), rescale) %>% filter(vars(namecol) != "MIN" & vars(namecol) != "MAX")
     names <- unlist(data %>% select(namecol),use.names = F)
     data <- data %>% select(-namecol)
     theta <- c(names(data),names(data)[1])

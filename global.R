@@ -170,7 +170,7 @@ reptmpdir<-"./www/report/tmp"
 repimgdir<-"./www/report/imgs"
 token <- readRDS("./token.rds")
 
-mydownloads <- drop_read_csv("downloadfrequency.csv",dest="./",dtoken=token)
+mydownloads <- drop_read_csv("downloads.csv",dest="./",dtoken=token)
 
 # mydownloads <- data.table(Name=character(),Date=numeric(),stringsAsFactors = F)
 
@@ -178,7 +178,9 @@ mydownloads <- drop_read_csv("downloadfrequency.csv",dest="./",dtoken=token)
 onStop(function() {
   frequency <- mydownloads %>% group_by(Name) %>% tally()
   write_csv(frequency,"downloadfrequency.csv")
+  write_csv(mydownloads,"downloads.csv")
   drop_upload(file = 'downloadfrequency.csv',dtoken=token)
+  drop_upload(file = "downloads.csv",dtoken=token)
   reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
   if(reps_size>1E4){
     print(utils:::format.object_size(reps_size, units="MB"))

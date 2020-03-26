@@ -113,7 +113,8 @@ In this report, we present data for `r paste(params$park)` on key metrics that c
 
 ## Basic Information for `r params$poly$Name`
 ```{r REFUGIA_TABLE, echo = params$printCode, results = 'asis',eval = params$table}
-polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc)
+polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc) %>%
+  mutate_at(.vars=vars(brdref,treref,treec),funs(as.numeric))
 
 if(isTRUE(params$l1data)) {
   l1data<-ecol1stats[which(ecol1stats$Name==params$poly$ecoreg1),]
@@ -144,7 +145,7 @@ if(isTRUE(params$l3data)) {
 }
 
 names(polydata)<-names(paminmax)[c(9,1:8)]
-setDF(polydata)
+polydata<-setDF(polydata)
 
 knitr::kable(
   polydata,
@@ -1000,9 +1001,13 @@ if (params$RBS){
 
 ## Climate Resilience Metric Star Plot for `r params$poly$Name`
 ```{r starplot, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center', eval=params$starplot}
-print(polydata)
-p<-radarplot(polydata,namecol="Name")
-
+# if(isTRUE(params$html)){
+#   p<-radarplot(polydata,namecol="Name")
+#   p
+# } else {
+  p<-radarplot(polydata,namecol="Name",interactive=F)
+  p
+# }
 if (params$RBS){
   shiny::setProgress(0.87)
 }
