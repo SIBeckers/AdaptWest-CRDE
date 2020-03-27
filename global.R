@@ -185,6 +185,7 @@ if(file.exists("./report_stats/token.rds")){
   tokenStatus=T
 } else {
   tokenStatus=F
+  if(!dir.exists("./report_stats")){dir.create("./report_stats")}
   mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
 }
 

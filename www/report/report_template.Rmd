@@ -18,6 +18,7 @@ params:
   printCode: FALSE  #Print the code too or just the output? 
   html: FALSE #Interactive HTML? The report is generated differently, NEEDED
   RBS: TRUE # Report progress? I put to true as we want the user to see progress
+  fmt: "" #The report format
 always_allow_html: true 
 output:
   md_document: default
@@ -46,6 +47,8 @@ registerPlugin <- function(mapFunction, plugin) {
 }
 if(!dir.exists("tmp")){dir.create("tmp")}
 if(!dir.exists("imgs")){dir.create("imgs")}
+if(!dir.exists("tmp/interactive_reports")){dir.create("tmp/interactive_reports")}
+if(!dir.exists("tmp/static_reports")){dir.create("tmp/static_reports")}
 bds <- st_bbox(params$poly)
 bds <- unname(bds)
 fullmap<-mapFunction()
@@ -72,6 +75,7 @@ Additionally, you can download the climate data for your protected area from
 within the app.
 Additional features and capabilities may be developed and the format of this 
 report and the application layout may change.
+
 ### Organizations participating in or supporting development of the application:
 AdaptWest, Canadian Forest Service
 
@@ -92,8 +96,7 @@ For further information and citation refer to:
 
 <p style="page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -163,8 +166,7 @@ if (params$RBS){
 
 
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -268,8 +270,7 @@ at several scales:
 The map above shows refugia based on forward climatic velocity from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5).
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -359,8 +360,7 @@ Areas with low backward climatic velocity will have higher values as refugia, so
 The map above shows refugia based on backward climatic velocity from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5).
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -453,8 +453,7 @@ The map above shows topographic diversity. The spatial data can be downloaded [h
 
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -605,8 +604,7 @@ The map above shows refugia based on climatic niche models for songbirds (top pa
 
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -755,8 +753,7 @@ The map above shows forward (left panel) and backward (right panel) climatic con
 
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -902,8 +899,7 @@ The map above shows above-ground carbon stored in tree biomass (left panel) and 
 
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -992,8 +988,7 @@ The map above shows intactness (the inverse of human land use intensity). The sp
 
 <p style = "page-break-before: always">
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
   cat('\\pagebreak')
 }
 if (params$RBS){
@@ -1027,8 +1022,7 @@ For more information on patterns of climate resilience within North American pro
 
 <!-- <p style = "page-break-before: always"> -->
 ```{r, results = 'asis', echo = F}
-fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-if (fmt == "pdf_document") {
+if (params$fmt == "pdf_document") {
 cat('\\pagebreak')
 }
 if (params$RBS){
@@ -1047,8 +1041,7 @@ if (params$RBS){
 
 <!-- <p style = "page-break-before: always"> -->
 ```{r, results = 'asis', echo = F}
-# fmt <- rmarkdown::default_output_format(knitr::current_input())$name
-# if (fmt == "pdf_document") {
+# if (params$fmt == "pdf_document") {
   # cat('\\pagebreak')
 # }
 ```
