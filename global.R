@@ -39,7 +39,7 @@ library(ggiraphExtra)
 library(viridis)
 library(scales)
 library(combinat)
-webshot::install_phantomjs()
+# webshot::install_phantomjs()
 options(shiny.jquery.version = 1)
 
 
@@ -179,9 +179,14 @@ repimgdir<-"./www/report/imgs"
 reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])
 
 #Report Status Stuff
-token <- readRDS("./report_stats/token.rds")
-mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
-# mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+if(file.exists("./report_stats/token.rds")){
+  token <- readRDS("./report_stats/token.rds")
+  mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+  tokenStatus=T
+} else {
+  tokenStatus=F
+  mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+}
 
 
 # onStop(function() {

@@ -623,12 +623,14 @@ function(input, output, session) {
     write_csv(interactiveFrequency,"./report_stats/interactiveFrequency.csv")
     write_csv(paFrequency,"./report_stats/paFrequency.csv")
     write_csv(mydownloads,"./report_stats/downloads.csv")
-    drop_upload(file = './report_stats/downloadfrequency.csv',dtoken=token)
-    drop_upload(file = "./report_stats/reportFrequency.csv",dtoken=token)
-    drop_upload(file = "./report_stats/interactiveFrequency.csv",dtoken=token)
-    drop_upload(file = "./report_stats/paFrequency.csv",dtoken=token)
-    drop_upload(file = "./report_stats/downloads.csv",dtoken=token)
-    file.remove(list.files(path="./report_stats",pattern=".csv",full.names=T))
+    if(isTRUE(tokenStatus)){
+      drop_upload(file = './report_stats/downloadfrequency.csv',dtoken=token)
+      drop_upload(file = "./report_stats/reportFrequency.csv",dtoken=token)
+      drop_upload(file = "./report_stats/interactiveFrequency.csv",dtoken=token)
+      drop_upload(file = "./report_stats/paFrequency.csv",dtoken=token)
+      drop_upload(file = "./report_stats/downloads.csv",dtoken=token)
+      file.remove(list.files(path="./report_stats",pattern=".csv",full.names=T))
+    }
     reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
     if(reps_size>1E4){
       print(utils:::format.object_size(reps_size, units="MB"))
