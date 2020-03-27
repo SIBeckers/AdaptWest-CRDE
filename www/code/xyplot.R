@@ -1,17 +1,11 @@
 xyplot <- function(data,data2,xvar, yvar,nam,offset=0) {
-  library(ggplot2)
-  source("./www/code/colours.R")
-  library(viridis)
   ggplotColours <- function(n = nrow(data2), h = c(0, 360)+15) {
     if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
     hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
   }
-  #STILL NEED TO FIX THE COLOURS!
   if (!is.null(data2)) {
     fcol <- rep(NA,nrow(data2))
     col2 <- ggplotColours(n=(nrow(data2)+offset))[(1+offset):(offset+nrow(data2))]
-    # print(col2)
-    # print(nrow(data2))
     if (ncol(data) == 3) {
       cols <- colors2d(data[,1:2],c("blue","yellow","red","green"))
       
@@ -38,8 +32,5 @@ xyplot <- function(data,data2,xvar, yvar,nam,offset=0) {
         scale_color_viridis(discrete=F)+theme_bw()
     }
   }
-  
-  
   return(p) 
-  
 }

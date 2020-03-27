@@ -11,7 +11,6 @@ mapFunction<-function(opacity=0.75,
       wheelDebounceTime = 100
     )
   ) %>%
-    # mapOptions(zoomToLimits = "always") %>%
     addProviderTiles(
       provider = providers$Esri.WorldShadedRelief ,
       layerId = "EsriWorldRelief", 

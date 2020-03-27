@@ -46,12 +46,10 @@ colors3d <- function(data, trans="fit", order=1, inversion=1, opacity=NULL){
 colors2d <- function(data, colors=c("yellow", "green", "blue", "magenta"),
                      xtrans=c("none", "log", "rank"), ytrans=c("none", "log", "rank")){
   colors <- col2rgb(colors)/255
-  
   if(xtrans=="rank") data[,1] <- ecdf(data[,1])(data[,1])
   if(ytrans=="rank") data[,2] <- ecdf(data[,2])(data[,2])
   if(xtrans=="log") data[,1] <- log(data[,1])
   if(ytrans=="log") data[,2] <- log(data[,2])
-  
   data <- apply(data, 2, scales::rescale)
   interpolate <- function(i){
     x <- i[1]
@@ -107,10 +105,8 @@ colorwheel2d <- function(data, colors=c("black", "yellow", "green", "cyan", "blu
   result <- rep(NA, nrow(data))
   a <- which(!is.na(apply(data, 1, sum)))
   data <- na.omit(data)
-  
   if(is.null(origin)) origin <- c(sum(range(data[,1], na.rm=T))/2,
                                   sum(range(data[,2], na.rm=T))/2)
-  
   xrange <- range(data[,1])
   yrange <- range(data[,2])
   xmag <- plyr::round_any(max(abs(xrange)), (xrange[2]-xrange[1])/20, ceiling)
@@ -122,25 +118,21 @@ colorwheel2d <- function(data, colors=c("black", "yellow", "green", "cyan", "blu
   
   if(!is.null(kernel)) pdata$distance <- kernel(pdata$distance)
   pdata$angle <- pdata$angle / 360
-  
   n <- length(colors)-1
   pdata$cl <- ceiling(pdata$angle * n) + 1
   pdata$fl <- floor(pdata$angle * n) + 1
   col <- matrix(NA, length(pdata$angle), 3)
   mx <- max(pdata$distance)
-  
   colors <- col2rgb(colors)
   pal <- colors[,c(2:ncol(colors),2)] / 255
   center <- colors[,1] / 255
   center <- as.vector(center)
-  
   getcol <- function(x){
     interp <- x[2] * n - x[4] + 1
     col_angle <- (as.vector(pal[,x[3]]) * interp +
                     as.vector(pal[,x[4]]) * (1-interp))
     col_angle * x[1] / mx + center * (1 - x[1]/mx)
   }
-  
   col <- t(apply(pdata, 1, getcol))
   col[pdata$distance==0,] <- center
   result[a] <- rgb(col)
@@ -162,51 +154,31 @@ colorwheel2d <- function(data, colors=c("black", "yellow", "green", "cyan", "blu
 #' @param radius Neighborhood size for potential moves, analagous to heating.
 #' @param avoid_white Logical, default is TRUE.
 distant_colors <- function(n, res=20, maxreps=100, radius=1, avoid_white=T){
-  
   require(dplyr, quietly=T)
   require(FNN, quietly=T)
-  
   if(avoid_white) n <- n + 1
-  
   f <- expand.grid(r=1:res,
                    g=1:res,
                    b=1:res)
-  
   si <- sample_n(f, n, replace=F)
-  
   for(i in 1:maxreps){
-    
     si0 <- si
-    
     for(j in 1:n){
-      
-      # active location
-      sij<- si[j,]
-      
+      sij<- si[j,] # active location
       # potential moves
       hood <- filter(f,
                      between(r, sij$r-radius, sij$r+radius),
                      between(g, sij$g-radius, sij$g+radius),
                      between(b, sij$b-radius, sij$b+radius))
-      
-      # reference locations
-      sin <- si[-j,]
-      
+      sin <- si[-j,]# reference locations
       # find the move with max dist to nearest active location
       dst <- get.knnx(sin, hood, k=1)$nn.dist
       move <- hood[which.max(dst)[1],]
-      
-      # execute optimal move
-      si[j,] <- move
+      si[j,] <- move # execute optimal move
     }
-    
-    # check for convergence
-    if(all.equal(as.matrix(si0), as.matrix(si)) == T) break
+    if(all.equal(as.matrix(si0), as.matrix(si)) == T) break # check for convergence
   }
-  
   if(i == maxreps) warning("Algorithm failed to converge, consider increasing maxreps parameter.")
-  
   if(avoid_white) si <- si[setdiff(1:nrow(si), which.max(si$r + si$g + si$b)),]
-  
   rgb(si, maxColorValue=res)
 }

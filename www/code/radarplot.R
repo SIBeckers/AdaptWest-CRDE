@@ -1,12 +1,6 @@
 radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
-  library(dplyr)
-  library(tibble)
-  library(scales)
-  library(sf)
-
   if ("sf" %in% class(data)) {
     data <- st_drop_geometry(data)
-    
   }
   if (!is.null(removecols)) {
   data <- data %>%
@@ -17,32 +11,14 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
   }
   data[[namecol]]<-str_wrap(data[[namecol]],35)
   if (isFALSE(interactive)) {
-   
-    library(ggplot2)
-    # library(ggradar)
-    library(ggiraphExtra)
     mname <- sym(namecol)
     data <- data %>% mutate_at(vars(-namecol), rescale) %>% rownames_to_column("ROWID") %>%
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
-    # print(head(data))
     ggplotColours <- function(n = nrow(data), h = c(0, 360)+15) {
       if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
       hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
     }
-    # data[[namecol]]<-factor(data[[namecol]],levels=1:nrow(data))
-    # print(levels(data[[namecol]]))
-    # p <- ggradar(
-    #   data,
-    #   legend.position = "bottom",
-    #   plot.extent.x.sf = 1.4,
-    #   plot.extent.y.sf = 1.2,
-    #   base.size = 10,
-    #   legend.text.size = 10,
-    #   group.point.size = 2,
-    #   group.line.width = 1,
-    #   axis.label.size = 4,
-    # )
     p <- ggRadar(data = data,aes(colour = ROWID),
                 na.rm = T,
                 rescale = F,
@@ -73,14 +49,11 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
 
 
       )
-    # p <- ggplotly(p)
   } else {
-    library(plotly)
     data <- data %>% mutate_at(vars(-namecol), rescale) %>% filter(vars(namecol) != "MIN" & vars(namecol) != "MAX")
     names <- unlist(data %>% select(namecol),use.names = F)
     data <- data %>% select(-namecol)
     theta <- c(names(data),names(data)[1])
-    
     p <- plot_ly(
       type = "scatterpolar",
       fill = "none",
@@ -112,7 +85,6 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
         orientation = "h"
       ),
       autosize = T,
-    
       margin = list(l = 0,r = 0,b = 0,t = 100,pad = 0)
     )
     for (i in 2:nrow(data)) {

@@ -611,4 +611,32 @@ function(input, output, session) {
       })
     }
   })
+
+  #WRITE REPORT STATS TO DROPBOX ----
+  session$onSessionEnded(function() {
+    downfrequency <- mydownloads %>% group_by(Name) %>% tally()
+    repFrequency <- mydownloads %>% group_by(Format) %>% tally()
+    interactiveFrequency <- mydownloads %>% group_by(Interactive) %>% tally()
+    paFrequency <- mydownloads %>% group_by(ProtectedArea) %>% tally()
+    write_csv(downfrequency,"./report_stats/downloadfrequency.csv")
+    write_csv(repFrequency,"./report_stats/reportFrequency.csv")
+    write_csv(interactiveFrequency,"./report_stats/interactiveFrequency.csv")
+    write_csv(paFrequency,"./report_stats/paFrequency.csv")
+    write_csv(mydownloads,"./report_stats/downloads.csv")
+    drop_upload(file = './report_stats/downloadfrequency.csv',dtoken=token)
+    drop_upload(file = "./report_stats/reportFrequency.csv",dtoken=token)
+    drop_upload(file = "./report_stats/interactiveFrequency.csv",dtoken=token)
+    drop_upload(file = "./report_stats/paFrequency.csv",dtoken=token)
+    drop_upload(file = "./report_stats/downloads.csv",dtoken=token)
+    file.remove(list.files(path="./report_stats",pattern=".csv",full.names=T))
+    reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+    if(reps_size>1E4){
+      print(utils:::format.object_size(reps_size, units="MB"))
+      # dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
+      # htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
+      # pngs<-list.files(path=repimgdir,full.names=T,recursive=F,pattern=".png")
+      #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
+      #I'm hoping this is never kicked on but we don't really want to get too big now do we.
+    }
+  })
 }

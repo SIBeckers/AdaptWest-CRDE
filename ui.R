@@ -14,20 +14,20 @@
 ui <- function(request) {
   #Header ----
   header <- tagList(
-    includeHTML("google-analytics.html"),
-    includeScript("www/js/resizeMap.js"),
-    includeScript("www/js/togglePanelIcon.js"),
+    includeHTML("config_files/google-analytics.html"),
+    includeScript("www/shared/resizeMap.js"),
+    includeScript("www/shared/togglePanelIcon.js"),
     tags$link(rel = "stylesheet", type = "text/css", href = "./css/custom.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "./css/tour.css"),
     tags$link(rel = "stylesheet", type = "text/css", href = "./css/map.css"),
     tags$link(href = 'https://fonts.googleapis.com/css?family=Work+Sans:700', rel = 'stylesheet'),
     tags$link(href = 'https://fonts.googleapis.com/css?family=Roboto:500', rel = 'stylesheet'),
-    includeScript("www/lib/plotly-binding-4.9.0/plotly.js"),
-    includeScript("www/lib/typedarray-0.1/typedarray.min.js"),
-    includeScript("www/lib/crosstalk-1.0.1/js/crosstalk.min.js"),
-    includeCSS("www/lib/crosstalk-1.0.1/css/crosstalk.css"),
-    includeCSS("www/lib/plotly-htmlwidgets-css-1.46.1/plotly-htmlwidgets.css"),
-    includeScript("www/lib/plotly-main-1.46.1/plotly-latest.min.js"),
+    includeScript("www/shared/plotly-binding-4.9.0/plotly.js"),
+    includeScript("www/shared/typedarray-0.1/typedarray.min.js"),
+    includeScript("www/shared/crosstalk-1.0.1/js/crosstalk.min.js"),
+    includeCSS("www/shared/crosstalk-1.0.1/css/crosstalk.css"),
+    includeCSS("www/shared/plotly-htmlwidgets-css-1.46.1/plotly-htmlwidgets.css"),
+    includeScript("www/shared/plotly-main-1.46.1/plotly-latest.min.js"),
     tags$script(
       HTML(
         '$(document).keyup(function(event) {
@@ -82,7 +82,7 @@ ui <- function(request) {
           style = "height: 10.5vh; max-height: 100%;"
         ), 
         fluidRow(
-          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
@@ -91,7 +91,7 @@ ui <- function(request) {
           style = "height: 10.5vh; max-height: 100%;"
         ),
         fluidRow(
-          img(id = "climexpimg", src = "img/HomeScreen/watershed.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         )
       ),
@@ -108,7 +108,7 @@ ui <- function(request) {
         ),
         fluidRow(
           id = "patourimg", 
-          img(src = "img/HomeScreen/patourthumbnail.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          img(src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
@@ -120,7 +120,7 @@ ui <- function(request) {
         ),
         fluidRow(
           id = "paexpimg", 
-          img(src = "img/HomeScreen/protectedarea.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
+          img(src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         )
       )
@@ -225,7 +225,7 @@ ui <- function(request) {
     title = "Protected Areas Tour",
     value = "patourTab",
     icon = NULL,
-    tags$head(includeScript("www/js/togglePanelIcon.js")),
+    tags$head(includeScript("www/shared/togglePanelIcon.js")),
     sidebarPanel(
       class = "mysidebar",
       id = "patourSide",
@@ -271,7 +271,7 @@ ui <- function(request) {
     title = "Protected Areas Explorer",
     value = "paexpTab",
     icon = NULL,
-    # tags$head(includeScript("www/js/togglePanelIcon.js")),
+    # tags$head(includeScript("www/shared/togglePanelIcon.js")),
     sidebarPanel(
       id = "paexpSide",
       class = "mysidebar",

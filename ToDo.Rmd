@@ -13,8 +13,7 @@ output: html_document
 +	Currently I think the opacity slider isn’t working properly, seems like you have to move to the next step and back for the effect to take place. Works okay for the single maps, but not for the double map.
 
 3.	Climate Metrics Explorer
-+ Fix radar plot axes scaling
-+ Include additional data/summary data
+
 + Selector for Report.
 
 4.	PA Tour
@@ -25,19 +24,9 @@ output: html_document
 + Selector for report
 
 6.	Reporting
-+ Will we be generating reports?
-+ What should be in the report: 
-+ What regions
-+	do we produce separate reports for the Watersheds and PAs? 
-+	Do we let the user select one or multiple watersheds or pas or both? 
-+ Do we combine them if there are multiple selected
-+	What content:
-++	Maps?
-++	RadarPlot?
 ++	XY plot?
-++	Iterate through many options or just the user selected ones.
 +	What else?
-+	Format?
+
                 
 7.	Versioning/GitHub
 + I've created a private repository on github that I will start syncing to occasionally. Right now the data isn't there but the app structure etc is.

@@ -1,8 +1,6 @@
 report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
-  
   observeEvent(!is.null(polys),{
-    # print(names(data))
     if(isTRUE(pa)){
       output$selPolys<-renderUI({
         ns <- session$ns
@@ -52,55 +50,110 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
     ROIdata$roi<-bar
     rm(bar)
   })
-
-  print(paste0("Report Bttn Value: ",input$reportBttn))
-  
   outputDir<-"./www/report" #Should work when running the app locally.
  
-  
-
-  
-  
   output$reportBttn <- downloadHandler(
     filename = function() {
       paste0(outname,"_",ROIdata$roi$Name,".",
              switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",Markdown="md"))
     },
     content = function(file) {
-      mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()))),use.names=F,fill = F)
-      paramslist<-list(
-        "poly" = ROIdata$roi,
-        "table" = TRUE,
-        "vdata" = TRUE,
-        "starplot" = T,
-        "scatterplot" = F,
-        "l1data" = T,
-        "l2data" = T,
-        "l3data" = T,
-        "printCode" = FALSE,
-        "html" = input$reportInteractive,
-        "RBS" = T
-      )
+      
       rpfm =  switch(input$reportFormat,PDF="pdf_document",Word="word_document",
                      Powerpoint="powerpoint_presentation",HTML="html_document",
                      MD="md_document")
-      print(paramslist)
+      paramslist<-reportconfig
+      paramslist$poly = ROIdata$roi
+      paramslist$html = input$reportInteractive
+      if(!(rpfm=="html_document")){paramslist$html<-FALSE}
+      mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()),as.integer(input$reportInteractive),rpfm,as.integer(pa))),use.names=F,fill = F)
+      
       withProgress(message = "Generating report ...",{
         tempReport <- file.path(outputDir, "report_template.Rmd")
         file.copy("report_template.Rmd", tempReport, overwrite = TRUE)
-        params <- paramslist
-        
-       rmarkdown::render(
-          tempReport,
-          output_format = rpfm,
-          # clean = T,
-          output_file = file,
-          # intermediates_dir = "/www/report/tmp",
-          params = params,
-          envir = new.env(parent = globalenv())
-        )
+        if(paramslist$html){
+          if(file.exists(file.path(outputDir,"interactive_reports",
+              paste0(outname,"_",ROIdata$roi$Name,".",
+                switch(input$reportFormat,PDF="pdf",Word="docx",
+                        Powerpoint="pptx",HTML="html",Markdown="md"
+                )))))
+          {
+            shiny::setProgress(0.75,message="Found an existing report; getting it...")
+            file.copy(
+              from= file.path(
+                outputDir,"interactive_reports",
+                paste0(outname,"_",ROIdata$roi$Name,".",
+                       switch(input$reportFormat,PDF="pdf",Word="docx",
+                              Powerpoint="pptx",HTML="html",Markdown="md"
+                       )
+                )
+              ),
+              to=file
+            )
+          } else {
+            out <- rmarkdown::render(
+              tempReport,
+              output_format = rpfm,
+              # clean = T,
+              output_file = file,
+              # intermediates_dir = "/www/report/tmp",
+              params = paramslist,
+              envir = new.env(parent = globalenv())
+            )
+            file.copy(
+              from = out,
+              to = file.path(
+                outputDir,"interactive_reports",
+                  paste0(outname,"_",ROIdata$roi$Name,".",
+                    switch(input$reportFormat,PDF="pdf",Word="docx",
+                      Powerpoint="pptx",HTML="html",Markdown="md"
+                    )
+                  )
+                )
+              )
+          }
+        } else {
+          if(file.exists(file.path(outputDir,"static_reports",
+              paste0(outname,"_",ROIdata$roi$Name,".",
+                 switch(input$reportFormat,PDF="pdf",Word="docx",
+                        Powerpoint="pptx",HTML="html",Markdown="md"
+                 ))))) 
+          {
+            shiny::setProgress(0.75,message="Found an existing report; getting it...")
+            file.copy(
+              from = file.path(
+                outputDir,"static_reports",
+                paste0(outname,"_",ROIdata$roi$Name,".",
+                       switch(input$reportFormat,PDF="pdf",Word="docx",
+                              Powerpoint="pptx",HTML="html",Markdown="md"
+              ))),
+              to = file
+            )
+          } else {
+            out <- rmarkdown::render(
+              tempReport,
+              output_format = rpfm,
+              # clean = T,
+              output_file = file,
+              # intermediates_dir = "/www/report/tmp",
+              params = paramslist,
+              envir = new.env(parent = globalenv())
+            )
+            file.copy(
+              from = out,
+              to = file.path(
+                outputDir,"static_reports",
+                paste0(outname,"_",ROIdata$roi$Name,".",
+                       switch(input$reportFormat,PDF="pdf",Word="docx",
+                              Powerpoint="pptx",HTML="html",Markdown="md"
+                       )
+                )
+              )
+            )
+          }
+        file.copy(out,file)
+        }
       })
-       
     }
   )
 }

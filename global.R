@@ -28,13 +28,20 @@ library(data.table)
 library(dplyr)
 library(stringr)
 library(kableExtra)
-library(gridExtra)
-library(lubridate)
 library(rdrop2)
-library(readr)
 library(utils)
+library(readr)
+library(webshot)
+library(tibble)
+library(scales)
+library(ggplot2)
+library(ggiraphExtra)
+library(viridis)
+library(scales)
+library(combinat)
+webshot::install_phantomjs()
 options(shiny.jquery.version = 1)
-# library(webshot)
+
 
 # Global Resources ----
 aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
@@ -66,14 +73,12 @@ hucmin$NEWNAME = c("MIN","MAX")
 # Map Settings ----
 minZoom = 0
 maxZoom = 9
-
-
 zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
-# zoomcuts <- c(3500, 1350, 650, 390, 270, 200, 160, 130, 100,0)
+
 
 # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
 tiledir <- "http://www.cacpd.org.s3-website-us-west-2.amazonaws.com/tiledirectory" #FOR ONLINE TILES
-tilelist <- fread("./tilelist.txt") #Replaces above two lines.
+tilelist <- fread("./config_files/tilelist.txt") #Replaces above two lines.
 tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
 tilevect <- tilelist$tileName
 names(tilevect) <- tilelist$tileGroup
@@ -85,8 +90,7 @@ names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
 # Climate Metrics Tour Data -----
 y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
 y2ybds <- st_bbox(y2yshp)
-
-y2y <- fread("./metrictourinputs.csv",na.strings = "")
+y2y <- fread("./config_files/metrictourinputs.csv",na.strings = "")
 y2y$zoomTo <- as.logical(y2y$zoomTo)
 y2y$clear <- as.logical(y2y$clear)
 y2y$tourFileName <- file.path("./www/md/metrictour",y2y$tourFileName)
@@ -96,7 +100,7 @@ y2y$swipe <- ifelse(!is.na(y2y$tile1) & !is.na(y2y$tile2),T,F)
 
 # Protected Areas Tour Data ----
 pashp <- y2yshp
-pa <- fread("./patourinputs.csv",na.strings = "")
+pa <- fread("./config_files/patourinputs.csv",na.strings = "")
 pa$zoomTo <- as.logical(pa$zoomTo)
 pa$clear <- as.logical(pa$clear)
 pa$tourFileName <- file.path("./www/md/patour",pa$tourFileName)
@@ -120,6 +124,7 @@ pa$swipe <- ifelse(!is.na(pa$tile1) & !is.na(pa$tile2),T,F)
 # pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
 # pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
 
+
 # Modules ----
 source("./Modules/tourPanelUI.R") #The story map user interface
 source("./Modules/tourPanel.R") #The story map server code
@@ -137,13 +142,13 @@ source("./Modules/report.R")
 # Other Code -----
 source("www/code/tourStep_v2.R")
 source("www/code/myicon.R")
-# source("www/code/radarplot.R")
-# source("www/code/xyplot.R")
-
-
+source("www/code/radarplot.R")
+source("www/code/xyplot.R")
+source("./www/code/colours.R")
+source("./www/report/mapFunction.R")
 # Setup leaflet sidebyside plugin ----
 myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
-                                          src = c("www/js/leaflet-side-by-side-gh-pages"),
+                                          src = c("www/shared/leaflet-side-by-side-gh-pages"),
                                           script = "leaflet-side-by-side.js")
 
 
@@ -157,37 +162,41 @@ registerPlugin <- function(map, plugin) {
 
 #List of resources for each tab, used to remove from other tabs/reload. I think this will speed things up. ----
 #Not even being implemented right now, so still performance gains to be made I think.
-homeTablist <- list()
-metricTourlist <- list()
-metricExplist <- list("ecos","ecol1stats","ecol2stats","ecol3stats","wds")
-patourlist <- list("pa")
-paexplist <- list("pas")
-globallist <- list("aw_gh","aw_tw","minZoom","maxZoom","theuser","thepassword","zoomcuts","tiledir",
-                 "tilelist","tilevect","LeafletSideBySidePlugin","registerPlugin","tourStep")
+# homeTablist <- list()
+# metricTourlist <- list()
+# metricExplist <- list("ecos","ecol1stats","ecol2stats","ecol3stats","wds")
+# patourlist <- list("pa")
+# paexplist <- list("pas")
+# globallist <- list("aw_gh","aw_tw","minZoom","maxZoom","theuser","thepassword","zoomcuts","tiledir",
+#                  "tilelist","tilevect","LeafletSideBySidePlugin","registerPlugin","tourStep")
 
+#Report stuff -----
 reportdir<-"./www/report"
 reptmpdir<-"./www/report/tmp"
 repimgdir<-"./www/report/imgs"
-token <- readRDS("./token.rds")
+#Configure the report output using /config_files/reportconfig.csv. 
+#Note that parameters in this file must also be in /www/report/report_template.Rmd
+reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])
 
-mydownloads <- drop_read_csv("downloads.csv",dest="./",dtoken=token)
+#Report Status Stuff
+token <- readRDS("./report_stats/token.rds")
+mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+# mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
 
-# mydownloads <- data.table(Name=character(),Date=numeric(),stringsAsFactors = F)
 
-
-onStop(function() {
-  frequency <- mydownloads %>% group_by(Name) %>% tally()
-  write_csv(frequency,"downloadfrequency.csv")
-  write_csv(mydownloads,"downloads.csv")
-  drop_upload(file = 'downloadfrequency.csv',dtoken=token)
-  drop_upload(file = "downloads.csv",dtoken=token)
-  reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
-  if(reps_size>1E4){
-    print(utils:::format.object_size(reps_size, units="MB"))
-    # dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
-    # htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
-    # pngs<-list.files(path=repimgdir,full.names=T,recursive=F,pattern=".png")
-    #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
-    #I'm hoping this is never kicked on but we don't really want to get too big now do we.
-  }
-})
+# onStop(function() {
+#   frequency <- mydownloads %>% group_by(Name) %>% tally()
+#   write_csv(frequency,"./report_stats/downloadfrequency.csv")
+#   write_csv(mydownloads,"./report_stats/downloads.csv")
+#   drop_upload(file = './report_stats/downloadfrequency.csv',dtoken=token)
+#   drop_upload(file = "./report_stats/downloads.csv",dtoken=token)
+#   reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+#   if(reps_size>1E4){
+#     print(utils:::format.object_size(reps_size, units="MB"))
+#     # dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
+#     # htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
+#     # pngs<-list.files(path=repimgdir,full.names=T,recursive=F,pattern=".png")
+#     #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
+#     #I'm hoping this is never kicked on but we don't really want to get too big now do we.
+#   }
+# })
