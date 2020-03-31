@@ -43,7 +43,7 @@ ui <- function(request) {
     id = "titlediv",
     "Climate Resilience Data Explorer",
     tags$a(href = "https://adaptwest.databasin.org/",
-            tags$img(src = "./logos/adaptwestbanner.jpg", style = "height: 47px;"),
+            tags$img(src = "./logos/adaptwestbanner_svg.svg", style = "height: 46.5px;"),
       class = "titleimg")
   )
   
@@ -77,51 +77,52 @@ ui <- function(request) {
         id = "homeCol1",
         class = "homeCol",
         fluidRow(
+          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          style = "text-align: center; height: 33.625vh;"
+        ),
+        fluidRow(
           div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeText"), 
               id = "climtourLink", style = "cursor:pointer; text-align: justify;"),
-          style = "height: 10.5vh; max-height: 100%;"
-        ), 
+          style = "height: 12.5vh; max-height: 100%;"
+        ),
         fluidRow(
-          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
           div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeText"), 
               id = "climexpLink", style = "cursor:pointer;text-align: justify"),
-          style = "height: 10.5vh; max-height: 100%;"
-        ),
-        fluidRow(
-          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 33.625vh;"
+          style = "height: 12.5vh; max-height: 100%;"
         )
       ),
       column(
         width = 6,
         id = "homeCol2",
         class = "homeCol",
-        fluidRow(
-          id = "patourLink",
-          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeText"), 
-            style = "cursor:pointer; text-align: justify;"
-          ),
-          style = "height: 10.5vh; max-height: 100%;"
-        ),
+        
         fluidRow(
           id = "patourimg", 
           img(src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
-          id = "paexpLink", 
-          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeText"), 
-            style = "cursor:pointer;text-align: justify;"
+          id = "patourLink",
+          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeText"), 
+              style = "cursor:pointer; text-align: justify;"
           ),
-          style = "height: 10.5vh; max-height: 100%;"
+          style = "height: 12.5vh; max-height: 100%;"
         ),
         fluidRow(
           id = "paexpimg", 
           img(src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
+        ),
+        fluidRow(
+          id = "paexpLink", 
+          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeText"), 
+              style = "cursor:pointer;text-align: justify;"
+          ),
+          style = "height: 12.5vh; max-height: 100%;"
         )
       )
     )
@@ -164,47 +165,82 @@ ui <- function(request) {
         bs_accordion(id = "climexpacc") %>%
           bs_set_opts(panel_type = "info", use_heading_link = T) %>%
           bs_append(
-            title = "About",
+            title = "1. About",
             includeHTML("./www/md/explorermainpanelcontent/metrictourexplorermainpanel.html")
           ) %>%
           bs_set_opts(panel_type = "primary", use_heading_link = T) %>%
           bs_append(
-            title = "Inputs", 
+            title = "2. Optional map inputs",
             content =
               list(
-                selectizeInput(
-                  inputId = "climExpLayer",
-                  label = NULL,
-                  choices = c("Select metric: " = "", tilevect),
-                  selected = NULL,
-                  multiple  = F,
-                  width = "auto",
-                  options = list(maxOptions = 12)
+                fluidRow(
+                  selectizeInput(
+                    inputId = "climExpLayer",
+                    label = NULL,
+                    choices = c("Select metric: " = "", tilevect),
+                    selected = NULL,
+                    multiple  = F,
+                    width = "75%",
+                    options = list(maxOptions = 12)
+                  ),
+                  actionBttn(
+                    inputId = "clearTileFill",
+                    label = "Clear Layer",
+                    icon= NULL,
+                    color="default",
+                    size="s"
+                  )
                 ),
-                selectizeInput(
-                  inputId = "climFillPolys",
-                  label = NULL,
-                  choices = c("Fill visible polygons with ..." = "",
-                              tilevect),
-                  selected = NULL,
-                  multiple = F,
-                  width = "auto",
-                  options = list(maxOptions = 12)
+                fluidRow(
+                  selectizeInput(
+                    inputId = "climFillPolys",
+                    label = NULL,
+                    choices = c("Fill visible polygons with ..." = "",
+                                polyfillvect),
+                    selected = NULL,
+                    multiple = F,
+                    width = "75%",
+                    options = list(maxOptions = 12)
+                  ),
+                  actionBttn(
+                    inputId = "clearPolyFill",
+                    label = "Clear Layer",
+                    icon= NULL,
+                    color="default",
+                    size="s"
+                  )
                 )
               )
           ) %>%
+          bs_set_opts(panel_type = "warning", use_heading_link = T) %>%
+          bs_append(
+            title = "3. Required map inputs",
+            content = list(
+              fluidRow(h3("In order to view any plots or tables, or to generate a report, you must
+                          select an ecoregion on the map and then select a watershed."))
+            )
+          ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Plots and tables", 
+            # title = "3. Starplot of Metrics", 
+            title = "4. Starplot of Metrics", 
             content = 
               list(
-                uiOutput("climexpStarplotDiv",inline = T),
+                uiOutput("climexpStarplotDiv",inline = T)
+              )
+          )%>%
+          bs_append(
+            # title = "4. Scatterplot comparison", 
+            title = "5. Scatterplot comparison", 
+            content = 
+              list(
                 uiOutput("climexpXYplotdiv",inline = T)
               )
           )%>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Generate Report", 
+            # title = "5. Generate a report",
+            title = "6. Generate a report", 
             content = 
               list(reportUI('climReport')
               )
@@ -285,35 +321,94 @@ ui <- function(request) {
         bs_accordion(id = "paexpacc") %>%
           bs_set_opts(panel_type = "info", use_heading_link = T) %>%
           bs_append(
-            title = "About",
+            title = "1. About",
             content = 
               includeHTML("./www/md/explorermainpanelcontent/paexplorermainpanel.html")
           ) %>%
           bs_set_opts(panel_type = "primary", use_heading_link = T) %>%
           bs_append(
-            title = "Inputs", 
+            title = "2. Optional map inputs", 
             content =
-              selectInput(
-                inputId = "paExpLayer",
-                label = NULL,
-                choices = c("Select metric: " = "",tilevect),
-                selected = "",
-                multiple  = F,
-                width = "100%",
-                selectize = T
+              list(
+                fluidRow(
+                  selectizeInput(
+                    inputId = "paExpLayer",
+                    label = NULL,
+                    choices = c("Select metric: " = "", tilevect),
+                    selected = "",
+                    multiple  = F,
+                    width = "75%",
+                    options = list(maxOptions = 12)
+                  ),
+                  actionBttn(
+                    inputId = "paclearTileFill",
+                    label = "Clear Layer",
+                    icon= NULL,
+                    color="default",
+                    size="s"
+                  )
+                ),
+                fluidRow(
+                  selectizeInput(
+                    inputId = "paFillPolys",
+                    label = NULL,
+                    choices = c("Fill visible polygons with ..." = "",
+                                polyfillvect),
+                    selected = NULL,
+                    multiple = F,
+                    width = "75%",
+                    options = list(maxOptions = 12)
+                  ),
+                  actionBttn(
+                    inputId = "paclearPolyFill",
+                    label = "Clear Layer",
+                    icon= NULL,
+                    color="default",
+                    size="s"
+                  )
+                )
               )
+          ) %>%
+          bs_set_opts(panel_type = "warning", use_heading_link = T) %>%
+          bs_append(
+            title = "3. Required map inputs",
+            content = list(
+              fluidRow(h3("In order to view any plots or tables, or to generate a report, you must
+                          select an protected area on the map or from the dropdown list below.")),
+              fluidRow(
+                selectizeInput(
+                  inputId = "paSelInput",
+                  label = "Select a protected area of interest",
+                  choices = c("Select one..."="",
+                              panames
+                              ),
+                  selected = "",
+                  multiple = F,
+                  width="100%",
+                  options=list(maxOptions = 3000)
+                )
+              )
+            )
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Plots and Tables", 
+            # title = "3. Starplot of metrics", 
+            title = "4. Starplot of metrics",
             content=list(
-              uiOutput("paexpStarplotDiv",inline = T),
+              uiOutput("paexpStarplotDiv",inline = T)
+            )
+          )%>%
+          bs_append(
+            # title = "4. Scatterplot of metrics ", 
+            title = "5. Scatterplot of metrics ",
+            content=list(
               uiOutput("paexpXYplotdiv",inline = T)
             )
           )%>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            title = "Generate Report", 
+            # title = "5. Generate a report", 
+            title = "6. Generate a report", 
             content = 
               list(reportUI('paReport')
                 

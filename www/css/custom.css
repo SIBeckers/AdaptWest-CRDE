@@ -217,11 +217,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   height: calc(100vh - 80px);
 }
 .homeCol {
-  width: 48%;
+  width: 46%;
 }
 
 #homeCol2 {
-  margin-left: 2%;
+  margin-left: 4%;
 }
 
 /*-----------------------------------------------------------------
@@ -270,6 +270,17 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   
 }
 
+#clearTileFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
+#clearPolyFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
 /*-----------------------------------------------------------------
                     PA TOUR CSS
 -------------------------------------------------------------------*/
@@ -339,6 +350,19 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   padding-right: 15px;
   
 }
+
+#paclearTileFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
+#paclearPolyFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
 /*-----------------------------------------------------------------
                     Stuff for smaller screens
 -------------------------------------------------------------------*/

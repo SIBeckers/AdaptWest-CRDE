@@ -11,7 +11,6 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-square",class="far"), style = "bordered")
           ),
           plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
-          
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {
@@ -22,7 +21,6 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             actionBttn(ns("resetSP"), label = "Clear All", icon = icon("square",class="far"), style = "bordered"),
           ),
           plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
-          
         )
       )
     } else if (isFALSE(reset) & isTRUE(all)) {
@@ -33,7 +31,6 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-square",class="far"), style = "bordered")
           ),
           plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
-          
         )
       )
     }
@@ -49,7 +46,6 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
                        color="success")
           ),
           plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500)
-          
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {

@@ -1,11 +1,11 @@
 xyPlotUI <- function(id) {
   ns <- NS(id)
   tagList(
-    div(class = "xyplotdiv",
+    div(class = "xyPlot",
       fluidRow(
         plotOutput(ns("xyPlot"),width = "100%")
       ),
-      fluidRow(
+      fluidRow(id=ns("xyBttnRow"),
         selectizeInput(
           inputId = ns("X"),
           label = "X-variable",

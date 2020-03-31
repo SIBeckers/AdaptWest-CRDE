@@ -43,10 +43,6 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
     bar <- na.omit(data[data[[namecol]]==foo,])
     rm(foo)
     names(bar)[which(names(bar)==namecol)]<-"Name"  
-    print(bar %>% 
-            # st_drop_geometry() %>% 
-            select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,
-                                                       treec,soilc))
     ROIdata$roi<-bar
     rm(bar)
   })
@@ -61,12 +57,13 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
       
       rpfm =  switch(input$reportFormat,PDF="pdf_document",Word="word_document",
                      Powerpoint="powerpoint_presentation",HTML="html_document",
-                     MD="md_document")
+                     Markdown="md_document")
       paramslist<-reportconfig
       paramslist$poly = ROIdata$roi
       paramslist$html = input$reportInteractive
       paramslist$fmt = rpfm
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
+      
       mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()),as.integer(input$reportInteractive),rpfm,as.integer(pa))),use.names=F,fill = F)
       
       withProgress(message = "Generating report ...",{

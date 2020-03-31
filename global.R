@@ -39,7 +39,8 @@ library(ggiraphExtra)
 library(viridis)
 library(scales)
 library(combinat)
-# webshot::install_phantomjs()
+library(RColorBrewer)
+webshot::install_phantomjs()
 options(shiny.jquery.version = 1)
 
 
@@ -50,20 +51,22 @@ enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
 loginMenu = F
+reportStatsStatus=T #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 
 # Protected Areas Data ---- 
-pafile = "./Data/pas_20191230.gpkg"
-ptsfile = "./Data/pas_centroids_20191230.gpkg"
+pafile = "./Data/pas.gpkg"
+ptsfile = "./Data/pas_centroids.gpkg"
+panames<-readRDS("./Data/panames.Rds")
 paminmax <- fread('./Data/paminmax.csv')
 paminmax$Name = c("MIN","MAX")
 names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                      'Tree Carbon','Soil Carbon',"Name")
 
 # Watersheds Data ----
-wdfile = "./Data/wds_20191230.gpkg"
+wdfile = "./Data/wds.gpkg"
 
 # Ecoregion Data ----
-ecos <- read_sf('./Data/ecos_20191230.gpkg')
+ecos <- read_sf('./Data/ecos.gpkg')
 ecol1stats <- fread("./Data/ecoregionlevel1mean.csv",colClasses=list(character=1,numeric=2:9))
 ecol2stats <- fread("./Data/ecoregionlevel2mean.csv",colClasses=list(character=1,numeric=2:9))
 ecol3stats <- fread("./Data/ecoregionlevel3mean.csv",colClasses=list(character=1,numeric=2:9))
@@ -73,7 +76,8 @@ hucmin$NEWNAME = c("MIN","MAX")
 # Map Settings ----
 minZoom = 0
 maxZoom = 9
-zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
+# zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
+zoomcuts <- c(12500,10000,7500,5000,1000, 100, 10, 1, 1,0)
 
 
 # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
@@ -86,7 +90,10 @@ metriclist <-names(hucmin)
 names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
                        'Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                        'Tree Carbon','Soil Carbon',"Name")
-
+polyfillvect<-c("elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","intact")
+names(polyfillvect)<-c("Topodiversity","Forward Climatic Refugia","Backward Climatic Refugia",
+                       "Bird Refugia","Tree Refugia","Tree Carbon","Soil Carbon",
+                       "Intactness")                    
 # Climate Metrics Tour Data -----
 y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
 y2ybds <- st_bbox(y2yshp)
@@ -179,14 +186,19 @@ repimgdir<-"./www/report/imgs"
 reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])
 
 #Report Status Stuff
-if(file.exists("./report_stats/token.rds")){
-  token <- readRDS("./report_stats/token.rds")
-  mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
-  tokenStatus=T
+if(reportStatsStatus==T){
+  if(file.exists("./report_stats/token.rds")){
+    token <- readRDS("./report_stats/token.rds")
+    mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+  } else {
+
+    if(!dir.exists("./report_stats")){dir.create("./report_stats")}
+    mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+  }
 } else {
-  tokenStatus=F
   if(!dir.exists("./report_stats")){dir.create("./report_stats")}
   mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+  
 }
 
 

@@ -5,12 +5,7 @@ tourPanelUI<-function(id){
     # div(id=ns("tour"),class="tour",
       fluidRow(id = ns("Col1Row1"),#Unique ID for CSS styling. The story will go here.
                class = "tourCol1Row1",
-       #Here we will put the story content
-        # div(
-        #   id = ns("story"), #Unique ID for CSS styling
-          # textOutput(ns("bbtn")),
           uiOutput(ns("sidebar"),inline=F)
-        # )
       ),
       # Story Buttons ---------------------------------------------------------------
       fluidRow(#The story control buttons will go here
@@ -62,6 +57,5 @@ tourPanelUI<-function(id){
           size = "sm"
         )
       )
-    # )
   )
 }

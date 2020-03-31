@@ -21,6 +21,13 @@ ddownBttnUI <- function(id){
           max = 1.0,
           value = 0.45
         ),
+        sliderInput(
+          inputId = ns("polyopacity"),
+          label = "Polygon Fill Opacity",
+          min = 0,
+          max = 1.0,
+          value = 0.85
+        ),
         bookmarkButton(
           label = "Bookmark App",
           icon = icon("bookmark", lib = "font-awesome"),

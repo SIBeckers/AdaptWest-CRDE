@@ -96,7 +96,8 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL,
         fillColor = NULL, 
         weight = 2,color = "blue",
         layerId = paste0("shp",shp$TOURID),
-        fillOpacity = 0.0
+        fillOpacity = 0.0,
+        smoothFactor = 2.0
       )
     if (isFALSE(setup$zoomTo)) {
       proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
