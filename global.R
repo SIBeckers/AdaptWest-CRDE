@@ -40,7 +40,7 @@ library(viridis)
 library(scales)
 library(combinat)
 library(RColorBrewer)
-webshot::install_phantomjs()
+# webshot::install_phantomjs()
 options(shiny.jquery.version = 1)
 
 
@@ -51,7 +51,7 @@ enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
 loginMenu = F
-reportStatsStatus=T #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus=F#Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 
 # Protected Areas Data ---- 
 pafile = "./Data/pas.gpkg"

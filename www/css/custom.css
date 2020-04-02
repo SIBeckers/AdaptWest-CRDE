@@ -2,6 +2,25 @@
 /*-----------------------------------------------------------------
                     CSS THAT APPLIES TO ENTIRE WEBPAGE
 -------------------------------------------------------------------*/
+.btn-twitter {
+	position: fixed !important;
+	right: 65px;
+	border-bottom-width: 0px;
+}
+#tabs > li:nth-child(7) > a:nth-child(1) {
+  padding: 0px;
+}
+
+#tabs > li:nth-child(6) > a:nth-child(1) {
+  padding: 0px;
+}
+.btn-github {
+  position: fixed !important;
+	right: 25px;
+	border-bottom-width: 0px;
+}
+}
+
 .col-sm-12:nth-child(1){
   height: 8vh;
 }
@@ -124,11 +143,6 @@ a:hover, a:focus {
 }
 
 
-#climexpacc-1-collapse{
-  min-height: 33vh;
-  
-}
-
 .mystyle {
   width: auto !important;
 }
@@ -197,6 +211,13 @@ a.btn:hover, a.btn:focus, a.btn.focus {
  font-family: Roboto, "Helvetica Neue", sans-serif !important;
  line-height: 1.2;
 }
+.homeTextHead {
+ /*font-size: 16px !important;*/
+ font-family: Roboto, "Helvetica Neue", sans-serif !important;
+ line-height: 1.2;
+ text-align: center;
+ font-size: 1.2em;
+}
 
 #homeSidebar{
   text-align: center;
@@ -205,9 +226,16 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   max-height: calc(100vh - 115px);
 }
 
+#homeSidebarBottom {
+  text-align: left;
+  position: absolute;
+  bottom:10px;
+  width:96%;
+}
 
 #homeSidebarR2{
   padding: 5px;
+  text-align: center;
 }
 #homeSidebarR1{
   text-align:left;
@@ -256,11 +284,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   color: white !important;
 }
 
-#climexp-getallSP, #climexp-resetSP, #climExpB2E {
+#climexp-getallSP, #climexp-resetSP, #climExpB2E,#climexp-getallSPxy, #climexp-resetSPxy {
   color: #0078A8;
 }
 
-#climexp-getallSP {
+#climexp-getallSP, #climexp-getallSPxy{
   float: right;
 }
 
@@ -337,11 +365,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   height: calc(100vh - 80px);
 }
 
-#paexp-getallSP, #paexp-resetSP{
+#paexp-getallSP, #paexp-resetSP, #paexp-resetSPxy, #paexp-getallSPxy{
   color: #0078A8;
 }
 
-#paexp-getallSP {
+#paexp-getallSP,#paexp-getallSPxy {
   float: right;
 }
 
@@ -350,6 +378,8 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   padding-right: 15px;
   
 }
+
+
 
 #paclearTileFill {
   right: -75%;

@@ -3,7 +3,7 @@
 .ddownBttn {
   position: absolute;
   top: 15px;
-  right: 15px;
+  right: 25px;
   left: auto;
   bottom: auto;
 }
@@ -84,4 +84,8 @@
 
 .leaflet-top {
   top: 45px;
+}
+
+#pamap-map .leaflet-top {
+  top: 90px;
 }

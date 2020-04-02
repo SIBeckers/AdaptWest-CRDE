@@ -28,18 +28,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.1529412"
-     inkscape:cx="185.22026"
-     inkscape:cy="24"
+     inkscape:zoom="4.2352941"
+     inkscape:cx="169.05556"
+     inkscape:cy="33.444444"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1900"
-     inkscape:window-height="730"
-     inkscape:window-x="9"
-     inkscape:window-y="270"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
      showguides="false" />
   <metadata
      id="metadata3716">
@@ -72,20 +72,20 @@
      transform="translate(0,-284.29998)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23429775px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26506037;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
-       x="0.27060762"
-       y="289.32184"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:4.18041679px;line-height:1.25;font-family:'Roboto Medium';-inkscape-font-specification:'Roboto Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#fffff0;fill-opacity:1;stroke:none;stroke-width:0.26506037;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
+       x="0.27060774"
+       y="289.50937"
        id="text3759"
        transform="scale(1.0006744,0.99932606)"><tspan
          sodipodi:role="line"
          id="tspan3785"
-         x="0.27060762"
-         y="289.32184"
-         style="stroke-width:0.26506037;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:'Arial Rounded MT Bold, Normal';font-family:'Arial Rounded MT Bold';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:3.88055556px;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal">AdaptWest - A Climate Adaptation Conservation</tspan><tspan
+         x="0.27060774"
+         y="289.50937"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:4.18041679px;font-family:'Roboto Medium';-inkscape-font-specification:'Roboto Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr;text-anchor:start;fill:#fffff0;fill-opacity:1;stroke-width:0.26506037;">AdaptWest - A Climate Adaptation Conservation</tspan><tspan
          sodipodi:role="line"
          id="tspan3787"
-         x="0.27060762"
-         y="294.61472"
-         style="stroke-width:0.26506037;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:'Arial Rounded MT Bold, Normal';font-family:'Arial Rounded MT Bold';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:3.88055556px;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal">Planning Database for Western North America</tspan></text>
+         x="0.27060774"
+         y="294.80237"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:4.18041679px;font-family:'Roboto Medium';-inkscape-font-specification:'Roboto Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr;text-anchor:start;fill:#fffff0;fill-opacity:1;stroke-width:0.26506037;">Planning Database for Western North America</tspan></text>
   </g>
 </svg>

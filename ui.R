@@ -43,17 +43,17 @@ ui <- function(request) {
     id = "titlediv",
     "Climate Resilience Data Explorer",
     tags$a(href = "https://adaptwest.databasin.org/",
-            tags$img(src = "./logos/adaptwestbanner_svg.svg", style = "height: 46.5px;"),
-      class = "titleimg")
+            tags$img(src = "./logos/adaptwestbanner_svg.svg", style = "height: 46.5px; font-family: Roboto;"),
+      class = "titleimg", style="font-family: Roboto;")
   )
   
   #Footer ----
-  footer = tagList(
-    div(class="footer",
-      shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
-      shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
-    )
-  )
+  # footer = tagList(
+  #   div(class="footer",
+  #     shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
+  #     shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
+  #   )
+  # )
   
   #Home Tab ----
   homeTab <- tabPanel(
@@ -81,18 +81,18 @@ ui <- function(request) {
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
-          div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeText"), 
-              id = "climtourLink", style = "cursor:pointer; text-align: justify;"),
-          style = "height: 12.5vh; max-height: 100%;"
+          div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeTextHead"), 
+              id = "climtourLink", style = " text-align: center;cursor:pointer; text-align: justify;"),
+          style = "text-align: center; height: 12.5vh; max-height: 100%;"
         ),
         fluidRow(
           img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
-          div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeText"), 
-              id = "climexpLink", style = "cursor:pointer;text-align: justify"),
-          style = "height: 12.5vh; max-height: 100%;"
+          div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeTextHead"), 
+              id = "climexpLink", style = "text-align: center;cursor:pointer;text-align: justify"),
+          style = "text-align: center; height: 12.5vh; max-height: 100%;"
         )
       ),
       column(
@@ -107,10 +107,10 @@ ui <- function(request) {
         ),
         fluidRow(
           id = "patourLink",
-          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeText"), 
-              style = "cursor:pointer; text-align: justify;"
+          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeTextHead"), 
+              style = "text-align: center;cursor:pointer; text-align: justify;"
           ),
-          style = "height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%;"
         ),
         fluidRow(
           id = "paexpimg", 
@@ -119,10 +119,10 @@ ui <- function(request) {
         ),
         fluidRow(
           id = "paexpLink", 
-          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeText"), 
-              style = "cursor:pointer;text-align: justify;"
+          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeTextHead"), 
+              style = "text-align: center; cursor:pointer;text-align: justify;"
           ),
-          style = "height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%;"
         )
       )
     )
@@ -158,7 +158,8 @@ ui <- function(request) {
       width = 4,
       fluidRow(
         id = "climexpSideR1",
-        HTML('<i class="fa fa-minus fa-lg mycolIcon" id="climexpPanelIcon" data-toggle="collapse" data-target="#climexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
+        h4("Menu",style="padding-left: 15px")
+        # HTML('<i class="fa fa-minus fa-lg mycolIcon" id="climexpPanelIcon" data-toggle="collapse" data-target="#climexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
       ),
       fluidRow(
         id = "climexpSideR2",
@@ -189,7 +190,8 @@ ui <- function(request) {
                     icon= NULL,
                     color="default",
                     size="s"
-                  )
+                  ),
+                  style="padding-left:15px; padding-right: 15px;"
                 ),
                 fluidRow(
                   selectizeInput(
@@ -208,7 +210,8 @@ ui <- function(request) {
                     icon= NULL,
                     color="default",
                     size="s"
-                  )
+                  ),
+                  style="padding-left:15px; padding-right: 15px;"
                 )
               )
           ) %>%
@@ -216,8 +219,9 @@ ui <- function(request) {
           bs_append(
             title = "3. Required map inputs",
             content = list(
-              fluidRow(h3("In order to view any plots or tables, or to generate a report, you must
-                          select an ecoregion on the map and then select a watershed."))
+              fluidRow(h4("In order to view any plots or tables, or to generate a report, you must
+                          select an ecoregion on the map and then select a watershed."),
+                       style="padding-left:15px; padding-right: 15px;")
             )
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
@@ -275,7 +279,7 @@ ui <- function(request) {
       ddownBttnUI("pamapBttn"),
       absolutePanel(
         id = "patourPanel",
-        top = 350,
+        top = 20,
         left = 25,
         right = "auto",
         bottom = "auto",
@@ -314,7 +318,8 @@ ui <- function(request) {
       width = 4,
       fluidRow(
         id = "paexpSideR1",
-        HTML('<i class="fa fa-minus fa-lg mycolIcon" id="paexpPanelIcon" data-toggle="collapse" data-target="#paexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
+        h4("Menu",style="padding-left: 15px")
+        # HTML('<i class="fa fa-minus fa-lg mycolIcon" id="paexpPanelIcon" data-toggle="collapse" data-target="#paexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
       ),
       fluidRow(
         id = "paexpSideR2",
@@ -346,7 +351,8 @@ ui <- function(request) {
                     icon= NULL,
                     color="default",
                     size="s"
-                  )
+                  ),
+                  style="padding-left:15px; padding-right: 15px;"
                 ),
                 fluidRow(
                   selectizeInput(
@@ -365,7 +371,8 @@ ui <- function(request) {
                     icon= NULL,
                     color="default",
                     size="s"
-                  )
+                  ),
+                  style="padding-left:15px; padding-right: 15px;"
                 )
               )
           ) %>%
@@ -373,21 +380,9 @@ ui <- function(request) {
           bs_append(
             title = "3. Required map inputs",
             content = list(
-              fluidRow(h3("In order to view any plots or tables, or to generate a report, you must
-                          select an protected area on the map or from the dropdown list below.")),
-              fluidRow(
-                selectizeInput(
-                  inputId = "paSelInput",
-                  label = "Select a protected area of interest",
-                  choices = c("Select one..."="",
-                              panames
-                              ),
-                  selected = "",
-                  multiple = F,
-                  width="100%",
-                  options=list(maxOptions = 3000)
-                )
-              )
+              fluidRow(h4("In order to view any plots or tables, or to generate a report, you must
+                          select an protected area on the map.",
+                          style="padding-left:15px; padding-right: 15px;"))
             )
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
@@ -423,7 +418,13 @@ ui <- function(request) {
       ddownBttnUI("paexpMapBttn")
     )
   )
-  
+  test<-tabPanel(
+    title=
+      shinydashboardPlus::socialButton(url = aw_gh, type = "github")
+  )
+  test2<-tabPanel(
+    title= shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
+  )
   #NavBar Page ----
   tagList(
     useShinyjs(),
@@ -434,7 +435,7 @@ ui <- function(request) {
       selected = "homeTab",
       position = "static-top",
       header = header,
-      footer = footer,
+      # footer = footer,
       collapsible = T,
       inverse = F,
       fluid = T,
@@ -443,7 +444,9 @@ ui <- function(request) {
       climTourTab,
       climExpTab,
       paTourTab,
-      paExpTab
+      paExpTab,
+      test,
+      test2
     )
   ) 
 }

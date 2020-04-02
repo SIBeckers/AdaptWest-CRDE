@@ -1,7 +1,10 @@
-report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
+report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
+  
+  print(polys)
   observeEvent(!is.null(polys),{
     if(isTRUE(pa)){
+      n<-nrow(polys)
       output$selPolys<-renderUI({
         ns <- session$ns
         selectizeInput(
@@ -13,12 +16,13 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
             "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
           ),
           multiple=F,
-          selected="",
+          selected=polys[n,][[namecol]],
           width="100%",
           options=list(maxOptions=4000,hideSelected=T)
         )
       })
     } else {
+      n<-nrow(polys2)
       output$selPolys<-renderUI({
         ns <- session$ns
         selectizeInput(
@@ -26,11 +30,12 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
           label = "",
           choices = list(
             "Select watershed for report..." ="",
-            "Selected in map"=as.list(polys[[namecol]]),
+            "Selected in map..." = as.list(polys2[n,][[namecol]]),
+            "In the same ecoregion"=as.list(setdiff(polys[[namecol]],polys2[[namecol]])),
             "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
           ),
           multiple=F,
-          selected="",
+          selected=polys2[n,][[namecol]],
           width="100%",
           options=list(maxOptions=3000)
         )
@@ -51,13 +56,13 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
   output$reportBttn <- downloadHandler(
     filename = function() {
       paste0(outname,"_",ROIdata$roi$Name,".",
-             switch(input$reportFormat,PDF="pdf",Word="docx",Powerpoint="pptx",HTML="html",Markdown="md"))
+             switch(input$reportFormat,PDF="pdf",Word="docx",HTML="html"))
     },
     content = function(file) {
       
       rpfm =  switch(input$reportFormat,PDF="pdf_document",Word="word_document",
-                     Powerpoint="powerpoint_presentation",HTML="html_document",
-                     Markdown="md_document")
+                     HTML="html_document"
+                     )
       paramslist<-reportconfig
       paramslist$poly = ROIdata$roi
       paramslist$html = input$reportInteractive
@@ -73,7 +78,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
           if(file.exists(file.path(outputDir,"interactive_reports",
               paste0(outname,"_",ROIdata$roi$Name,".",
                 switch(input$reportFormat,PDF="pdf",Word="docx",
-                        Powerpoint="pptx",HTML="html",Markdown="md"
+                        HTML="html"
                 )))))
           {
             shiny::setProgress(0.75,message="Found an existing report; getting it...")
@@ -82,7 +87,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
                 outputDir,"interactive_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              Powerpoint="pptx",HTML="html",Markdown="md"
+                              HTML="html"
                        )
                 )
               ),
@@ -104,7 +109,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
                 outputDir,"interactive_reports",
                   paste0(outname,"_",ROIdata$roi$Name,".",
                     switch(input$reportFormat,PDF="pdf",Word="docx",
-                      Powerpoint="pptx",HTML="html",Markdown="md"
+                      HTML="html"
                     )
                   )
                 )
@@ -114,7 +119,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
           if(file.exists(file.path(outputDir,"static_reports",
               paste0(outname,"_",ROIdata$roi$Name,".",
                  switch(input$reportFormat,PDF="pdf",Word="docx",
-                        Powerpoint="pptx",HTML="html",Markdown="md"
+                        HTML="html"
                  ))))) 
           {
             shiny::setProgress(0.75,message="Found an existing report; getting it...")
@@ -123,7 +128,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
                 outputDir,"static_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              Powerpoint="pptx",HTML="html",Markdown="md"
+                              HTML="html"
               ))),
               to = file
             )
@@ -143,7 +148,7 @@ report<- function(input, output, session,pa=T,polys=NULL,data,namecol="PA_NAME",
                 outputDir,"static_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              Powerpoint="pptx",HTML="html",Markdown="md"
+                              HTML="html",Markdown="md"
                        )
                 )
               )

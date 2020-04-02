@@ -33,5 +33,4 @@ www/report/tmp/*
 www/report/static_reports/*
 www/report/interactive_reports/*
 Data_20200329.7z
-
-
+/report_stats/**.csv
