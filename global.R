@@ -151,7 +151,6 @@ source("www/code/tourStep_v2.R")
 source("www/code/myicon.R")
 source("www/code/radarplot.R")
 source("www/code/xyplot.R")
-source("./www/code/colours.R")
 source("./www/report/mapFunction.R")
 # Setup leaflet sidebyside plugin ----
 myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
