@@ -167,7 +167,7 @@ ui <- function(request) {
           bs_set_opts(panel_type = "info", use_heading_link = T) %>%
           bs_append(
             title = "1. About",
-            includeHTML("./www/md/explorermainpanelcontent/metrictourexplorermainpanel.html")
+            includeHTML("./www/md/explorers/metrictourexplorermainpanel.html")
           ) %>%
           bs_set_opts(panel_type = "primary", use_heading_link = T) %>%
           bs_append(
@@ -328,7 +328,7 @@ ui <- function(request) {
           bs_append(
             title = "1. About",
             content = 
-              includeHTML("./www/md/explorermainpanelcontent/paexplorermainpanel.html")
+              includeHTML("./www/md/explorers/paexplorermainpanel.html")
           ) %>%
           bs_set_opts(panel_type = "primary", use_heading_link = T) %>%
           bs_append(

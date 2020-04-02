@@ -38,7 +38,7 @@ reportUI <- function(id) {
     div(style="text-align: center",
       downloadBttn(
         outputId=ns("reportBttn"),
-        style="bordered",
+        style="unite",
         color="primary",
         size="md",
         no_outline=F,
