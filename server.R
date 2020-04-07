@@ -289,7 +289,9 @@ function(input, output, session) {
         proxy %>% clearGroup('swds')
         mswds<-NULL
         spdat<-NULL
+        rwds(NULL)
         clickedIds$ids<-NULL
+        multiSelected_wds(NULL)
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
         callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
       })
@@ -301,7 +303,9 @@ function(input, output, session) {
           proxy %>% clearGroup('swds')
           mswds<-NULL
           spdat<-NULL
+          rwds(NULL)
           clickedIds$ids<-NULL
+          multiSelected_wds(NULL)
           callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
           callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
         })
@@ -410,7 +414,7 @@ function(input, output, session) {
           # 8e) i. If the clicked polygon is an ecoregion ----
           polygroup("wds")
           output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = F,all=T,reset=T)))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T)))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T)))
           output$b2ecoBttn <- renderUI(
             div(
               class = "b2eBttn",
@@ -457,7 +461,7 @@ function(input, output, session) {
           names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon',"Name")
           callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
-
+          callModule(xyPlot,"climexp",data=rwds(),data2= NULL, namecol="NEWNAME",offset=1)
           #8e) ii. If the clicked polygon is a watershed ----
         } else if (click$group == "wds" | click$group == "swds" ) {
           polygroup("wds")
@@ -481,8 +485,15 @@ function(input, output, session) {
       observeEvent(input$climExpB2E,{
         removeUI(selector = "div:has(>#climExpB2E)", session = session)
         removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
+        removeUI(selector = "div:has(>#climexpp-xyPlot)", session = session)
         output$climexpStarplotDiv <- NULL
+        output$climexpXYplotdiv <- NULL
         polygroup("ecoregions")
+        mswds<-NULL
+        spdat<-NULL
+        rwds(NULL)
+        multiSelected_wds(NULL)
+        clickedIds$ids<-NULL
         proxy <- leafletProxy("climexpMap-map") %>% hideGroup("Place Labels") %>%
           clearGroup("wds") %>%
           clearGroup("swds") %>%
@@ -693,7 +704,7 @@ function(input, output, session) {
           input$"paexpMap-map_shape_click"
         },{
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = F,all=F,reset=T)))
-        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T)))
+        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T,live=T)))
         multiSelected_pas(
           selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")

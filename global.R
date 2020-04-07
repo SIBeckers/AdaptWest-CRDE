@@ -40,7 +40,9 @@ library(viridis)
 library(scales)
 library(combinat)
 library(RColorBrewer)
-# webshot::install_phantomjs()
+library(flextable)
+library(cowplot)
+# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.jquery.version = 1)
 
 
@@ -152,6 +154,7 @@ source("www/code/myicon.R")
 source("www/code/radarplot.R")
 source("www/code/xyplot.R")
 source("./www/report/mapFunction.R")
+
 # Setup leaflet sidebyside plugin ----
 myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
                                           src = c("www/shared/leaflet-side-by-side-gh-pages"),

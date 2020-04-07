@@ -67,6 +67,8 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       paramslist$poly = ROIdata$roi
       paramslist$html = input$reportInteractive
       paramslist$fmt = rpfm
+      paramslist$data2 = data
+      paramslist$pa  = pa
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
       
       mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()),as.integer(input$reportInteractive),rpfm,as.integer(pa))),use.names=F,fill = F)

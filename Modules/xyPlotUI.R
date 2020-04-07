@@ -1,4 +1,4 @@
-xyPlotUI <- function(id,reset=T,all=T,pa=F) {
+xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
   ns <- NS(id)
   if (isTRUE(reset) & isTRUE(all)) {
     tagList(
@@ -23,15 +23,17 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
           ,style="padding-left:15px; padding-right: 15px;"
         ),
         br(),
-        fluidRow(
-          plotOutput(ns("xyPlot"),width = "100%")
-        ),
-        fluidRow(id=ns("xyBttnRow"),
+        if(isTRUE(live)){
+          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+        } else{
+        fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+        }
+        ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
             inputId = ns("X"),
             label = "X-variable",
             choices = c("Select X axis: " = "", metriclist[1:8]),
-            selected = "elevdiv",
+            selected = "fwvelref",
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -40,7 +42,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
             inputId = ns("Y"),
             label = "Y-variable",
             choices = c("Select Y axis: " = "", metriclist[1:8]),
-            selected = "intact",
+            selected = "bwvelref",
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -69,15 +71,17 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
           ,style="padding-left:15px; padding-right: 15px;"
         ),
         br(),
-        fluidRow(
-          plotOutput(ns("xyPlot"),width = "100%")
-        ),
-        fluidRow(id=ns("xyBttnRow"),
+        if(isTRUE(live)){
+          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+        } else{
+          fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+        }
+        ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
             inputId = ns("X"),
             label = "X-variable",
             choices = c("Select X axis: " = "", metriclist[1:8]),
-            selected = "elevdiv",
+            selected = "fwvelref",
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -86,7 +90,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
             inputId = ns("Y"),
             label = "Y-variable",
             choices = c("Select Y axis: " = "", metriclist[1:8]),
-            selected = "intact",
+            selected = "bwvelref",
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -115,15 +119,17 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
             ,style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          fluidRow(
-            plotOutput(ns("xyPlot"),width = "100%")
-          ),
-          fluidRow(id=ns("xyBttnRow"),
+          if(isTRUE(live)){
+            fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+          } else{
+            fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+          }
+          ,fluidRow(id=ns("xyBttnRow"),
                    selectizeInput(
                      inputId = ns("X"),
                      label = "X-variable",
                      choices = c("Select X axis: " = "", metriclist[1:8]),
-                     selected = "elevdiv",
+                     selected = "fwvelref",
                      multiple  = F,
                      width = "auto",
                      options = list(maxOptions = 12)
@@ -132,7 +138,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
                      inputId = ns("Y"),
                      label = "Y-variable",
                      choices = c("Select Y axis: " = "", metriclist[1:8]),
-                     selected = "intact",
+                     selected = "bwvelref",
                      multiple  = F,
                      width = "auto",
                      options = list(maxOptions = 12)
@@ -151,10 +157,12 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F) {
           style="padding-left:15px; padding-right: 15px;"
         ),
         br(),
-        fluidRow(
-          plotOutput(ns("xyPlot"),width = "100%")
-        ),
-        fluidRow(id=ns("xyBttnRow"),
+        if(isTRUE(live)){
+          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+        } else{
+          fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+        }
+        ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
             inputId = ns("X"),
             label = "X-variable",
