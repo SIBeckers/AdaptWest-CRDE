@@ -51,10 +51,10 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
       p <- fig %>% add_markers(
         data = data, x = ~get(xvar),y = ~get(yvar),color = ~Group, 
         colors=c("grey",col2),legendgroup=~Group,
-        text = ~get(nam),
+        text = ~I(get(nam)),
         hovertemplate = paste(
           '<b>Name</b>: %{text}<br>',
-          '<b>Forward Climate Refugia</b>: %{y:.3f}}<br>',
+          '<b>Forward Climate Refugia</b>: %{y:.3f}<br>',
           '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
         ) 
       ) %>% layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),
@@ -72,11 +72,11 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
       fig <- plot_ly()
       p <- fig %>% add_markers(
         data = data, x =~get(xvar),y = ~get(yvar) ,color = ~Group, 
-        colors=c("grey"),legendgroup=~Group,
-        text = ~get(nam),
+        colors=c("grey"),legendgroup= ~Group,
+        text = ~I(get(nam)),
         hovertemplate = paste(
           '<b>Name</b>: %{text}<br>',
-          '<b>Forward Climate Refugia</b>: %{y:.3f}}<br>',
+          '<b>Forward Climate Refugia</b>: %{y:.3f}<br>',
           '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
         )
       ) %>% layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),

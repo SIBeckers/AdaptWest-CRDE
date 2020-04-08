@@ -133,6 +133,7 @@ In this report, we present data for `r paste(params$park)` on key metrics that c
   * [Intactness (the inverse of landuse intensity)](https://figshare.com/articles/Global_Human_Modification/7283087)
 
 ## Basic Information for `r params$poly$Name`
+
 ```{r REFUGIA_TABLE, echo = params$printCode, results = 'asis',eval = params$table}
 polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc) %>%
   mutate_at(.vars=vars(brdref,treref,treec),funs(as.numeric))
@@ -192,7 +193,13 @@ if(params$fmt %in% c("word_document")){
     row.names=F,
     align = c("l",rep('c', 8)),
     caption = paste0("Adaptation Metrics for: ", params$poly$Name)) %>%
-    kable_styling(latex_options=c("hold_position","scale_down"))
+    column_spec(1,width="1in") %>%
+    column_spec(2,width="0.73in") %>%
+    column_spec(3,width="0.88in") %>%
+    column_spec(4,width="0.69in") %>%
+    column_spec(5,width="0.75in") %>%
+    column_spec(6:9,width="0.61in") %>%
+    kable_styling(latex_options=c("HOLD_position","scale_down"))
 } else {
   outtable<-knitr::kable(booktabs = T, format="html",
     x=polydata,
@@ -299,8 +306,6 @@ if (params$RBS){
   shiny::setProgress(0.28)
 }
 ```
-
-
 **Climate velocity** is the speed that an organism needs to travel to keep pace with climate. Climate refugia (areas of species persistence during climate change) are areas of low enough velocity that the organism can remain within their suitable climate.
 
 To calculate analog-based climatic velocity, climate is categorized into types, and the straight-line distance is measured between a site and the nearest site with the same climate type in a different time period. Climatic velocity is influenced by processes 
@@ -398,8 +403,6 @@ if (params$RBS){
   shiny::setProgress(0.36)
 }
 ```
-
-
 **Backward climatic velocity** measures the straight-line distance between a site's future climate type and the nearest site with the same climate type under current climates. This represents the rate at which organisms adapted to a location's future climate will need to move to colonize that location. 
 Backward velocity represents the distance and rate at which organisms adapted to a location's future climate will need to move to reach that location, and reflects a location's ability to serve as a refugium for species and ecosystems. 
 Backward velocity is generally low in alpine areas, because adapted organisms can reach the site from nearby downslope locations. Values are often high in valley bottom habitat because organisms must travel longer distances to colonize these locally new habitat conditions.
@@ -491,8 +494,6 @@ if (params$RBS){
   shiny::setProgress(0.45)
 }
 ```
-
-
 **Microrefugia potential**
  - Many approaches to identifying areas that will be refuges for biodiversity under climate change are based on predicting future climate. Other approaches use only information on the current environment. Species distributions, communities, ecosystems, and broader patterns of biodiversity are known to be influenced by abiotic drivers such as soils, geology, and topography.
 Refugia also span a range of spatial scales. Coarse-resolution metrics such as climatic velocity which identify **macrorefugia** (areas where broad-scale climate is relatively stable and suitable for persistence) can be complemented with other information that helps identify fine-scale **microrefugia** (small areas with locally favorable environments within otherwise unsuitable climates).  
@@ -646,8 +647,6 @@ if (params$RBS){
   shiny::setProgress(0.53)
 }
 ```
-
-
 **Biotic velocity** is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.  
 Biotic velocities provide a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported on a per-species basis or averaged across a taxa group.
 Backward biotic velocity provides a  species-specific refugia index.
@@ -798,8 +797,6 @@ if (params$RBS){
   shiny::setProgress(0.62)
 }
 ```
-
-
 **Climate connectivity** - The persistence of many species under climate change will depend areas that facilitate dispersal to newly climatically suitable habitat. **Climate connectivity areas** or "climate corridors" are areas that form the best route between current climate types and where those climates will occur in the future under climate change. Climate connectivity areas are distinct from refugia and thus poorly captured by many existing conservation strategies. Because dispersing organisms may need to avoid hostile climates, these routes are often circuitous rather than the straight-line paths, as is assumed when measuring standard climatic velocity [Dobrowski and Parks 2016](https://www.nature.com/articles/ncomms12349). Several methods exist for identifying climate corridors. [Carroll et al. 2018](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.14373) used centrality metrics to identify areas where many potential dispersal paths overlap.
 Broad-scale topography and climate influence connectivity paths. Routes were found to be funneled along north-south trending passes and valley systems and along the leeward or drier slopes of north-south trending mountain ranges. Climate connectivity paths also tend to avoid areas of novel and disappearing climates. Human landuses may further constrain the ability of species to disperse through these areas.
 
@@ -947,8 +944,6 @@ if (params$RBS){
   shiny::setProgress(0.7)
 }
 ```
-
-
 **Above- and below-ground carbon** - Climate adaptation planning addresses the impacts of climate change via efforts to increase landscape resilience and other strategies. However, it is important to place climate adaptation strategies within a larger context which includes mitigation strategies to address the causes of climate change by reducing accumulation of greenhouse gases in the atmosphere. An example of such a dual adaptation/mitigation strategy is a recent conservation proposal termed the Global Deal for Nature, which proposes that protected area networks be expanded to include areas that hold large reserves of **aboveground (biomass) and belowground (soil and biomass) carbon**, with the aim of reducing disturbances that accelerate release of stored carbon ([Dinerstein et al. 2019](http://doi.org/10.1126/sciadv.aaw2869)). In North America, soil carbon is generally at highest levels in large boreal peatlands, implying that protection of large boreal landscapes is critical for conserving areas of high soil carbon. Patterns of above-ground carbon are complex and vary based on several broad-scale climatic and other factors. A strong longitudinal precipitation gradient is evident in North America, as predominantly west-to-east atmospheric circulation interacts with north-south cordilleras such as the Rocky Mountains. More mesic forested ecosystems to the west of these ranges generally support higher levels of aboveground carbon in terms of tree biomass. Grassland ecosystems can also support high levels of belowground carbon.
 
 **How to interpret the map:** The maps above shows above-ground carbon stored in tree biomass `r ifelse(params$html,paste("(left panel)"),paste("(top panel)"))` and below-ground soil carbon at 1 meter depth `r ifelse(params$html,paste("(right panel)"),paste("(bottom panel)"))`. Red shades indicate areas with the highest concentrations of carbon per unit area, whereas blue shades indicate areas with low levels of carbon. The spatial data can be downloaded [here](http://globbiomass.org/wp-content/uploads/GB_Maps/Globbiomass_global_dataset.html) and [here](https://data.isric.org/geonetwork/srv/eng/catalog.search#/metadata/c02ddf8b-cbfb-4533-a9c3-7bf0790fd042).
@@ -1036,7 +1031,6 @@ if (params$RBS){
   shiny::setProgress(0.79)
 }
 ```
-
 **The Human Footprint** - 
 The effects of climate stressors on natural systems interact with and can be magnified by other human-caused stressors such as land conversion and development. Human modification of the landscape shows a strong latitudinal gradient in North America, increasing in intensity from the boreal region to mid-latitudes. In much of the boreal region, development corridors are embedded within a more intact matrix. In mid-latitude regions, large protected area complexes and other wild areas appear as islands within a more developed matrix. The intensity of anthropogenic stressors has been termed the **human footprint** or **human modification index** ([Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549)). We represent this metric here as intactness, the inverse of anthropogenic landuse intensity, so that, as with other climate resilience metrics described here, increasing values of the metric correspond to increasing resilience.  The figure below shows the specific data used by [Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549) to produce a composite human modification index.
 **How to interpret the map:** The map above shows intactness (the inverse of human land use intensity). Red shades indicate areas with highest intactness, whereas blue shades indicate areas with lowest intactness (highest levels of development). The spatial data can be downloaded [here](https://figshare.com/articles/Global_Human_Modification/7283087).
@@ -1063,8 +1057,6 @@ if (params$RBS){
   shiny::setProgress(0.87)
 }
 ```
-
-
 **Data visualization** - The wide variety of climate exposure and refugia metrics can seem confusing. However, there are several ways to integrate information from diverse metrics.
 As discussed previously, coarse-resolution velocity metrics can be combined with fine-resolution diversity metrics in order to leverage the respective strengths of the two groups of metrics as tools for identification of potential macro-and microrefugia that in combination help maximize both transient and long-term resilience to climate change.
 Alternately, planners can integrate multiple climate exposure metrics for an area of interest into a single diagram to produce a composite "fingerprint" representing factors affecting climate resilience.
@@ -1142,11 +1134,11 @@ if(isFALSE(params$html)){
   poly$Group <- poly$Name
   
   data <- bind_rows(dat2,poly)
-  fig <- plot_ly()
+  fig <- plot_ly(width="100%")
   fig1 <- fig %>% add_markers(
     data = data, x = ~bwvelref,y = ~fwvelref ,color = ~Group, 
     colors=c("grey",col2),legendgroup=~Group,showlegend=F,
-    text = ~Name,
+    text = ~I(Name),
     hovertemplate = paste(
       '<b>Name</b>: %{text}<br>',
       '<b>Forward Climate Refugia</b>: %{y:.3f}}<br>',
@@ -1156,7 +1148,7 @@ if(isFALSE(params$html)){
   fig2 <- fig %>% add_markers(
     data=data,x= ~bwvelref,y= ~elevdiv,color= ~Group,
     colors=c("grey",col2),legendgroup=~Group,showlegend=F,
-    text = ~Name,
+    text = ~I(Name),
     hovertemplate = paste(
       '<b>Name</b>: %{text}<br>',
       '<b>Togographic Diversity</b>: %{y:.3f}}<br>',
@@ -1166,7 +1158,7 @@ if(isFALSE(params$html)){
   fig3 <- fig %>% add_markers(
     data=data,x= ~treref,y= ~brdref,color= ~Group,
     colors=c("grey",col2),legendgroup=~Group,showlegend=F,
-    text = ~Name,
+    text = ~I(Name),
     hovertemplate = paste(
       '<b>Name</b>: %{text}<br>',
       '<b>Bird Refugia</b>: %{y:.3f}}<br>',
@@ -1176,7 +1168,7 @@ if(isFALSE(params$html)){
   fig4 <- fig %>% add_markers(
     data=data,x= ~soilc,y= ~treec,color= ~Group,
     colors=c("grey",col2),legendgroup=~Group,
-    text = ~Name,
+    text = ~I(Name),
     hovertemplate = paste(
       '<b>Name</b>: %{text}<br>',
       '<b>Soil Carbon</b>: %{y:.3f}}<br>',
@@ -1184,14 +1176,13 @@ if(isFALSE(params$html)){
     )
   )
   f <- subplot(fig1, fig2,fig3, fig4,nrows=2) %>% 
-    layout(legend = list(orientation = 'h',x = 0, y = -0.1,yanchor="top"))
+    layout(legend = list(orientation = 'h',x = 0, y = -0.1,yanchor="top"),width="100%")
   f
 }
 if (params$RBS){
   shiny::setProgress(0.96)
 }
 ```
-
 **Scatterplots** - This page shows several x-y scatterplots for `r paste(params$poly$Name)`. Each plot shows values for `r paste(params$poly$Name)` for two metrics, in the context of values shown in the dataset as a whole. To create and compare custom scatterplots of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** and **Protected Area Explorer** tabs.
 
 

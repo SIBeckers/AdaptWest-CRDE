@@ -33,9 +33,9 @@ css: "../../css/custom.css"
       <a href = "https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/13497", style = "font-color: #ffffff;margin-bottom:20px;padding-bottom:20px">
       <img src = "../../logos/canada-2c-nrcan-cfs-curves.jpg", width = "16.55%"/>
       </a>
-      <a href = "https://adaptwest.databasin.org/",style = "background: white; font-color: #3c8dbc">
-        <img src = "../../logos/adaptwestbanner.jpg", width = "48%"/>
-      </a>
+      <!-- <a href = "https://adaptwest.databasin.org/",style = "background: white; font-color: #3c8dbc"> -->
+      <!--   <img src = "../../logos/adaptwestbanner.jpg", width = "48%"/> -->
+      <!-- </a> -->
     </div>
   </div>
 </div>
