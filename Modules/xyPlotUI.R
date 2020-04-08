@@ -24,9 +24,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
         ),
         br(),
         if(isTRUE(live)){
-          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
         } else{
-        fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+        fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
         }
         ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
@@ -72,9 +72,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
         ),
         br(),
         if(isTRUE(live)){
-          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
         } else{
-          fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+          fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
         }
         ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
@@ -120,9 +120,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
           ),
           br(),
           if(isTRUE(live)){
-            fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+            fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
           } else{
-            fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+            fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
           }
           ,fluidRow(id=ns("xyBttnRow"),
                    selectizeInput(

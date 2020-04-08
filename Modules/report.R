@@ -150,13 +150,14 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
                 outputDir,"static_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              HTML="html",Markdown="md"
+                              HTML="html"
                        )
                 )
               )
             )
+            file.copy(out,file)
           }
-        file.copy(out,file)
+        
         }
       })
     }

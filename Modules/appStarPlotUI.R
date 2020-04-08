@@ -20,7 +20,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {
@@ -40,7 +40,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
         )
       )
     } else if (isFALSE(reset) & isTRUE(all)) {
@@ -60,7 +60,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotlyOutput(ns("appStarPlot"),width = "100%",inline = T)
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
         )
       )
     }
@@ -85,7 +85,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500)
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {
@@ -106,7 +106,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500)
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
         )
       )
     } else if (isFALSE(reset) & isTRUE(all)) {
@@ -127,7 +127,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500)
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
         )
       )
     }
