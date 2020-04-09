@@ -200,14 +200,13 @@ function(input, output, session) {
   
     } else if (input$tabs == "climexpTab") {
       #8). Metric Explorer ----
+      #8a) Setup ----
       shinyjs::click("climexpacc-0-heading")
       wds <- read_sf(wdfile)
       callModule(map, "climexpMap",OSM=F) # Climate Metrics Explorer Map server logic
       callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
       proxy <- leafletProxy("climexpMap-map") # Represents the map so that we can make changes to it
-      #8a) Add Ecoregion Polygons ----
-      # proxy %>% hideGroup("Place Labels") %>%
-      #   setView(lng = -100, lat = 55, zoom = 3) 
+      
       #8b) Add tiles----
       observe({
         proxy %>% 
@@ -311,7 +310,7 @@ function(input, output, session) {
         })
       
       
-      #8e_pre) Add polygons and fill ----
+      #8e Add polygons and fill by mean value ----
       observeEvent(polygroup(),{
         observeEvent(
           {input$climFillPolys
@@ -402,7 +401,7 @@ function(input, output, session) {
         })
       })
         
-      #8e) Map Polygon Click Logic----
+      #8f) Map Polygon Click Logic----
       observeEvent(input$"climexpMap-map_shape_click", {
         click <- input$"climexpMap-map_shape_click"
         
@@ -431,6 +430,10 @@ function(input, output, session) {
           )
           #e) Get the ecoregion data
           eregion$edata <- ecos[which(ecos$ecoreg3 == click$id),]
+          min <- l3min[which(l3min$ecr3_id ==eregion$edata$ecoreg3),2:9]
+          max <- l3max[which(l3max$ecr3_id == eregion$edata$ecoreg3),2:9]
+          min$NEWNAME <- "MIN"
+          max$NEWNAME <- "MAX"
           eregion$bds <- st_bbox(eregion$edata)
           #e) Get the watershed data for watersheds within that ecoregion.
           bds <- unname(eregion$bds)
@@ -457,7 +460,8 @@ function(input, output, session) {
           eregion$edata <- eregion$edata %>% select(intact3,elevdiv3,fwvelref3,bwvelref3,brdref3,treref3,treec3,soilc3) %>% st_drop_geometry() %>% mutate_all(funs(as.numeric))
           names(eregion$edata) <- c("intact","elevdiv","fwvelref" ,"bwvelref", "brdref","treref","treec","soilc")
           eregion$edata$NEWNAME <-  "Ecoregion Avg"
-          eregion$edata <- rbind(eregion$edata,hucmin)
+          
+          eregion$edata <- rbind(eregion$edata,min,max)
           names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon',"Name")
           callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
@@ -581,7 +585,7 @@ function(input, output, session) {
           data <-pas[1,]
         }
         return(data)
-      })
+      }) %>% debounce(500)
       #9b) Add polygons to the map based on the view and scale.----
       observe({
         rpas(inBounds_PAs())
@@ -668,7 +672,7 @@ function(input, output, session) {
           output$paexpStarplotDiv <- NULL
           output$paexpXYplotdiv <- NULL
         })
-      #9d) Add tiles ----
+      #9d) Add tiles from dropdown ----
       observe({
         proxy %>% 
           clearGroup("metrics")
@@ -693,12 +697,7 @@ function(input, output, session) {
         }
       })
       #9e) Map polygon click logic ----
-      # #9e) i. Expand the output section the first time a polygon is clicked
-      # observeEvent(input$"paexpMap-map_shape_click", {
-      #   shinyjs::click(id = "paexpacc-3-heading")
-      # },once=T)
-      
-      #9e) ii. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
+        #9e) i. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
       observeEvent(
         {
           input$"paexpMap-map_shape_click"
@@ -709,12 +708,26 @@ function(input, output, session) {
           selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
         )
-        mspas <- st_drop_geometry(multiSelected_pas()) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
-        names(mspas) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        mspas <- isolate(multiSelected_pas())
+        pamin <- l1min[which(l1min$ecr1_id %in% mspas$ecoreg1),2:9]
+        pamin <- pamin %>% summarise_all(min,na.rm=T)
+        pamax <- l1max[which(l1max$ecr1_id %in% mspas$ecoreg1),2:9]
+        pamax <- pamax %>% summarise_all(max,na.rm=T)
+        pamin$Name <- "MIN"
+        pamax$Name <- "MAX"
+        names(pamin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                               'Tree Carbon','Soil Carbon',"Name")
+        names(pamax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                          'Tree Carbon','Soil Carbon',"Name")
+        padat <- st_drop_geometry(mspas) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
+        names(padat) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                         'Tree Carbon','Soil Carbon',"Name")
-        padat <- rbind(paminmax,mspas)
+        print(paste0("NCOL PADAT: ", ncol(padat)))
+        print(paste0("NCOL PAMIN: ", ncol(pamin)))
+        print(paste0("NCOL PAMAX: ", ncol(pamax)))
+        padat <- rbind(pamin,pamax,padat)
         if (nrow(padat) > 2){
-          callModule(report,"paReport",polys=multiSelected_pas(),data=pas)
+          callModule(report,"paReport",polys=mspas,data=pas)
           callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = F)
   
         } else {
@@ -735,22 +748,23 @@ function(input, output, session) {
       )
       #9f) XY Plot Logic ----
       observeEvent(multiSelected_pas(),{
+      mspas <- isolate(multiSelected_pas())
        observeEvent(input$"paexp-X",{
-          if (is.null(multiSelected_pas())) {
+          if (is.null(mspas)) {
            callModule(xyPlot,"paexp",data=pas,
                        data2= NULL, namecol="PA_NAME",offset=0,pa=T)
-          } else if(nrow(multiSelected_pas())>0) {
-            biomeInd <- which(pas$ecoreg1 %in% multiSelected_pas()$ecoreg1)
+          } else if(nrow(mspas)>0) {
+            biomeInd <- which(pas$ecoreg1 %in% mspas$ecoreg1)
             callModule(xyPlot,"paexp",data=pas[biomeInd,],
-                         data2= multiSelected_pas(), namecol="PA_NAME",offset=0,pa=T)
+                         data2= mspas, namecol="PA_NAME",offset=0,pa=T)
           }
         })
         observeEvent(input$"paexp-Y",{
-          if (is.null(multiSelected_pas())) {
+          if (is.null(mspas)) {
             callModule(xyPlot,"paexp",data=pas,data2=NULL,namecol="PA_NAME",offset=0,pa=T)
-          } else if(nrow(multiSelected_pas())>0) {
-            biomeInd <- which(pas$ecoreg1 %in% multiSelected_pas()$ecoreg1)
-            callModule(xyPlot,"paexp",data=pas[biomeInd,],data2=isolate(multiSelected_pas()),namecol="PA_NAME",offset=0,pa=T)
+          } else if(nrow(mspas)>0) {
+            biomeInd <- which(pas$ecoreg1 %in% mspas$ecoreg1)
+            callModule(xyPlot,"paexp",data=pas[biomeInd,],data2=mspas,namecol="PA_NAME",offset=0,pa=T)
           }
         })
       })

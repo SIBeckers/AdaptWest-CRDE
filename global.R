@@ -63,10 +63,10 @@ reportStatsStatus=F#Keep track of stats globally (T) (e.g. from Dropbox) or loca
 pafile = "./Data/pas.gpkg"
 ptsfile = "./Data/pas_centroids.gpkg"
 panames<-readRDS("./Data/panames.Rds")
-paminmax <- fread('./Data/paminmax.csv')
-paminmax$Name = c("MIN","MAX")
-names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
-                     'Tree Carbon','Soil Carbon',"Name")
+# paminmax <- fread('./Data/paminmax.csv')
+# paminmax$Name = c("MIN","MAX")
+# names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+#                      'Tree Carbon','Soil Carbon',"Name")
 
 # Watersheds Data ----
 wdfile = "./Data/wds.gpkg"
@@ -76,8 +76,11 @@ ecos <- read_sf('./Data/ecos.gpkg')
 ecol1stats <- fread("./Data/ecoregionlevel1mean.csv",colClasses=list(character=1,numeric=2:9))
 ecol2stats <- fread("./Data/ecoregionlevel2mean.csv",colClasses=list(character=1,numeric=2:9))
 ecol3stats <- fread("./Data/ecoregionlevel3mean.csv",colClasses=list(character=1,numeric=2:9))
-hucmin <- fread("./Data/hucminmax.csv")
-hucmin$NEWNAME = c("MIN","MAX")
+l1min <- fread("./Data/ecoregionlevel1min.csv",colClasses=list(numeric=1:9))
+l1max <- fread("./Data/ecoregionlevel1max.csv",colClasses=list(numeric=1:9))
+l3min <- fread("./Data/ecoregionlevel3min.csv",colClasses=list(numeric=1:9))
+l3max <- fread("./Data/ecoregionlevel3max.csv",colClasses=list(numeric=1:9))
+
 
 # Map Settings ----
 minZoom = 0
@@ -92,7 +95,7 @@ tilelist <- fread("./config_files/tilelist.txt") #Replaces above two lines.
 tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
 tilevect <- tilelist$tileName
 names(tilevect) <- tilelist$tileGroup
-metriclist <-names(hucmin)
+metriclist <- c("intact","elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","NEWNAME")
 names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
                        'Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                        'Tree Carbon','Soil Carbon',"Name")
@@ -153,7 +156,7 @@ source("./Modules/reportUI.R")
 source("./Modules/report.R")
 
 # Other Code -----
-source("www/code/tourStep_v2.R")
+source("www/code/tourStep.R")
 source("www/code/myicon.R")
 source("www/code/radarplot.R")
 source("www/code/xyplot.R")
