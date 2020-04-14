@@ -12,7 +12,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
   data[[namecol]]<-str_wrap(data[[namecol]],35)
   if (isFALSE(interactive)) {
     mname <- sym(namecol)
-    data <- data %>% mutate_at(vars(-namecol), rescale) %>% rownames_to_column("ROWID") %>%
+    data <- data %>% mutate_at(vars(-namecol), rescale,na.rm=F) %>% rownames_to_column("ROWID") %>%
       filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
       as_tibble(rownames = namecol)
     ggplotColours <- function(n = nrow(data), h = c(0, 360)+15) {
@@ -20,7 +20,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
       hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
     }
     p <- ggRadar(data = data,aes(colour = ROWID),
-                na.rm = T,
+                na.rm = F,
                 rescale = F,
                 legend.position = "none",
                 alpha = 0,
@@ -50,7 +50,7 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T) {
 
       )
   } else {
-    data <- data %>% mutate_at(vars(-namecol), rescale) %>% filter(vars(namecol) != "MIN" & vars(namecol) != "MAX")
+    data <- data %>% mutate_at(vars(-namecol), rescale,na.rm=F) %>% filter(vars(namecol) != "MIN" & vars(namecol) != "MAX")
     names <- unlist(data %>% select(namecol),use.names = F)
     data <- data %>% select(-namecol)
     theta <- c(names(data),names(data)[1])

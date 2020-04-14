@@ -213,22 +213,98 @@ function(input, output, session) {
           clearGroup("metrics") 
         if (input$climExpLayer != "") {
           data <- tilelist[tileName %in% input$climExpLayer,]
-          proxy %>%
-          addTiles(
-            urlTemplate = data$tileSubdir,
-            attribution = data$tileAttribution,
-            group = "metrics",
-            layerId = data$tileGroup,
-            options = tileOptions(
-              tms = T,
-              minZoom = minZoom,
-              maxZoom = maxZoom,
-              unloadInvisibleTiles = T,
-              noWrap = T,
-              opacity = input$"climexpMapBttn-opacity",
-              zIndex = 9000
+          if(data$tileName == "fwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"climexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
+                         rgb(255,0,0,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("Low","Medium","High"),
+                title = paste0("Legend: Tile Fill<br>",data$tileGroup),
+                opacity = input$"climexpMapBttn-opacity",
+                layerId = "climexpTileLegend",
+                group = "pas",
+                className= "info legend Legend"
+              )
+          } else if(data$tileName =="bwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"climexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
+                         rgb(0,112,255,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("Low","Medium","High"),
+                title = paste0("Legend: Tile Fill <br>",data$tileGroup),
+                opacity = input$"climexpMapBttn-opacity",
+                layerId = "climexpTileLegend",
+                group = "pas",
+                className= "info legend Legend"
+              )
+          } else {
+            cols<-colorNumeric(
+              palette="RdYlBu",
+              domain=c(0,100),
+              reverse=T
             )
-          )
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"climexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                pal=cols,
+                values=c(0:100),
+                title = paste0("Legend: Tile Fill (Quantiles)<br>",data$tileGroup),
+                opacity = input$"climexpMapBttn-opacity",
+                layerId = "climexpTileLegend",
+                group = "pas",
+                className= "info legend Legend",
+                labFormat = labelFormat(suffix = "%")
+              )
+          }
         }
       })
      
@@ -317,6 +393,7 @@ function(input, output, session) {
           input$"climexpMapBttn-polyopacity"
           },{
           if(polygroup() == "ecoregions" & input$climFillPolys != ""){
+            nam<-names(polyfillvect)[which(polyfillvect==input$climFillPolys)]
             var<-paste0(input$climFillPolys,"3")
             cols<-colorNumeric(
               palette="RdYlBu",
@@ -337,6 +414,16 @@ function(input, output, session) {
                 group = "ecoregions",
                 highlightOptions=highlightOptions(
                   color="white",weight=2.5)
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                pal=cols,
+                values=ecos[[var]],
+                title = paste0("Legend:Polygon Fill<br>",nam),
+                opacity = input$"climexpMapBttn-polyopacity",
+                layerId = "climexpPolyLegend",
+                group = "wds",
+                className= "info legend polyLegend"
               )
           } else if(polygroup() == "ecoregions" & input$climFillPolys == ""){
             proxy %>%
@@ -374,6 +461,7 @@ function(input, output, session) {
                 )
           } else if (polygroup()=="wds" & input$climFillPolys != ""){
             var<-input$climFillPolys
+            nam<-names(polyfillvect)[which(polyfillvect==var)]
             if(is.null(rwds())){return()}
             data<-rwds()
             cols<-colorNumeric(
@@ -395,6 +483,16 @@ function(input, output, session) {
                 group = "wds",
                 highlightOptions=highlightOptions(
                   color="white",weight=2.5)
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                pal=cols,
+                values=data[[var]],
+                title = paste0("Legend:Polygon Fill<br>",nam),
+                opacity = input$"climexpMapBttn-polyopacity",
+                layerId = "climexpPolyLegend",
+                group = "wds",
+                className= "info legend polyLegend"
               )
           } else if(is.null(polygroup()) | is.null(input$climFillPolys)){
           }
@@ -532,6 +630,7 @@ function(input, output, session) {
           choices = c("Select metric: " = "", tilevect),
           options = list(maxOptions = 12)
         )
+        proxy %>% removeControl("climexpTileLegend")
       })
       #8i) Clear Polygon Fill ----
       observeEvent(input$clearPolyFill,{
@@ -544,6 +643,7 @@ function(input, output, session) {
                       polyfillvect),
           options = list(maxOptions = 12)
         )
+        proxy %>% removeControl("climexpPolyLegend")
       })
     } else if (input$tabs == "paexpTab") {
     #9). PA Explorer Logic ----
@@ -599,6 +699,7 @@ function(input, output, session) {
             {
               if(input$paFillPolys!=""){
               var<-input$paFillPolys
+              nam<-names(polyfillvect)[which(polyfillvect==var)]
               cols<-colorNumeric(
                 palette="RdYlBu",
                 domain=range(pas[[var]],na.rm=T),
@@ -618,6 +719,16 @@ function(input, output, session) {
                   group= "pas",
                   highlightOptions=highlightOptions(
                     color="white",weight=2.5)
+                ) %>%
+                addLegend(
+                  position = "bottomright",
+                  pal=cols,
+                  values=isolate(rpas())[[var]],
+                  title = paste0("Legend:Polygon Fill<br>",nam),
+                  opacity = input$"paexpMapBttn-polyopacity",
+                  layerId = "paexpPolyLegend",
+                  # group = "wds",
+                  className= "info legend polyLegend"
                 )
               selectMultiPolys(mapId = "paexpMap-map",calc=F,data = pas,
                                idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
@@ -678,22 +789,99 @@ function(input, output, session) {
           clearGroup("metrics")
         if (input$paExpLayer != "") {
           data <- tilelist[tileName %in% input$paExpLayer,]
-          proxy %>%
-          addTiles(
-            urlTemplate = data$tileSubdir,
-            attribution = data$tileAttribution,
-            group = "metrics",
-            layerId = data$tileGroup,
-            options = tileOptions(
-              tms = T,
-              minZoom = minZoom,
-              maxZoom = maxZoom,
-              unloadInvisibleTiles = T,
-              noWrap = T,
+          if(data$tileName == "fwshpath"){
+            proxy %>%
+            addTiles(
+              urlTemplate = data$tileSubdir,
+              attribution = data$tileAttribution,
+              group = "metrics",
+              layerId = data$tileGroup,
+              options = tileOptions(
+                tms = T,
+                minZoom = minZoom,
+                maxZoom = maxZoom,
+                unloadInvisibleTiles = T,
+                noWrap = T,
+                opacity = input$"paexpMapBttn-opacity",
+                zIndex = 9000
+              )
+            ) %>%
+            addLegend(
+              position = "bottomright",
+              colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
+                       rgb(255,0,0,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("Low","Medium","High"),
+              title = paste0("Legend: Tile Fill<br>",data$tileGroup),
               opacity = input$"paexpMapBttn-opacity",
-              zIndex = 9000
+              layerId = "paexpTileLegend",
+              group = "pas",
+              className= "info legend Legend"
             )
-          )
+          } else if(data$tileName =="bwshpath"){
+            proxy %>%
+            addTiles(
+              urlTemplate = data$tileSubdir,
+              attribution = data$tileAttribution,
+              group = "metrics",
+              layerId = data$tileGroup,
+              options = tileOptions(
+                tms = T,
+                minZoom = minZoom,
+                maxZoom = maxZoom,
+                unloadInvisibleTiles = T,
+                noWrap = T,
+                opacity = input$"paexpMapBttn-opacity",
+                zIndex = 9000
+              )
+            ) %>%
+            addLegend(
+              position = "bottomright",
+              colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
+                       rgb(0,112,255,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("Low","Medium","High"),
+              title = paste0("Legend: Tile Fill <br>",data$tileGroup),
+              opacity = input$"paexpMapBttn-opacity",
+              layerId = "paexpTileLegend",
+              group = "pas",
+              className= "info legend Legend"
+            )
+          } else {
+            cols<-colorNumeric(
+              palette="RdYlBu",
+              domain=c(0,100),
+              reverse=T
+            )
+            proxy %>%
+            addTiles(
+              urlTemplate = data$tileSubdir,
+              attribution = data$tileAttribution,
+              group = "metrics",
+              layerId = data$tileGroup,
+              options = tileOptions(
+                tms = T,
+                minZoom = minZoom,
+                maxZoom = maxZoom,
+                unloadInvisibleTiles = T,
+                noWrap = T,
+                opacity = input$"paexpMapBttn-opacity",
+                zIndex = 9000
+              )
+            ) %>%
+            addLegend(
+              position = "bottomright",
+              pal=cols,
+              values=c(0:100),
+              title = paste0("Legend: Tile Fill (Quantiles)<br>",data$tileGroup),
+              opacity = input$"paexpMapBttn-opacity",
+              layerId = "paexpTileLegend",
+              group = "pas",
+              className= "info legend Legend",
+              labFormat = labelFormat(suffix = "%")
+            )
+          }
+          
         }
       })
       #9e) Map polygon click logic ----
@@ -710,9 +898,9 @@ function(input, output, session) {
         )
         mspas <- isolate(multiSelected_pas())
         pamin <- l1min[which(l1min$ecr1_id %in% mspas$ecoreg1),2:9]
-        pamin <- pamin %>% summarise_all(min,na.rm=T)
+        pamin <- pamin %>% summarise_all(min,na.rm=F)
         pamax <- l1max[which(l1max$ecr1_id %in% mspas$ecoreg1),2:9]
-        pamax <- pamax %>% summarise_all(max,na.rm=T)
+        pamax <- pamax %>% summarise_all(max,na.rm=F)
         pamin$Name <- "MIN"
         pamax$Name <- "MAX"
         names(pamin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
@@ -722,9 +910,6 @@ function(input, output, session) {
         padat <- st_drop_geometry(mspas) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
         names(padat) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
                         'Tree Carbon','Soil Carbon',"Name")
-        print(paste0("NCOL PADAT: ", ncol(padat)))
-        print(paste0("NCOL PAMIN: ", ncol(pamin)))
-        print(paste0("NCOL PAMAX: ", ncol(pamax)))
         padat <- rbind(pamin,pamax,padat)
         if (nrow(padat) > 2){
           callModule(report,"paReport",polys=mspas,data=pas)
@@ -778,6 +963,7 @@ function(input, output, session) {
           choices = c("Select metric: " = "", tilevect),
           options = list(maxOptions = 12)
         )
+        proxy %>% removeControl("paexpTileLegend")
       })
       #9h) Clear Polygon Fill ----
       observeEvent(input$paclearPolyFill,{
@@ -790,6 +976,7 @@ function(input, output, session) {
                       polyfillvect),
           options = list(maxOptions = 12)
         )
+        proxy %>% removeControl("paexpPolyLegend")
       })
     }
   }) #End of observe which tab we are on.

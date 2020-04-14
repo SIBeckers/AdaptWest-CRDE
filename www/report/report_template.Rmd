@@ -26,6 +26,7 @@ header-includes:
 output:
   pdf_document: 
     toc: true
+    fig_caption: false
     keep_tex: false
     latex_engine: pdflatex
     template: "./template.tex"
@@ -36,6 +37,8 @@ output:
     fig_width: 6
     fig_height: 6
   html_document:
+    theme: readable
+    toc: true
     df_print: paged
     fig.height: 8
     fig.width: 8 
@@ -76,6 +79,13 @@ bds <- unname(bds)
 fullmap<-mapFunction()
 halfmap<-mapFunction(width="50%")
 fullhalfmap<-mapFunction(height="400px")
+cols<-colorNumeric(
+  palette="RdYlBu",
+  domain=c(0,100),
+  reverse=T
+)
+polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc) 
+
 if(isTRUE(params$html)) {
   chunktype = "hold"
 } else {
@@ -135,9 +145,6 @@ In this report, we present data for `r paste(params$park)` on key metrics that c
 ## Basic Information for `r params$poly$Name`
 
 ```{r REFUGIA_TABLE, echo = params$printCode, results = 'asis',eval = params$table}
-polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc) %>%
-  mutate_at(.vars=vars(brdref,treref,treec),funs(as.numeric))
-
 if(isTRUE(params$l1data)) {
   l1data<-ecol1stats[which(ecol1stats$Name==params$poly$ecoreg1),]
   # l1data[,1]<-as.character(l1data[,1])
@@ -166,7 +173,7 @@ if(isTRUE(params$l3data)) {
   polydata<-rbind(polydata,l3data,use.names=F)
 }
 
-names(polydata)<-names(paminmax)[c(9,1:8)]
+names(polydata)<-names(metriclist)[c(9,1:8)]
 names(polydata)[3]<-"Topographic Diversity"
 polydata<-setDF(polydata)
 
@@ -228,7 +235,7 @@ if (params$RBS){
 ```
 
 ## Map of forward-velocity-based climate refugia for `r params$poly$Name`
-```{r fwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=T}
+```{r fwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$fwvelref)}
 ind<-which(tilelist$tileName=="fwvel500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))){
@@ -263,6 +270,14 @@ if(isFALSE(params$html)){
           opacity = 0.9,
           zIndex = 9000
         )
+      ) %>%
+      addLegend(
+        position = "bottomright",
+        pal=cols,
+        values=c(0:100),
+        title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+        opacity = 0.9,
+        labFormat = labelFormat(suffix = "%")
       ) %>%
       fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
       mapview::mapshot(
@@ -299,6 +314,14 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   m
 }
@@ -330,7 +353,7 @@ if (params$RBS){
 ```
 
 ## Map of backward-velocity-based climate refugia for `r params$poly$Name`
-```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=T}
+```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$bwvelref)}
 ind<-which(tilelist$tileName=="bwvel500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))){
@@ -363,6 +386,14 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -396,6 +427,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+    position = "bottomright",
+    pal=cols,
+    values=c(0:100),
+    title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+    opacity = 0.9,
+    labFormat = labelFormat(suffix = "%")
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   m
 }
@@ -421,7 +460,7 @@ if (params$RBS){
 ```
 
 ## Map of microrefugia potential for `r params$poly$Name`
-```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=T}
+```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$elevdiv)}
 ind<-which(tilelist$tileName=="elevdiv500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))){
@@ -453,6 +492,14 @@ if(isFALSE(params$html)){
         opacity = 0.9,
         zIndex = 9000
       )
+    ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
     ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
@@ -487,6 +534,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+    position = "bottomright",
+    pal=cols,
+    values=c(0:100),
+    title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+    opacity = 0.9,
+    labFormat = labelFormat(suffix = "%")
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   m
 }
@@ -512,9 +567,11 @@ if (params$RBS){
 }
 ```
 
+```{r, results="asis",eval=!is.na(params$poly$brdref)}
+cat("## ",paste0("Map of biotic-velocity-based refugia for ", params$poly$Name))
+```
 
-## Map of biotic-velocity-based refugia for `r params$poly$Name`
-```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = '50%', fig.align = 'default',eval=T}
+```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = '50%', fig.align = 'default',eval=!is.na(params$poly$brdref)}
 ind<-which(tilelist$tileName=="birdref500")
 ind2<-which(tilelist$tileName=="treeref500")
 
@@ -553,6 +610,14 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -581,6 +646,14 @@ if(isFALSE(params$html)){
         opacity = 0.9,
         zIndex = 9000
       )
+    ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind2]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
     ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
@@ -615,6 +688,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
   m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -640,6 +721,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind2]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   p(m,m2)
 }
@@ -647,13 +736,16 @@ if (params$RBS){
   shiny::setProgress(0.53)
 }
 ```
-**Biotic velocity** is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.  
-Biotic velocities provide a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported on a per-species basis or averaged across a taxa group.
-Backward biotic velocity provides a  species-specific refugia index.
-When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions, such as California and the southern Appalachians, more biodiverse than expected based on climate alone. 
-Biotic-velocity-based refugia vary depending on the species considered. Stralberg et al. 2018 mapped refugia for 592 songbird and tree species in the US and Canada.
+```{r results="asis",eval=!is.na(params$poly$brdref)}
+p(strong("Biotic velocity"),"is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.")
+p("Biotic velocities provide a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported on a per-species basis or averaged across a taxa group.")
+p("Backward biotic velocity provides a species-specific refugia index.")
+p("When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions, such as California and the southern Appalachians, more biodiverse than expected based on climate alone.")
+p("Biotic-velocity-based refugia vary depending on the species considered. Stralberg et al. 2018 mapped refugia for 592 songbird and tree species in the US and Canada.")
 
-**How to interpret the map:** The map above shows refugia based on climatic niche models for songbirds `r ifelse(params$html,paste("(left panel)"),paste("(top panel)"))` and trees `r ifelse(params$html,paste("(right panel)"),paste("(bottom panel)"))`. Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds). Data is currently limited to Canada and the US. We hope to add data for Mexico in the future.
+p(strong("How to interpret the map:")," The map above shows refugia based on climatic niche models for songbirds",
+  ifelse(params$html,"(left panel)","(top panel)"),"and trees ",ifelse(params$html,"(right panel)","(bottom panel)"),". Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded ",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds","here"),". Data is currently limited to Canada and the US. We hope to add data for Mexico in the future.")
+```
 
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
@@ -703,6 +795,18 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+    addLegend(
+      position = "bottomright",
+      colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
+               rgb(255,0,0,maxColorValue = 255)),
+      values=c(150,450,750),
+      labels=c("Low","Medium","High"),
+      title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind]),
+      opacity = input$"paexpMapBttn-opacity",
+      layerId = "paexpTileLegend",
+      group = "pas",
+      className= "info legend Legend"
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -731,7 +835,19 @@ if(isFALSE(params$html)){
         opacity = 0.9,
         zIndex = 9000
       )
-    ) %>%
+    ) %>% 
+    addLegend(
+      position = "bottomright",
+      colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
+               rgb(0,112,255,maxColorValue = 255)),
+      values=c(150,450,750),
+      labels=c("Low","Medium","High"),
+      title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind2]),
+      opacity = input$"paexpMapBttn-opacity",
+      layerId = "paexpTileLegend",
+      group = "pas",
+      className= "info legend Legend"
+    ) %>% 
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -765,6 +881,18 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+    position = "bottomright",
+    colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
+             rgb(255,0,0,maxColorValue = 255)),
+    values=c(150,450,750),
+    labels=c("Low","Medium","High"),
+    title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind]),
+    opacity = input$"paexpMapBttn-opacity",
+    layerId = "paexpTileLegend",
+    group = "pas",
+    className= "info legend Legend"
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
   m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -790,6 +918,18 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+  addLegend(
+    position = "bottomright",
+    colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
+             rgb(0,112,255,maxColorValue = 255)),
+    values=c(150,450,750),
+    labels=c("Low","Medium","High"),
+    title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind2]),
+    opacity = input$"paexpMapBttn-opacity",
+    layerId = "paexpTileLegend",
+    group = "pas",
+    className= "info legend Legend"
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   p(m,m2)
 }
@@ -812,7 +952,7 @@ if (params$RBS){
 ```
 
 ## Map of below- and above-Ground Carbon for `r params$poly$Name`
-```{r carbon, echo = params$printCode, results = chunktype,out.width = '50%', fig.align = 'default',eval=T}
+```{r carbon, echo = params$printCode, results = chunktype,out.width = '50%', fig.align = 'default',eval=!is.na(params$poly$soilc)}
 ind<-which(tilelist$tileName=="soilc500")
 ind2<-which(tilelist$tileName=="treena500")
 if(isFALSE(params$html)){
@@ -850,6 +990,14 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+      addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -878,6 +1026,14 @@ if(isFALSE(params$html)){
         opacity = 0.9,
         zIndex = 9000
       )
+    ) %>%
+      addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind2]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
     ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
@@ -912,6 +1068,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
   m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -937,6 +1101,14 @@ if(isFALSE(params$html)){
       zIndex = 9000
     )
   ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind2]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   p(m,m2)
 }
@@ -958,7 +1130,7 @@ if (params$RBS){
 ```
 
 ## Map of intactness for `r params$poly$Name`
-```{r intactness, echo = params$printCode, results = chunktype, out.width="80%", fig.align = 'center',eval=T}
+```{r intactness, echo = params$printCode, results = chunktype, out.width="80%", fig.align = 'center',eval=!is.na(params$poly$intact)}
 ind<-which(tilelist$tileName=="intact500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))){
@@ -970,7 +1142,7 @@ if(isFALSE(params$html)){
     )
     knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))
   } else {
-    m <- m %>% addPolygons(
+    m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
       fillColor = NULL,
       fillOpacity = 0.00,
@@ -991,6 +1163,14 @@ if(isFALSE(params$html)){
         zIndex = 9000
       )
     ) %>%
+    addLegend(
+      position = "bottomright",
+      pal=cols,
+      values=c(0:100),
+      title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+      opacity = 0.9,
+      labFormat = labelFormat(suffix = "%")
+    ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
@@ -1002,7 +1182,7 @@ if(isFALSE(params$html)){
     knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))
   }
 } else {
-  m <- m %>% addPolygons(
+  m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
@@ -1023,6 +1203,14 @@ if(isFALSE(params$html)){
       opacity = 0.9,
       zIndex = 9000
     )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal=cols,
+    values=c(0:100),
+    title = paste0("Legend: Tile Fill (Quantiles)<br>",tilelist$tileGroup[ind]),
+    opacity = 0.9,
+    labFormat = labelFormat(suffix = "%")
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   m

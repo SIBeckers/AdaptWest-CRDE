@@ -1,7 +1,6 @@
 report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
-  
-  print(polys)
+  outputDir<-"./www/report" #Should still work when running the app locally.
   observeEvent(!is.null(polys),{
     if(isTRUE(pa)){
       n<-nrow(polys)
@@ -45,24 +44,24 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
   
   observe({
     foo<-input$selPoly4Report
-    bar <- na.omit(data[data[[namecol]]==foo,])
+    bar <- data[data[[namecol]]==foo,]
     rm(foo)
     names(bar)[which(names(bar)==namecol)]<-"Name"  
     ROIdata$roi<-bar
     rm(bar)
   })
-  outputDir<-"./www/report" #Should work when running the app locally.
- 
+  
+  
   output$reportBttn <- downloadHandler(
     filename = function() {
       paste0(outname,"_",ROIdata$roi$Name,".",
              switch(input$reportFormat,PDF="pdf",Word="docx",HTML="html"))
     },
     content = function(file) {
-      
-      rpfm =  switch(input$reportFormat,PDF="pdf_document",Word="word_document",
-                     HTML="html_document"
-                     )
+      rpfm =  switch(
+        input$reportFormat,PDF="pdf_document",Word="word_document",
+        HTML="html_document"
+      )
       paramslist<-reportconfig
       paramslist$poly = ROIdata$roi
       paramslist$html = input$reportInteractive
@@ -71,7 +70,11 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       paramslist$pa  = pa
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
       
-      mydownloads<<-rbindlist(list(mydownloads,data.table(ROIdata$roi$Name,as.numeric(Sys.time()),as.integer(input$reportInteractive),rpfm,as.integer(pa))),use.names=F,fill = F)
+      mydownloads<<-rbindlist(
+        list(mydownloads,
+             data.table(ROIdata$roi$Name,as.numeric(Sys.time()),
+                        as.integer(input$reportInteractive),rpfm,
+                        as.integer(pa))),use.names=F,fill = F)
       
       withProgress(message = "Generating report ...",{
         tempReport <- file.path(outputDir, "report_template.Rmd")
@@ -80,19 +83,15 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
           if(file.exists(file.path(outputDir,"interactive_reports",
               paste0(outname,"_",ROIdata$roi$Name,".",
                 switch(input$reportFormat,PDF="pdf",Word="docx",
-                        HTML="html"
-                )))))
-          {
+                        HTML="html")))) 
+          ){
             shiny::setProgress(0.75,message="Found an existing report; getting it...")
             file.copy(
               from= file.path(
                 outputDir,"interactive_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              HTML="html"
-                       )
-                )
-              ),
+                              HTML="html"))),
               to=file
             )
           } else {
@@ -112,17 +111,14 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
                   paste0(outname,"_",ROIdata$roi$Name,".",
                     switch(input$reportFormat,PDF="pdf",Word="docx",
                       HTML="html"
-                    )
-                  )
-                )
-              )
+                    )))
+            )
           }
         } else {
           if(file.exists(file.path(outputDir,"static_reports",
               paste0(outname,"_",ROIdata$roi$Name,".",
                  switch(input$reportFormat,PDF="pdf",Word="docx",
-                        HTML="html"
-                 ))))) 
+                        HTML="html"))))) 
           {
             shiny::setProgress(0.75,message="Found an existing report; getting it...")
             file.copy(
@@ -130,17 +126,14 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
                 outputDir,"static_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              HTML="html"
-              ))),
+                              HTML="html"))),
               to = file
             )
           } else {
             out <- rmarkdown::render(
               tempReport,
               output_format = rpfm,
-              # clean = T,
               output_file = file,
-              # intermediates_dir = "/www/report/tmp",
               params = paramslist,
               envir = new.env(parent = globalenv())
             )
@@ -150,16 +143,13 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
                 outputDir,"static_reports",
                 paste0(outname,"_",ROIdata$roi$Name,".",
                        switch(input$reportFormat,PDF="pdf",Word="docx",
-                              HTML="html"
-                       )
-                )
-              )
+                              HTML="html")))
             )
-            file.copy(out,file)
+            file.copy(out, file)
           }
         
         }
-      })
-    }
-  )
+      })#end of with progress
+    } #end of content
+  )#end of download handler
 }
