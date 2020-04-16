@@ -1,4 +1,4 @@
-appStarPlotUI <- function(id, live = T,reset=T,all=T) {
+appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600) {
   source("./www/code/myicon.R")
   ns <- NS(id)
   if (isTRUE(live)) {
@@ -20,7 +20,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",height=height,inline = F))
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {
@@ -40,7 +40,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",height=height,inline = F))
         )
       )
     } else if (isFALSE(reset) & isTRUE(all)) {
@@ -60,7 +60,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",inline = T))
+          withSpinner(plotlyOutput(ns("appStarPlot"),width = "100%",height=height,inline = F))
         )
       )
     }
@@ -85,7 +85,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = height))
         )
       )
     } else if (isTRUE(reset) & isFALSE(all)) {
@@ -106,7 +106,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = height))
         )
       )
     } else if (isFALSE(reset) & isTRUE(all)) {
@@ -127,7 +127,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T) {
             style="padding-left:15px; padding-right: 15px;"
           ),
           br(),
-          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = 500))
+          withSpinner(plotOutput(ns("appStarPlot"),width = "100%",inline = F,height = height))
         )
       )
     }

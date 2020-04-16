@@ -44,9 +44,8 @@ library(flextable)
 library(cowplot)
 library(shinycssloaders)
 library(tinytex)
-# tinytex::install_tinytex()
-# tinytex::tlmgr_install("unicode-math")
-# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+
+webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.jquery.version = 1)
 
 
@@ -63,10 +62,6 @@ reportStatsStatus=F#Keep track of stats globally (T) (e.g. from Dropbox) or loca
 pafile = "./Data/pas.gpkg"
 ptsfile = "./Data/pas_centroids.gpkg"
 panames<-readRDS("./Data/panames.Rds")
-# paminmax <- fread('./Data/paminmax.csv')
-# paminmax$Name = c("MIN","MAX")
-# names(paminmax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
-#                      'Tree Carbon','Soil Carbon',"Name")
 
 # Watersheds Data ----
 wdfile = "./Data/wds.gpkg"
@@ -97,7 +92,7 @@ tilevect <- tilelist$tileName
 names(tilevect) <- tilelist$tileGroup
 metriclist <- c("intact","elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","NEWNAME")
 names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
-                       'Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+                       'Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                        'Tree Carbon','Soil Carbon',"Name")
 polyfillvect<-c("elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","intact")
 names(polyfillvect)<-c("Topodiversity","Forward Climatic Refugia","Backward Climatic Refugia",
@@ -190,6 +185,8 @@ registerPlugin <- function(map, plugin) {
 reportdir<-"./www/report"
 reptmpdir<-"./www/report/tmp"
 repimgdir<-"./www/report/imgs"
+repstaticdir<-"./www/report/static_reports"
+repinterdir<-"./www/report/interactive_reports"
 #Configure the report output using /config_files/reportconfig.csv. 
 #Note that parameters in this file must also be in /www/report/report_template.Rmd
 reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])

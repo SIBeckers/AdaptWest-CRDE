@@ -1,6 +1,7 @@
 report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
   outputDir<-"./www/report" #Should still work when running the app locally.
+ 
   observeEvent(!is.null(polys),{
     if(isTRUE(pa)){
       n<-nrow(polys)
@@ -44,9 +45,10 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
   
   observe({
     foo<-input$selPoly4Report
-    bar <- data[data[[namecol]]==foo,]
+    bar <- which(data[[namecol]]==foo)
+    bar<-data[bar,]
     rm(foo)
-    names(bar)[which(names(bar)==namecol)]<-"Name"  
+    names(bar)[which(names(bar)==namecol)]<-"Name"
     ROIdata$roi<-bar
     rm(bar)
   })

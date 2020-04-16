@@ -34,8 +34,6 @@ output:
     fig_height: 6.5
   word_document: 
     reference_docx: "./template.docx"
-    fig_width: 6
-    fig_height: 6
   html_document:
     theme: readable
     toc: true
@@ -51,12 +49,12 @@ mainfont: roboto
 # set this option in the first code chunk in the document
 if(isFALSE(params$html)){
   knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
-                     error = F,tidy = T, out.width="50%",
+                     error = F,tidy = T, out.width="50%",dpi=600,
                       fig.align = "center", strip.white = T,cache = F)
 } else if(params$fmt=="word_document"){
   knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
-                     error = F,tidy = T,out.width="80%",
-                      fig.align = "default", strip.white = T,cache = F)
+                     error = F,tidy = T,fig.height="5.5",fig.width="5.5",dpi=600,
+                      fig.align = "center", strip.white = T,cache = F)
 } else {
   knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
                      error = F,tidy = T, out.width="100%",
@@ -233,19 +231,26 @@ if (params$RBS){
   shiny::setProgress(0.23)
 }
 ```
+```{r,echo=F}
+if(params$fmt=="word_document"){
+  ow = "13.2cm"
+} else{
+  ow = "80%"
+}
+```
 
 ## Map of forward-velocity-based climate refugia for `r params$poly$Name`
-```{r fwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$fwvelref)}
+```{r fwdvel, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$fwvelref)}
 ind<-which(tilelist$tileName=="fwvel500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))){
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
   } else if(!file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/fwsvel_",params$poly$Name,".html"))) {
     webshot::webshot(
       url = paste0(getwd(),"/tmp/fwsvel_",params$poly$Name,".html"),
       file=paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
   } else {
     m <- fullmap %>%
       clearGroup("metrics") %>%
@@ -287,7 +292,7 @@ if(isFALSE(params$html)){
         remove_url=F,
         selfcontained=T
       )
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
   }
 } else {
   m <- fullmap %>%
@@ -329,6 +334,7 @@ if (params$RBS){
   shiny::setProgress(0.28)
 }
 ```
+
 **Climate velocity** is the speed that an organism needs to travel to keep pace with climate. Climate refugia (areas of species persistence during climate change) are areas of low enough velocity that the organism can remain within their suitable climate.
 
 To calculate analog-based climatic velocity, climate is categorized into types, and the straight-line distance is measured between a site and the nearest site with the same climate type in a different time period. Climatic velocity is influenced by processes 
@@ -344,16 +350,13 @@ at several scales:
 **How to interpret the map:** The map above shows refugia based on forward climatic velocity from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5). Red shades indicate areas with highest refugia value (i.e., lowest velocity and climate exposure), whereas blue shades indicate areas with highest velocity and most climate exposure. As in all maps shown in this report, data were rescaled to 100 equal-area quantiles in order to increase comparability between metrics. Becuase this scaling was based on the range of values across North America, colors may be relatively uniform at the extent of an individual management area or watershed.
 
 ```{r, results = 'asis', echo = F}
-if (params$fmt == "word_document") {
-  cat('#####')
-}
 if (params$RBS){
   shiny::setProgress(0.34)
 }
 ```
 
 ## Map of backward-velocity-based climate refugia for `r params$poly$Name`
-```{r bwdvel, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$bwvelref)}
+```{r bwdvel, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$bwvelref)}
 ind<-which(tilelist$tileName=="bwvel500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))){
@@ -442,6 +445,7 @@ if (params$RBS){
   shiny::setProgress(0.36)
 }
 ```
+
 **Backward climatic velocity** measures the straight-line distance between a site's future climate type and the nearest site with the same climate type under current climates. This represents the rate at which organisms adapted to a location's future climate will need to move to colonize that location. 
 Backward velocity represents the distance and rate at which organisms adapted to a location's future climate will need to move to reach that location, and reflects a location's ability to serve as a refugium for species and ecosystems. 
 Backward velocity is generally low in alpine areas, because adapted organisms can reach the site from nearby downslope locations. Values are often high in valley bottom habitat because organisms must travel longer distances to colonize these locally new habitat conditions.
@@ -451,16 +455,13 @@ Areas with low backward climatic velocity will have higher values as refugia, so
 **How to interpret the map:** The map above shows refugia based on backward climatic velocity from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5). Red shades indicate areas with highest refugia value (i.e., lowest velocity and climate exposure), whereas blue shades indicate areas with highest velocity and climate exposure.
 
 ```{r, results = 'asis', echo = F}
-if (params$fmt == "word_document") {
-  cat('#####')
-}
 if (params$RBS){
   shiny::setProgress(0.40)
 }
 ```
 
 ## Map of microrefugia potential for `r params$poly$Name`
-```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=!is.na(params$poly$elevdiv)}
+```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$elevdiv)}
 ind<-which(tilelist$tileName=="elevdiv500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))){
@@ -549,6 +550,7 @@ if (params$RBS){
   shiny::setProgress(0.45)
 }
 ```
+
 **Microrefugia potential**
  - Many approaches to identifying areas that will be refuges for biodiversity under climate change are based on predicting future climate. Other approaches use only information on the current environment. Species distributions, communities, ecosystems, and broader patterns of biodiversity are known to be influenced by abiotic drivers such as soils, geology, and topography.
 Refugia also span a range of spatial scales. Coarse-resolution metrics such as climatic velocity which identify **macrorefugia** (areas where broad-scale climate is relatively stable and suitable for persistence) can be complemented with other information that helps identify fine-scale **microrefugia** (small areas with locally favorable environments within otherwise unsuitable climates).  
@@ -567,11 +569,19 @@ if (params$RBS){
 }
 ```
 
+```{r,echo=F}
+if(params$fmt=="word_document"){
+  ow = "8.2cm"
+} else{
+  ow = "50%"
+}
+```
+
 ```{r, results="asis",eval=!is.na(params$poly$brdref)}
 cat("## ",paste0("Map of biotic-velocity-based refugia for ", params$poly$Name))
 ```
 
-```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = '50%', fig.align = 'default',eval=!is.na(params$poly$brdref)}
+```{r biotic_velocity, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'default',eval=!is.na(params$poly$brdref)}
 ind<-which(tilelist$tileName=="birdref500")
 ind2<-which(tilelist$tileName=="treeref500")
 
@@ -744,7 +754,7 @@ p("When compared to refugia defined by low climatic velocity, biotic velocity hi
 p("Biotic-velocity-based refugia vary depending on the species considered. Stralberg et al. 2018 mapped refugia for 592 songbird and tree species in the US and Canada.")
 
 p(strong("How to interpret the map:")," The map above shows refugia based on climatic niche models for songbirds",
-  ifelse(params$html,"(left panel)","(top panel)"),"and trees ",ifelse(params$html,"(right panel)","(bottom panel)"),". Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded ",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds","here"),". Data is currently limited to Canada and the US. We hope to add data for Mexico in the future.")
+  ifelse(params$html,"(top panel)","(left panel)"),"and trees ",ifelse(params$html,"(bottom panel)","(right panel)"),". Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded ",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds","here"),". Data is currently limited to Canada and the US. We hope to add data for Mexico in the future.")
 ```
 
 ```{r, results = 'asis', echo = F}
@@ -757,7 +767,7 @@ if (params$RBS){
 ```
 
 ## Map of climate connectivity for `r params$poly$Name`
-```{r climate_connectivity, echo = params$printCode, results = chunktype, out.width = '50%',fig.align = 'default',eval=T}
+```{r climate_connectivity, echo = params$printCode, results = chunktype, out.width = ow,fig.align = 'default',eval=T}
 ind<-which(tilelist$tileName=="fwshpath")
 ind2<-which(tilelist$tileName=="bwshpath")
 if(isFALSE(params$html)){
@@ -802,9 +812,7 @@ if(isFALSE(params$html)){
       values=c(150,450,750),
       labels=c("Low","Medium","High"),
       title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind]),
-      opacity = input$"paexpMapBttn-opacity",
-      layerId = "paexpTileLegend",
-      group = "pas",
+      opacity = 0.9,
       className= "info legend Legend"
     ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -843,9 +851,7 @@ if(isFALSE(params$html)){
       values=c(150,450,750),
       labels=c("Low","Medium","High"),
       title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind2]),
-      opacity = input$"paexpMapBttn-opacity",
-      layerId = "paexpTileLegend",
-      group = "pas",
+      opacity = 0.9,
       className= "info legend Legend"
     ) %>% 
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -888,9 +894,7 @@ if(isFALSE(params$html)){
     values=c(150,450,750),
     labels=c("Low","Medium","High"),
     title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind]),
-    opacity = input$"paexpMapBttn-opacity",
-    layerId = "paexpTileLegend",
-    group = "pas",
+    opacity = 0.9,
     className= "info legend Legend"
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -925,9 +929,7 @@ if(isFALSE(params$html)){
     values=c(150,450,750),
     labels=c("Low","Medium","High"),
     title = paste0("Legend: Tile Fill <br>",tilelist$tileGroup[ind2]),
-    opacity = input$"paexpMapBttn-opacity",
-    layerId = "paexpTileLegend",
-    group = "pas",
+    opacity = 0.9,
     className= "info legend Legend"
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -937,10 +939,11 @@ if (params$RBS){
   shiny::setProgress(0.62)
 }
 ```
+
 **Climate connectivity** - The persistence of many species under climate change will depend areas that facilitate dispersal to newly climatically suitable habitat. **Climate connectivity areas** or "climate corridors" are areas that form the best route between current climate types and where those climates will occur in the future under climate change. Climate connectivity areas are distinct from refugia and thus poorly captured by many existing conservation strategies. Because dispersing organisms may need to avoid hostile climates, these routes are often circuitous rather than the straight-line paths, as is assumed when measuring standard climatic velocity [Dobrowski and Parks 2016](https://www.nature.com/articles/ncomms12349). Several methods exist for identifying climate corridors. [Carroll et al. 2018](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.14373) used centrality metrics to identify areas where many potential dispersal paths overlap.
 Broad-scale topography and climate influence connectivity paths. Routes were found to be funneled along north-south trending passes and valley systems and along the leeward or drier slopes of north-south trending mountain ranges. Climate connectivity paths also tend to avoid areas of novel and disappearing climates. Human landuses may further constrain the ability of species to disperse through these areas.
 
-**How to interpret the map:** The maps above shows forward `r ifelse(params$html,paste("(left panel)"),paste("(top panel)"))` and backward `r ifelse(params$html,paste("(right panel)"),paste("(bottom panel)"))` climatic connectivity areas from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5). Note that the color scheme differs from that used in previous maps, with red showing forward-velocity-based connectivity areas and blue showing backward-velocity-based connectivity areas. These connectivity areas hold a high concentration of dispersal paths between current and future climate analogs. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climate-connectivity-north-america).
+**How to interpret the map:** The maps above shows forward `r ifelse(params$html,"(top panel)","(left panel)")` and backward `r ifelse(params$html,"(bottom panel)","(right panel)")` climatic connectivity areas from current to 2080s climate for a "business-as-usual" emissions scenario (RCP8.5). Note that the color scheme differs from that used in previous maps, with red showing forward-velocity-based connectivity areas and blue showing backward-velocity-based connectivity areas. These connectivity areas hold a high concentration of dispersal paths between current and future climate analogs. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climate-connectivity-north-america).
 
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
@@ -952,7 +955,7 @@ if (params$RBS){
 ```
 
 ## Map of below- and above-Ground Carbon for `r params$poly$Name`
-```{r carbon, echo = params$printCode, results = chunktype,out.width = '50%', fig.align = 'default',eval=!is.na(params$poly$soilc)}
+```{r carbon, echo = params$printCode, results = chunktype,out.width = ow, fig.align = 'default',eval=!is.na(params$poly$soilc)}
 ind<-which(tilelist$tileName=="soilc500")
 ind2<-which(tilelist$tileName=="treena500")
 if(isFALSE(params$html)){
@@ -1116,9 +1119,10 @@ if (params$RBS){
   shiny::setProgress(0.7)
 }
 ```
+
 **Below- and above-ground carbon** - Climate adaptation planning addresses the impacts of climate change via efforts to increase landscape resilience and other strategies. However, it is important to place climate adaptation strategies within a larger context which includes mitigation strategies to address the causes of climate change by reducing accumulation of greenhouse gases in the atmosphere. An example of such a dual adaptation/mitigation strategy is a recent conservation proposal termed the Global Deal for Nature, which proposes that protected area networks be expanded to include areas that hold large reserves of **aboveground (biomass) and belowground (soil and biomass) carbon**, with the aim of reducing disturbances that accelerate release of stored carbon ([Dinerstein et al. 2019](http://doi.org/10.1126/sciadv.aaw2869)). In North America, soil carbon is generally at highest levels in large boreal peatlands, implying that protection of large boreal landscapes is critical for conserving areas of high soil carbon. Patterns of above-ground carbon are complex and vary based on several broad-scale climatic and other factors. A strong longitudinal precipitation gradient is evident in North America, as predominantly west-to-east atmospheric circulation interacts with north-south cordilleras such as the Rocky Mountains. More mesic forested ecosystems to the west of these ranges generally support higher levels of aboveground carbon in terms of tree biomass. Grassland ecosystems can also support high levels of belowground carbon.
 
-**How to interpret the map:** The maps above shows below-ground soil carbon at 1 meter depth `r ifelse(params$html,paste("(left panel)"),paste("(top panel)"))` and above-ground carbon stored in tree biomass `r ifelse(params$html,paste("(right panel)"),paste("(bottom panel)"))`. Red shades indicate areas with the highest concentrations of carbon per unit area, whereas blue shades indicate areas with low levels of carbon. The spatial data can be downloaded [here](http://globbiomass.org/wp-content/uploads/GB_Maps/Globbiomass_global_dataset.html) and [here](https://data.isric.org/geonetwork/srv/eng/catalog.search#/metadata/c02ddf8b-cbfb-4533-a9c3-7bf0790fd042).
+**How to interpret the map:** The maps above shows below-ground soil carbon at 1 meter depth `r ifelse(params$html,"(top panel)","(left panel)")` and above-ground carbon stored in tree biomass `r ifelse(params$html,"(bottom panel)","(right panel)")`. Red shades indicate areas with the highest concentrations of carbon per unit area, whereas blue shades indicate areas with low levels of carbon. The spatial data can be downloaded [here](http://globbiomass.org/wp-content/uploads/GB_Maps/Globbiomass_global_dataset.html) and [here](https://data.isric.org/geonetwork/srv/eng/catalog.search#/metadata/c02ddf8b-cbfb-4533-a9c3-7bf0790fd042).
 
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
@@ -1128,9 +1132,15 @@ if (params$RBS){
   shiny::setProgress(0.77)
 }
 ```
-
+```{r,echo=F}
+if(params$fmt=="word_document"){
+  ow = "13.2cm"
+} else{
+  ow = "80%"
+}
+```
 ## Map of intactness for `r params$poly$Name`
-```{r intactness, echo = params$printCode, results = chunktype, out.width="80%", fig.align = 'center',eval=!is.na(params$poly$intact)}
+```{r intactness, echo = params$printCode, results = chunktype, out.width=ow, fig.align = 'center',eval=!is.na(params$poly$intact)}
 ind<-which(tilelist$tileName=="intact500")
 if(isFALSE(params$html)){
   if(file.exists(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))){
@@ -1219,6 +1229,7 @@ if (params$RBS){
   shiny::setProgress(0.79)
 }
 ```
+
 **The Human Footprint** - 
 The effects of climate stressors on natural systems interact with and can be magnified by other human-caused stressors such as land conversion and development. Human modification of the landscape shows a strong latitudinal gradient in North America, increasing in intensity from the boreal region to mid-latitudes. In much of the boreal region, development corridors are embedded within a more intact matrix. In mid-latitude regions, large protected area complexes and other wild areas appear as islands within a more developed matrix. The intensity of anthropogenic stressors has been termed the **human footprint** or **human modification index** ([Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549)). We represent this metric here as intactness, the inverse of anthropogenic landuse intensity, so that, as with other climate resilience metrics described here, increasing values of the metric correspond to increasing resilience.  The figure below shows the specific data used by [Kennedy et al. 2019](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.14549) to produce a composite human modification index.
 **How to interpret the map:** The map above shows intactness (the inverse of human land use intensity). Red shades indicate areas with highest intactness, whereas blue shades indicate areas with lowest intactness (highest levels of development). The spatial data can be downloaded [here](https://figshare.com/articles/Global_Human_Modification/7283087).
@@ -1233,25 +1244,59 @@ if (params$RBS){
 ```
 
 ## Climate resilience metric starplot for `r params$poly$Name`
-```{r starplot, echo = params$printCode, results = chunktype, out.width = '70%', fig.align = 'center', eval=params$starplot}
-# if(isTRUE(params$html)){
-#   p<-radarplot(polydata,namecol="Name")
-#   p
-# } else {
-  p<-radarplot(polydata,namecol="Name",interactive=F)
+```{r starplot, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center', eval=T}
+if(isTRUE(params$pa)){
+  pamin <- l1min[which(l1min$ecr1_id %in% params$poly$ecoreg1),2:9]
+  pamin <- pamin %>% summarise_all(min,na.rm=F)
+  pamax <- l1max[which(l1max$ecr1_id %in% params$poly$ecoreg1),2:9]
+  pamax <- pamax %>% summarise_all(max,na.rm=F)
+  pamin$Name <- "MIN"
+  pamax$Name <- "MAX"
+  names(pamin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                         'Tree Carbon','Soil Carbon',"Name")
+  names(pamax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                    'Tree Carbon','Soil Carbon',"Name")
+  names(polydata)[3]<-'Topodiversity'
+  paminmax <- bind_rows(pamin,pamax) %>% mutate_at(1:8,funs(as.numeric))
+  stardata <- bind_rows(paminmax,polydata %>% slice(1:2))
+} else {
+  edata <- ecos[which(ecos$ecoreg3 == params$poly$ecoreg3),]
+  emin <- l3min[which(l3min$ecr3_id == edata$ecoreg3),2:9]
+  emax <- l3max[which(l3max$ecr3_id == edata$ecoreg3),2:9]
+  emin$NEWNAME <- "MIN"
+  emax$NEWNAME <- "MAX"
+  names(emin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                         'Tree Carbon','Soil Carbon',"Name")
+  names(emax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                    'Tree Carbon','Soil Carbon',"Name")
+  names(polydata)[3]<-'Topodiversity'
+  eminmax <- bind_rows(emin,emax) %>% mutate_at(1:8,funs(as.numeric))
+  stardata <- bind_rows(eminmax,polydata %>% slice(c(1,4)))
+}
+if(isTRUE(params$html)){
+  p<-radarplot(stardata,namecol="Name",interactive=T)
   p
-# }
+} else {
+  if(params$fmt=="word_document"){
+    p<-radarplot(stardata,namecol="Name",interactive=F,word=T)
+    p
+  } else{
+    p<-radarplot(stardata,namecol="Name",interactive=F)
+    p
+  }
+}
 if (params$RBS){
   shiny::setProgress(0.87)
 }
 ```
+
 **Data visualization** - The wide variety of climate exposure and refugia metrics can seem confusing. However, there are several ways to integrate information from diverse metrics.
 As discussed previously, coarse-resolution velocity metrics can be combined with fine-resolution diversity metrics in order to leverage the respective strengths of the two groups of metrics as tools for identification of potential macro-and microrefugia that in combination help maximize both transient and long-term resilience to climate change.
 Alternately, planners can integrate multiple climate exposure metrics for an area of interest into a single diagram to produce a composite "fingerprint" representing factors affecting climate resilience.
 [Garcia et al. 2014](http://science.sciencemag.org/content/344/6183/1247579) developed the concept of using a star plot to show the varying magnitudes of different climate metrics.
 A star plot provides a compact way to communicate contrasts between the intensity of different climate exposure stressors in a region.
 
-**How to interpret the starplot:** The starplot above shows the climate resilience value of `r paste(params$poly$Name)` in terms of eight metrics described above, as compared to that of the ecoregion as a whole. ADD INFO ON SCALING USED.
+**How to interpret the starplot:** The starplot above shows the climate resilience value of `r paste(params$poly$Name)` in terms of eight metrics described above, as compared to that of the ecoregion as a whole. The starplot is scaled relative to the maximum and minimum of the values found within the`r ifelse(isTRUE(params$pa),"Level 1","Level 3")` ecoregion that the `r ifelse(isTRUE(params$pa),"protected area","watershed")` is found in.
 For more information on patterns of climate resilience within North American watersheds and management areas, see this app's **Protected Area Tour** tab. To view and compare maps of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** and **Protected Area Explorer** tabs.
 
 ```{r, results = 'asis', echo = F}
@@ -1264,12 +1309,15 @@ if (params$RBS){
 ```
 
 ## Climate resilience metric scatterplots for `r params$poly$Name`
-```{r scatterplot, echo = params$printCode, results = chunktype, out.width = '80%', fig.align = 'center',eval=T}
+```{r scatterplot, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=T}
 if(!is.null(params$data2)){
   data<-params$data2
   poly<- params$poly
- 
-  dat2<- data[which(data$ecoreg1 %in% poly$ecoreg1),]
+  if(isTRUE(params$pa)){
+    dat2<- data[which(data$ecoreg1 %in% poly$ecoreg1),]
+  } else{
+    dat2 <- data[which(data$ecoreg3 %in% poly$ecoreg3),]
+  }
   dat2<-dat2 %>%st_drop_geometry()
   poly<-poly %>% st_drop_geometry()
 }
@@ -1282,29 +1330,57 @@ if(isTRUE(params$pa)){
 }
 namecol<-"Name"
 names(dat2)[which(names(dat2)==nam)]<-"Name"
-
+wd<-params$fmt=="word_document"
 if(isFALSE(params$html)){
-  p<- xyplot(data=dat2,data2=poly,yvar="fwvelref",xvar="bwvelref",yvarname="Forward Climate Refugia",
-             xvarname="Backward Climate Refugia",nam=namecol,offset=0,pa=params$pa,live=F)
   p1<- xyplot(data=dat2,data2=poly,yvar="fwvelref",xvar="bwvelref",yvarname="Forward Climate Refugia",
-              xvarname="Backward Climate Refugia",nam=namecol,offset=0,pa=params$pa,live=F)+
-    theme(legend.position="none")
+              xvarname="Backward Climate Refugia",nam=namecol,offset=0,pa=params$pa,live=F,word=wd)+
+    xlab("Backward Climate Refugia")+
+    ylab("Forward Climate Refugia")+
+    theme(legend.position = "none",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"),aspect.ratio=1)
   p2<- xyplot(data=dat2,data2=poly,yvar="elevdiv",xvar="bwvelref",yvarname="Topodiversity"
-              ,xvarname="Backward Climate Refugia",nam="PA_NAME",offset=0,pa=params$pa,live=F)+
-    theme(legend.position="none")
-  p3<- xyplot(data=dat2,data2=poly,yvar="brdref",xvar="treref",yvarname="Bird Habitat Refugia",
-              xvarname="Tree Habitat Refugia",nam=namecol,offset=0,pa=params$pa,live=F)+
-    theme(legend.position="none")
+              ,xvarname="Backward Climate Refugia",nam="PA_NAME",offset=0,pa=params$pa,live=F,word=wd)+
+    xlab("Backward Climate Refugia")+
+    ylab("Topographic Diversity")+
+    theme(legend.position = "none",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"),aspect.ratio=1)
+  if(!is.na(poly$brdref)){
+    p3<- xyplot(data=dat2,data2=poly,yvar="brdref",xvar="treref",yvarname="Bird Habitat Refugia",
+                xvarname="Tree Habitat Refugia",nam=namecol,offset=0,pa=params$pa,live=F,word=wd)+
+      ylab("Bird Habitat Refugia")+
+      xlab("Tree Habitat Refugia")+
+      theme(legend.position = "none",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"),aspect.ratio=1)
+  } else {
+    p3<- xyplot(data=dat2,data2=poly,yvar="intact",xvar="bwvelref",yvarname="Landscape Intactness",
+                xvarname="Backward Climate Refugia",nam=namecol,offset=0,pa=params$pa,live=F,word=wd)+
+      ylab("Landscape Intactness")+
+      xlab("Backward Climate Refugia")+
+      theme(legend.position = "none",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"),aspect.ratio=1)
+  }
   p4<- xyplot(data=dat2,data2=poly,yvar="treec",xvar="soilc",yvarname="Tree Carbon Content",
-              xvarname="Soil Carbon Content",nam=namecol,offset=0,pa=params$pa,live=F)+
-    theme(legend.position="none")
+              xvarname="Soil Carbon Content",nam=namecol,offset=0,pa=params$pa,live=F,word=wd)+
+    ylab("Tree Carbon Content")+
+    xlab("Soil Carbon Content")+
+    theme(legend.position = "none",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"),aspect.ratio=1)
+  
   legend <- get_legend(
     p1 +
       guides(color = guide_legend(nrow = 1)) +
-      theme(legend.position = "bottom")
+      theme(legend.position = "bottom",axis.text=element_text(size=8),
+            axis.title=element_text(size=8,face="bold"))
   )
   p<-plot_grid(p1,p2,p3,p4,labels="AUTO")
   p<-plot_grid(p,legend,nrow=2,ncol=1,rel_heights = c(1, .1))
+  if(params$fmt=="word_document"){
+    p<-plot_grid(p1,p2,p3,p4,labels="AUTO",label_size=8)
+    p<-plot_grid(p,legend,nrow=2,ncol=1,rel_heights = c(1, .1),label_size=8)
+  } else{
+    p<-plot_grid(p1,p2,p3,p4,labels="AUTO")
+    p<-plot_grid(p,legend,nrow=2,ncol=1,rel_heights = c(1, .1))
+  }
   p
 } else {
   ggplotColours <- function(n = nrow(data2), h = c(0, 360)+15) {
@@ -1332,7 +1408,18 @@ if(isFALSE(params$html)){
       '<b>Forward Climate Refugia</b>: %{y:.3f}}<br>',
       '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
     )
-  )
+  ) %>%
+    layout(
+      xaxis = list(
+        title = "Backward Climate Refugia",
+        standoff=0,
+        automargin=F
+      ),
+      yaxis = list(
+        title = "Forward Climate Refugia"
+      ),
+      margin=list(b=0)
+    )
   fig2 <- fig %>% add_markers(
     data=data,x= ~bwvelref,y= ~elevdiv,color= ~Group,
     colors=c("grey",col2),legendgroup=~Group,showlegend=F,
@@ -1342,17 +1429,63 @@ if(isFALSE(params$html)){
       '<b>Togographic Diversity</b>: %{y:.3f}}<br>',
       '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
     )
-  )
-  fig3 <- fig %>% add_markers(
-    data=data,x= ~treref,y= ~brdref,color= ~Group,
-    colors=c("grey",col2),legendgroup=~Group,showlegend=F,
-    text = ~I(Name),
-    hovertemplate = paste(
-      '<b>Name</b>: %{text}<br>',
-      '<b>Bird Refugia</b>: %{y:.3f}}<br>',
-      '<b>Tree Refugia</b>: %{x:.3f}<br>'
+  ) %>%
+    layout(
+      xaxis = list(
+        title = "Backward Climate Refugia",
+        standoff=0,
+        automargin=F
+      ),
+      yaxis = list(
+        title = "Togographic Diversity"
+      ),
+      margin=list(b=0)
     )
-  )
+  if(!is.na(poly$brdref)){
+    fig3 <- fig %>% add_markers(
+      data=data,x= ~treref,y= ~brdref,color= ~Group,
+      colors=c("grey",col2),legendgroup=~Group,showlegend=F,
+      text = ~I(Name),
+      hovertemplate = paste(
+        '<b>Name</b>: %{text}<br>',
+        '<b>Bird Refugia</b>: %{y:.3f}}<br>',
+        '<b>Tree Refugia</b>: %{x:.3f}<br>'
+      )
+    ) %>%
+      layout(
+        xaxis = list(
+          title = "Tree Refugia",
+          standoff=0,
+          automargin=F
+        ),
+        yaxis = list(
+          title = "Bird Refugia"
+        ),
+      margin=list(b=0)
+      )
+  } else {
+    fig3 <- fig %>% add_markers(
+      data=data,x= ~bwvelref,y= ~intact,color= ~Group,
+      colors=c("grey",col2),legendgroup=~Group,showlegend=F,
+      text = ~I(Name),
+      hovertemplate = paste(
+        '<b>Name</b>: %{text}<br>',
+        '<b>Intactness</b>: %{y:.3f}}<br>',
+        '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
+      )
+    ) %>%
+      layout(
+        xaxis = list(
+          title = "Backward Climate Refugia",
+          standoff=0,
+        automargin=F
+        ),
+        yaxis = list(
+          title = "Intactness"
+        ),
+        margin=list(b=0)
+      )
+  }
   fig4 <- fig %>% add_markers(
     data=data,x= ~soilc,y= ~treec,color= ~Group,
     colors=c("grey",col2),legendgroup=~Group,
@@ -1362,15 +1495,27 @@ if(isFALSE(params$html)){
       '<b>Soil Carbon</b>: %{y:.3f}}<br>',
       '<b>Tree Carbon</b>: %{x:.3f}<br>'
     )
-  )
-  f <- subplot(fig1, fig2,fig3, fig4,nrows=2) %>% 
-    layout(legend = list(orientation = 'h',x = 0, y = -0.1,yanchor="top"),width="100%")
+  ) %>%
+    layout(
+      xaxis = list(
+        title = "Tree Carbon",
+        standoff=0,
+        automargin=F
+      ),
+      yaxis = list(
+        title = "Soil Carbon"
+      ),
+      margin=list(b=0)
+    )
+  f <- subplot(fig1, fig2,fig3, fig4,nrows=2,titleX=T,titleY=T,margin=c(0.08,0.08,0.08,0.08)) %>% 
+    layout(legend = list(orientation = 'h',x = 0, y = -0.15,yanchor="top"),width="100%")
   f
 }
 if (params$RBS){
   shiny::setProgress(0.96)
 }
 ```
-**Scatterplots** - This page shows several x-y scatterplots for `r paste(params$poly$Name)`. Each plot shows values for `r paste(params$poly$Name)` for two metrics, in the context of values shown in the biome as a whole. Gray points show values for all polygons falling within the corresponding biome (Level 1 ecoregion). To create and compare custom scatterplots of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** and **Protected Area Explorer** tabs.
+
+**Scatterplots** - This page shows several x-y scatterplots for `r paste(params$poly$Name)`. Each plot shows values for `r paste(params$poly$Name)` for two metrics, in the context of values shown in the biome as a whole. Gray points show values for all polygons falling within the corresponding `r ifelse(isTRUE(params$pa),"L1 ecoregion","L3 Ecoregion")`. To create and compare custom scatterplots of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** and **Protected Area Explorer** tabs.
 
 

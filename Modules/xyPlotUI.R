@@ -1,4 +1,4 @@
-xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
+xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
   ns <- NS(id)
   if (isTRUE(reset) & isTRUE(all)) {
     tagList(
@@ -24,9 +24,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
         ),
         br(),
         if(isTRUE(live)){
-          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
+          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",height=height,inline=T)))
         } else{
-        fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
+        fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%",height=height)))
         }
         ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
@@ -72,9 +72,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
         ),
         br(),
         if(isTRUE(live)){
-          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
+          fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",height=height,inline=T)))
         } else{
-          fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
+          fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%",height=height)))
         }
         ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(
@@ -120,9 +120,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
           ),
           br(),
           if(isTRUE(live)){
-            fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",inline=T)))
+            fluidRow(withSpinner(plotlyOutput(ns("xyPlot"),width = "100%",height=height,inline=T)))
           } else{
-            fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%")))
+            fluidRow(withSpinner(plotOutput(ns("xyPlot"),width = "100%",height=height)))
           }
           ,fluidRow(id=ns("xyBttnRow"),
                    selectizeInput(
@@ -158,9 +158,9 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T) {
         ),
         br(),
         if(isTRUE(live)){
-          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",inline=T))
+          fluidRow(plotlyOutput(ns("xyPlot"),width = "100%",height=height,inline=T))
         } else{
-          fluidRow(plotOutput(ns("xyPlot"),width = "100%"))
+          fluidRow(plotOutput(ns("xyPlot"),width = "100%",height=height))
         }
         ,fluidRow(id=ns("xyBttnRow"),
           selectizeInput(

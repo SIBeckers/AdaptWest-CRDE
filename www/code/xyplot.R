@@ -1,4 +1,4 @@
-xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,live=T) {
+xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,live=T,word=F) {
   ggplotColours <- function(n = nrow(data2), h = c(0, 360)+15) {
     if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
     hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
@@ -14,12 +14,19 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
       greys="grey"
     }
     data<-bind_rows(data,data2)
-    
-    p<- ggplot()+
-      geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys,col2),name="Legend")+
-      xlab(xvarname)+
-      ylab(yvarname)+
-      theme_bw()
+    if(isFALSE(word)){
+      p<- ggplot()+
+        geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys,col2),name="Legend")+
+        xlab(xvarname)+
+        ylab(yvarname)+
+        theme_bw()
+    } else {
+      p<- ggplot()+
+        geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+scale_color_manual(values=c(greys,col2),name="Legend")+
+        xlab(xvarname)+
+        ylab(yvarname)+
+        theme_bw()
+    }
     } else {
       if(isFALSE(pa)){
         data[[nam]]<-" Surrounding Ecoregion "
@@ -28,11 +35,19 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
         data[[nam]]<-" Surrounding Biome(s) "
         greys="grey"
       }
-      p<- ggplot()+
-        geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys),name="Legend")+
-        xlab(xvarname)+
-        ylab(yvarname)+
-        theme_bw()
+      if(isFALSE(word)){
+        p<- ggplot()+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys),name="Legend")+
+          xlab(xvarname)+
+          ylab(yvarname)+
+          theme_bw()
+      } else {
+        p<- ggplot()+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+scale_color_manual(values=c(greys),name="Legend")+
+          xlab(xvarname)+
+          ylab(yvarname)+
+          theme_bw()
+      }
     }
   } else{
     if (!is.null(data2)) {

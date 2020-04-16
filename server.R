@@ -311,13 +311,15 @@ function(input, output, session) {
       #8c) Get All button press in Outputs ----
       observeEvent(input$"climexp-getallSP",{
         multiSelected_wds(rwds())
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(isolate(multiSelected_wds()))*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(isolate(multiSelected_wds()))*15)))))
         clickedIds$ids<-multiSelected_wds()$FIDNUM2
         mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
         edata <- eregion$edata
-        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                           'Tree Carbon','Soil Carbon')
         spdat <- rbind(edata,mswds)
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
         proxy %>%
           addPolygons(
             data = multiSelected_wds(),
@@ -335,13 +337,15 @@ function(input, output, session) {
       })
       observeEvent(input$"climexp-getallSPxy",{
         multiSelected_wds(rwds())
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(isolate(multiSelected_wds()))*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(isolate(multiSelected_wds()))*15)))))
         clickedIds$ids<-multiSelected_wds()$FIDNUM2
         mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
         edata <- eregion$edata
-        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                           'Tree Carbon','Soil Carbon')
         spdat <- rbind(edata,mswds)
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
         proxy %>%
           addPolygons(
             data = multiSelected_wds(),
@@ -364,10 +368,13 @@ function(input, output, session) {
         proxy %>% clearGroup('swds')
         mswds<-NULL
         spdat<-NULL
-        rwds(NULL)
+        # rwds(NULL)
         clickedIds$ids<-NULL
-        multiSelected_wds(NULL)
-        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
+        # multiSelected_wds(NULL)
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))#(600+(nrow(isolate(multiSelected_wds()))*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))#(500+(nrow(isolate(multiSelected_wds()))*15)))))
+        
+        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
         callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
       })
       observeEvent(
@@ -378,10 +385,13 @@ function(input, output, session) {
           proxy %>% clearGroup('swds')
           mswds<-NULL
           spdat<-NULL
-          rwds(NULL)
+          # rwds(NULL)
           clickedIds$ids<-NULL
-          multiSelected_wds(NULL)
-          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
+          # multiSelected_wds(NULL)
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))#(600+(nrow(isolate(multiSelected_wds()))*15)))))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))#(500+(nrow(isolate(multiSelected_wds()))*15)))))
+          
+          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
           callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
         })
       
@@ -510,8 +520,8 @@ function(input, output, session) {
         if (click$group == "ecoregions") {
           # 8e) i. If the clicked polygon is an ecoregion ----
           polygroup("wds")
-          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = F,all=T,reset=T)))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T)))
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))#(600+(nrow(isolate(multiSelected_wds()))*15)))))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))#(500+(nrow(isolate(multiSelected_wds()))*15)))))
           output$b2ecoBttn <- renderUI(
             div(
               class = "b2eBttn",
@@ -560,25 +570,30 @@ function(input, output, session) {
           eregion$edata$NEWNAME <-  "Ecoregion Avg"
           
           eregion$edata <- rbind(eregion$edata,min,max)
-          names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+          names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon',"Name")
-          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = F)
           callModule(xyPlot,"climexp",data=rwds(),data2= NULL, namecol="NEWNAME",offset=1)
+          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
+          
           #8e) ii. If the clicked polygon is a watershed ----
         } else if (click$group == "wds" | click$group == "swds" ) {
+          
           polygroup("wds")
           multiSelected_wds(
             selectMultiPolys(mapId = "climexpMap-map",data = rwds(),
                              idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
           )
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(isolate(multiSelected_wds()))*15)))))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(isolate(multiSelected_wds()))*15)))))
+          
           mswds <- st_drop_geometry(multiSelected_wds()) %>% select(-c(1,11:14)) %>% mutate_at(2:9,funs(as.numeric))
           edata <- eregion$edata
-          names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+          names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon')
           spdat <- rbind(edata,mswds)
           if (nrow(spdat) > 1){
             callModule(report,"climReport",polys=rwds(),polys2=multiSelected_wds(),data=wds,namecol="NEWNAME",pa=F)
-            callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = F)
+            callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
           }
         }
       
@@ -760,6 +775,7 @@ function(input, output, session) {
           input$"paexp-resetSP"
         },{
           multiSelected_pas(NULL)
+          
           proxy %>% clearGroup('rpas')
           mspas<-NULL
           padat<-NULL
@@ -890,8 +906,8 @@ function(input, output, session) {
         {
           input$"paexpMap-map_shape_click"
         },{
-        output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = F,all=F,reset=T)))
-        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T,live=T)))
+        output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = T,all=F,reset=T,height=(600+(nrow(isolate(multiSelected_pas()))*15)))))
+        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T,live=T,height=(500+(nrow(isolate(multiSelected_pas()))*15)))))
         multiSelected_pas(
           selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
@@ -903,17 +919,17 @@ function(input, output, session) {
         pamax <- pamax %>% summarise_all(max,na.rm=F)
         pamin$Name <- "MIN"
         pamax$Name <- "MAX"
-        names(pamin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        names(pamin) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                                'Tree Carbon','Soil Carbon',"Name")
-        names(pamax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        names(pamax) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                           'Tree Carbon','Soil Carbon',"Name")
         padat <- st_drop_geometry(mspas) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
-        names(padat) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backwards Climatic Refugia','Bird Refugia','Tree Refugia',
+        names(padat) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                         'Tree Carbon','Soil Carbon',"Name")
         padat <- rbind(pamin,pamax,padat)
         if (nrow(padat) > 2){
           callModule(report,"paReport",polys=mspas,data=pas)
-          callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = F)
+          callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = T)
   
         } else {
           removeUI(selector = "div:has(>#paexp-appStarPlot)", session = session)
@@ -1001,13 +1017,35 @@ function(input, output, session) {
       file.remove(list.files(path="./report_stats",pattern=".csv",full.names=T))
     }
     reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
-    if(reps_size>1E4){
+    if(reps_size>1E7){
       print(utils:::format.object_size(reps_size, units="MB"))
-      # dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
-      # htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
-      # pngs<-list.files(path=repimgdir,full.names=T,recursive=F,pattern=".png")
-      #Now compare to the frequency list downloaded and updated and then drop the ones that are used least often.
-      #I'm hoping this is never kicked on but we don't really want to get too big now do we.
+      dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
+      htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
+      if(length(dirs)>0){
+        lapply(dirs,unlink,recursive=T,force=T)
+      }
+      if(length(htmlfiles)>0){
+        lapply(htmlfiles,unlink,force=T)
+      }
+    }
+    if(reps_size>1E9){
+      statreps<-list.files(path=repstaticdir,full.names=T)
+      if(length(statreps)>0) {
+        lapply(statsreps,unlink,force=T)
+      }
+    }
+    if(reps_size>5.2E9) {
+      interreps<-list.files(path=repinterdir,full.names=T)
+      if(length(interreps)>0){
+        lapply(interreps,unlink,force=T)
+      }
+      reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+      if(reps_size>5.2E9) {
+        imgs<-list.files(path=repimgdir,full.names=T,pattern=".png")
+        if(length(imgs)>0){
+          lapply(imgs,unlink,force=T)
+        }
+      }
     }
   })
 }
