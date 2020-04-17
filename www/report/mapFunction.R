@@ -44,10 +44,21 @@ mapFunction<-function(opacity=0.75,
         opacity = 0.8
       )
     ) %>%
+    addProviderTiles(
+      provider = "Stamen.TonerLite",
+      group="Street Map",
+      layerId="Stamen Toner",
+      options = tileOptions(
+        zIndex = 0,
+        minZoom = minZoom,
+        maxZoom = maxZoom,
+        opacity = 1
+      )
+    ) %>%
     addMouseCoordinates() %>%
     addEasyButton(
       easyButton(id = "global",
-                 icon = icon("globe", class = "fa-3x", lib = "font-awesome"),
+                 icon = icon("globe", class = "fa-2x", lib = "font-awesome"),
                  title = "Global Extent",
                  onClick = JS("function(btn, map){map.setView(L.latLng(55,-100),3); }")
       )
@@ -58,7 +69,7 @@ mapFunction<-function(opacity=0.75,
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
       overlayGroups = c("Place labels"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
@@ -80,7 +91,7 @@ mapFunction<-function(opacity=0.75,
         layerId = "Open Street Map", 
         group = "Open Street Map", 
         options = tileOptions(
-          zIndex = 2.0,
+          zIndex = 0,
           minZoom = minZoom,
           maxZoom = maxZoom,
           opacity = 1
@@ -88,8 +99,8 @@ mapFunction<-function(opacity=0.75,
       ) %>% 
       addLayersControl(
         position = c("topleft"),
-        baseGroups = c("ESRI Relief","ESRI Terrain"),
-        overlayGroups = c("Place labels","Open Street Map"),
+        baseGroups = c("ESRI Relief","ESRI Terrain","Open Street Map"),
+        overlayGroups = c("Place labels"),
         options = layersControlOptions(collapsed = T, autoZIndex = F)
       ) %>%
       hideGroup("Place labels")

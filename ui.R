@@ -44,7 +44,7 @@ ui <- function(request) {
     "Climate Resilience Data Explorer",
     tags$a(href = "https://adaptwest.databasin.org/",
             tags$img(src = "./logos/adaptwestbanner_svg.svg", style = "height: 46.5px; font-family: Roboto;"),
-      class = "titleimg", style="font-family: Roboto;")
+      class = "titleimg", style="font-family: Roboto, Helvetica Neue, sans-serif !important;")
   )
   
   #Footer ----
@@ -77,22 +77,22 @@ ui <- function(request) {
         id = "homeCol1",
         class = "homeCol",
         fluidRow(
-          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
           div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeTextHead"), 
               id = "climtourLink", style = " text-align: center;cursor:pointer; text-align: justify;"),
-          style = "text-align: center; height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
         ),
         fluidRow(
-          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
           div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeTextHead"), 
               id = "climexpLink", style = "text-align: center;cursor:pointer;text-align: justify"),
-          style = "text-align: center; height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%;max-width: 100%;"
         )
       ),
       column(
@@ -102,7 +102,7 @@ ui <- function(request) {
         
         fluidRow(
           id = "patourimg", 
-          img(src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          img(src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
@@ -110,11 +110,11 @@ ui <- function(request) {
           div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeTextHead"), 
               style = "text-align: center;cursor:pointer; text-align: justify;"
           ),
-          style = "text-align: center; height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
         ),
         fluidRow(
           id = "paexpimg", 
-          img(src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 125%; max-height: 100%; height: auto; width: auto;"),
+          img(src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
           style = "text-align: center; height: 33.625vh;"
         ),
         fluidRow(
@@ -122,7 +122,7 @@ ui <- function(request) {
           div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeTextHead"), 
               style = "text-align: center; cursor:pointer;text-align: justify;"
           ),
-          style = "text-align: center; height: 12.5vh; max-height: 100%;"
+          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
         )
       )
     )
@@ -226,7 +226,6 @@ ui <- function(request) {
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            # title = "3. Starplot of Metrics", 
             title = "4. Starplot of Metrics", 
             content = 
               list(
@@ -234,7 +233,6 @@ ui <- function(request) {
               )
           )%>%
           bs_append(
-            # title = "4. Scatterplot comparison", 
             title = "5. Scatterplot comparison", 
             content = 
               list(
@@ -243,8 +241,12 @@ ui <- function(request) {
           )%>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            # title = "5. Generate a report",
-            title = "6. Generate a report", 
+            title = "6. Table of metrics ",
+            content=list(tableOutput("climtable"))
+          ) %>%
+          bs_set_opts(panel_type = "success", use_heading_link = T) %>%
+          bs_append(
+            title = "7. Generate a report", 
             content = 
               list(reportUI('climReport')
               )
@@ -387,14 +389,12 @@ ui <- function(request) {
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            # title = "3. Starplot of metrics", 
             title = "4. Starplot of metrics",
             content=list(
               uiOutput("paexpStarplotDiv",inline = T)
             )
           )%>%
           bs_append(
-            # title = "4. Scatterplot of metrics ", 
             title = "5. Scatterplot of metrics ",
             content=list(
               uiOutput("paexpXYplotdiv",inline = T)
@@ -402,8 +402,12 @@ ui <- function(request) {
           )%>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
-            # title = "5. Generate a report", 
-            title = "6. Generate a report", 
+            title = "6. Table of metrics ",
+            content=list(tableOutput("patable"))
+          ) %>%
+          bs_set_opts(panel_type = "success", use_heading_link = T) %>%
+          bs_append(
+            title = "7. Generate a report", 
             content = 
               list(reportUI('paReport')
                 

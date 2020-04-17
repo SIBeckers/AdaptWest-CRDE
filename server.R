@@ -76,23 +76,6 @@ function(input, output, session) {
       return(multipolys)
     }
   
-  # 3). Gather Inputs/Outputs for Debugging ----
-  AllInputs <- reactive({
-    data.frame(Names = names(unlist(reactiveValuesToList(input, all.names = T))),
-               Values = unlist((reactiveValuesToList(input, all.names = T))))
-  })
-
-  AllOut <- reactive({
-    outs <- outputOptions(output)
-    outs <- data.frame(unlist(lapply(names(outs), function(name) {
-      outputOptions(output, name, suspendWhenHidden = FALSE)
-    })))
-    outs
-  })
-
-  output$show_outputs <- renderTable({AllOut()})
-  output$show_inputs <- renderTable({AllInputs()})
-
   # 4). Cleanup objects if not on a certain tab. ----
   observe({
     if (input$tabs != "climtourTab") {
@@ -232,10 +215,11 @@ function(input, output, session) {
               ) %>%
               addLegend(
                 position = "bottomright",
-                colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
-                         rgb(255,0,0,maxColorValue = 255)),
+                colors=c(rgb(255,0,0,maxColorValue = 255),
+                         rgb(255,127,127,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
                 values=c(150,450,750),
-                labels=c("Low","Medium","High"),
+                labels=c("High","Medium","Low"),
                 title = paste0("Legend: Tile Fill<br>",data$tileGroup),
                 opacity = input$"climexpMapBttn-opacity",
                 layerId = "climexpTileLegend",
@@ -261,10 +245,11 @@ function(input, output, session) {
               ) %>%
               addLegend(
                 position = "bottomright",
-                colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
-                         rgb(0,112,255,maxColorValue = 255)),
+                colors=c(rgb(0,112,255,maxColorValue = 255),
+                         rgb(190,232,255,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
                 values=c(150,450,750),
-                labels=c("Low","Medium","High"),
+                labels=c("High","Medium","Low"),
                 title = paste0("Legend: Tile Fill <br>",data$tileGroup),
                 opacity = input$"climexpMapBttn-opacity",
                 layerId = "climexpTileLegend",
@@ -275,7 +260,7 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=c(0,100),
-              reverse=T
+              reverse=F
             )
             proxy %>%
               addTiles(
@@ -302,7 +287,7 @@ function(input, output, session) {
                 layerId = "climexpTileLegend",
                 group = "pas",
                 className= "info legend Legend",
-                labFormat = labelFormat(suffix = "%")
+                labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
               )
           }
         }
@@ -408,7 +393,7 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=range(ecos[[var]],na.rm=T),
-              reverse=T
+              reverse=F
             )
             proxy %>%
               clearGroup("ecoregions") %>%
@@ -433,7 +418,8 @@ function(input, output, session) {
                 opacity = input$"climexpMapBttn-polyopacity",
                 layerId = "climexpPolyLegend",
                 group = "wds",
-                className= "info legend polyLegend"
+                className= "info legend polyLegend",
+                labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
               )
           } else if(polygroup() == "ecoregions" & input$climFillPolys == ""){
             proxy %>%
@@ -477,7 +463,7 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=range(data[[var]],na.rm=T),
-              reverse=T
+              reverse=F
             )
             proxy %>%
               clearGroup("wds") %>%
@@ -502,7 +488,8 @@ function(input, output, session) {
                 opacity = input$"climexpMapBttn-polyopacity",
                 layerId = "climexpPolyLegend",
                 group = "wds",
-                className= "info legend polyLegend"
+                className= "info legend polyLegend",
+                labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
               )
           } else if(is.null(polygroup()) | is.null(input$climFillPolys)){
           }
@@ -590,6 +577,14 @@ function(input, output, session) {
           edata <- eregion$edata
           names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon')
+          tabdat<-mswds
+          names(tabdat)[3]<-"Topo-diversity"
+          output$climtable <- function (){
+            knitr::kable(x = tabdat,format = "html") %>%
+              kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                            fixed_thead = T, font_size = 12
+              )
+          }
           spdat <- rbind(edata,mswds)
           if (nrow(spdat) > 1){
             callModule(report,"climReport",polys=rwds(),polys2=multiSelected_wds(),data=wds,namecol="NEWNAME",pa=F)
@@ -718,7 +713,7 @@ function(input, output, session) {
               cols<-colorNumeric(
                 palette="RdYlBu",
                 domain=range(pas[[var]],na.rm=T),
-                reverse=T
+                reverse=F
               )
               proxy %>%
                 clearShapes() %>%
@@ -743,7 +738,8 @@ function(input, output, session) {
                   opacity = input$"paexpMapBttn-polyopacity",
                   layerId = "paexpPolyLegend",
                   # group = "wds",
-                  className= "info legend polyLegend"
+                  className= "info legend polyLegend",
+                  labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
                 )
               selectMultiPolys(mapId = "paexpMap-map",calc=F,data = pas,
                                idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
@@ -824,10 +820,11 @@ function(input, output, session) {
             ) %>%
             addLegend(
               position = "bottomright",
-              colors=c(rgb(225,225,225,maxColorValue = 255),rgb(255,127,127,maxColorValue = 255),
-                       rgb(255,0,0,maxColorValue = 255)),
+              colors=c(rgb(255,0,0,maxColorValue = 255),
+                       rgb(255,127,127,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
               values=c(150,450,750),
-              labels=c("Low","Medium","High"),
+              labels=c("High","Medium","Low"),
               title = paste0("Legend: Tile Fill<br>",data$tileGroup),
               opacity = input$"paexpMapBttn-opacity",
               layerId = "paexpTileLegend",
@@ -853,10 +850,11 @@ function(input, output, session) {
             ) %>%
             addLegend(
               position = "bottomright",
-              colors=c(rgb(225,225,225,maxColorValue = 255),rgb(190,232,255,maxColorValue = 255),
-                       rgb(0,112,255,maxColorValue = 255)),
+              colors=c(rgb(0,112,255,maxColorValue = 255),
+                       rgb(190,232,255,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
               values=c(150,450,750),
-              labels=c("Low","Medium","High"),
+              labels=c("High","Medium","Low"),
               title = paste0("Legend: Tile Fill <br>",data$tileGroup),
               opacity = input$"paexpMapBttn-opacity",
               layerId = "paexpTileLegend",
@@ -867,7 +865,7 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=c(0,100),
-              reverse=T
+              reverse=F
             )
             proxy %>%
             addTiles(
@@ -894,7 +892,7 @@ function(input, output, session) {
               layerId = "paexpTileLegend",
               group = "pas",
               className= "info legend Legend",
-              labFormat = labelFormat(suffix = "%")
+              labFormat = labelFormat(suffix="%",transform = function(x) sort(x, decreasing = TRUE))
             )
           }
           
@@ -912,7 +910,9 @@ function(input, output, session) {
           selectMultiPolys(mapId = "paexpMap-map",data = pas,
                            idfield = "gridcode", addPolys = T, newId = "mp_",nameField = "PA_NAME",group = "rpas")
         )
+        
         mspas <- isolate(multiSelected_pas())
+        
         pamin <- l1min[which(l1min$ecr1_id %in% mspas$ecoreg1),2:9]
         pamin <- pamin %>% summarise_all(min,na.rm=F)
         pamax <- l1max[which(l1max$ecr1_id %in% mspas$ecoreg1),2:9]
@@ -926,7 +926,16 @@ function(input, output, session) {
         padat <- st_drop_geometry(mspas) %>% select(c(4:11,15)) %>% mutate_at(1:8,funs(as.numeric))
         names(padat) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                         'Tree Carbon','Soil Carbon',"Name")
+        tabdat<-padat %>% select(9,1:8)
+        names(tabdat)[3]<-"Topo-Diversity"
+        output$patable <- function (){
+          knitr::kable(x = tabdat,format = "html") %>%
+          kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                        fixed_thead = T, font_size = 12
+          )
+        }
         padat <- rbind(pamin,pamax,padat)
+        
         if (nrow(padat) > 2){
           callModule(report,"paReport",polys=mspas,data=pas)
           callModule(appStarPlot,"paexp",data = padat,namecol = "Name",removecols = NULL, live = T)
@@ -1048,4 +1057,20 @@ function(input, output, session) {
       }
     }
   })
+  
+  #Bookmarking Stuff ----
+  setBookmarkExclude(c("y2ymapBttn-bookmarkBttn","climexpMapBttn-bookmarkBttn","paexpMapBttn-bookmarkBttn","pamapBttn-bookmarkBttn"))
+  observeEvent(
+    # {
+      # input$"y2ymapBttn-bookmarkBttn"
+      # input$"climexpMapBttn-bookmarkBttn"
+      input$"paexpMapBttn-bookmarkBttn"
+      # input$"pamapBttn-bookmarkBttn"
+    ,#},
+    {
+      session$doBookmark()
+    }
+  )
+  
+  
 }

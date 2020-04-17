@@ -35,14 +35,15 @@ reportUI <- function(id) {
         )
       )
     ),
+    br(),
     div(style="text-align: center",
-      downloadBttn(
+        downloadBttn(
         outputId=ns("reportBttn"),
         style="unite",
         color="primary",
-        size="md",
+        size="lg",
         no_outline=F,
-        block=T
+        block=F
       )
     )
   )

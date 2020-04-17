@@ -152,15 +152,6 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   text-decoration: none;
 }
 
-#climexp-getallSP.bttn-jelly.bttn-success {
-  background: #73a839;
-  color: #ffffff;
-}
-
-#climexp-resetSP.bttn-jelly.bttn-warning {
-  color: #ffffff;
-}
-
 .fa-twitter {
   font-size: 1.33333333em;
   line-height: .75em;
@@ -177,35 +168,6 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
-/*
-.homegridl {
- 	border-block: #39a8e8;
-	border-right-width: 3px;
-	border-right-style: solid;
-	border-right-color:#39a8e8;
-	border-bottom-width: 3px;
-	border-bottom-style: solid;
-	border-bottom-color:#39a8e8;
-	width: 50%;
-	padding-bottom: 10px;
-}
-
-.homegridlb {
- 	border-block: #39a8e8;
-	border-right-width: 3px;
-	border-right-style: solid;
-	border-right-color:#39a8e8;
-}
-.homegridr {
- 	border-block: #39a8e8;
-	border-bottom-width: 3px;
-	border-bottom-style: solid;
-	border-bottom-color:#39a8e8;
-	width: 50%;
-	padding-right: 18px;
-	padding-bottom: 10px;
-}
-*/
 .homeText {
  /*font-size: 16px !important;*/
  font-family: Roboto, "Helvetica Neue", sans-serif !important;
@@ -265,7 +227,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 
 
 /*-----------------------------------------------------------------
-                    Climate Metrics Exploter CSS
+                    Climate Metrics Explorer CSS
 -------------------------------------------------------------------*/
 #climexpSide{
   min-width: 10%;
@@ -284,8 +246,9 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   color: white !important;
 }
 
-#climexp-getallSP, #climexp-resetSP, #climExpB2E,#climexp-getallSPxy, #climexp-resetSPxy {
-  color: #0078A8;
+#climtable{
+  table-layout: fixed;
+  width: 100%;
 }
 
 #climexp-getallSP, #climexp-getallSPxy{
@@ -309,6 +272,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   top: -51px;
   position: relative;
 }
+
+#climexp-getallSP, #climexp-resetSP, #climExpB2E, #climexp-getallSPxy, #climexp-resetSPxy {
+  color: #0078A8;
+}
+
 /*-----------------------------------------------------------------
                     PA TOUR CSS
 -------------------------------------------------------------------*/
@@ -352,6 +320,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   
 }
 
+#patable{
+  table-layout: fixed;
+  width: 100%;
+}
+
 #paexpSide {
   min-width: 10%;
   max-width: 100%;
@@ -366,7 +339,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 }
 
 #paexp-getallSP, #paexp-resetSP, #paexp-resetSPxy, #paexp-getallSPxy{
-  color: #0078A8;
+  color: #0078A8 !important;
 }
 
 #paexp-getallSP,#paexp-getallSPxy {

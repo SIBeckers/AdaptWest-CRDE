@@ -45,7 +45,7 @@ library(cowplot)
 library(shinycssloaders)
 library(tinytex)
 
-webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.jquery.version = 1)
 
 
@@ -56,7 +56,7 @@ enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
 loginMenu = F
-reportStatsStatus=F#Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 
 # Protected Areas Data ---- 
 pafile = "./Data/pas.gpkg"
@@ -75,7 +75,9 @@ l1min <- fread("./Data/ecoregionlevel1min.csv",colClasses=list(numeric=1:9))
 l1max <- fread("./Data/ecoregionlevel1max.csv",colClasses=list(numeric=1:9))
 l3min <- fread("./Data/ecoregionlevel3min.csv",colClasses=list(numeric=1:9))
 l3max <- fread("./Data/ecoregionlevel3max.csv",colClasses=list(numeric=1:9))
-
+eco1namekey<-fread("./Data/eco1vals.csv",colClasses=list(numeric=1,character=2))
+eco2namekey<-fread("./Data/eco2vals.csv",colClasses=list(numeric=1,character=2))                   
+eco3namekey<-fread("./Data/eco3vals.csv",colClasses=list(numeric=1,character=2))
 
 # Map Settings ----
 minZoom = 0

@@ -7,8 +7,9 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600) {
         div(
           class = "appStarPlot",
           fluidRow(
-            actionBttn(ns("resetSP"), label = "Clear All", icon = icon("square",class="far"), style = "bordered"),
-            actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-square",class="far"), style = "bordered")
+            actionBttn(ns("resetSP"), label = "Clear All", icon = icon("times-circle",class="far"), style = "jelly",
+                       color="warning"),
+            actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-circle",class="far"), style = "jelly",color="success")
           ),
           br(),
           fluidRow(
@@ -28,7 +29,8 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600) {
         div(
           class = "appStarPlot",
           fluidRow(
-            actionBttn(ns("resetSP"), label = "Clear All", icon = icon("square",class="far"), style = "bordered"),
+            actionBttn(ns("resetSP"), label = "Clear All", icon = icon("times-circle",class="far"), style = "jelly",
+                       color="warning"),
           ),
           br(),
           fluidRow(
@@ -48,7 +50,7 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600) {
         div(
           class = "appStarPlot",
           fluidRow(
-            actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-square",class="far"), style = "bordered")
+            actionBttn(ns("getallSP"), label = "Select All", icon = icon("check-square",class="far"), style = "jelly",color="success")
           ),
           br(),
           fluidRow(
