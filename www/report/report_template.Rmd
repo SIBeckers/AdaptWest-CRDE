@@ -1600,7 +1600,7 @@ if(isFALSE(params$html)){
       '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
     )
   ) %>%
-    layout(
+    plotly::layout(
       xaxis = list(
         title = "Backward Climate Refugia",
         standoff=0,
@@ -1621,7 +1621,7 @@ if(isFALSE(params$html)){
       '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
     )
   ) %>%
-    layout(
+    plotly::layout(
       xaxis = list(
         title = "Backward Climate Refugia",
         standoff=0,
@@ -1643,7 +1643,7 @@ if(isFALSE(params$html)){
         '<b>Tree Refugia</b>: %{x:.3f}<br>'
       )
     ) %>%
-      layout(
+      plotly::layout(
         xaxis = list(
           title = "Tree Refugia",
           standoff=0,
@@ -1665,7 +1665,7 @@ if(isFALSE(params$html)){
         '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
       )
     ) %>%
-      layout(
+      plotly::layout(
         xaxis = list(
           title = "Backward Climate Refugia",
           standoff=0,
@@ -1687,7 +1687,7 @@ if(isFALSE(params$html)){
       '<b>Tree Carbon</b>: %{x:.3f}<br>'
     )
   ) %>%
-    layout(
+    plotly::layout(
       xaxis = list(
         title = "Tree Carbon",
         standoff=0,
@@ -1699,11 +1699,11 @@ if(isFALSE(params$html)){
       margin=list(b=0)
     )
   f <- subplot(fig1, fig2,fig3, fig4,nrows=2,titleX=T,titleY=T,margin=c(0.08,0.08,0.08,0.08)) %>% 
-    layout(legend = list(orientation = 'h',x = 0, y = -0.15,yanchor="top"))
+    plotly::layout(legend = list(orientation = 'h',x = 0, y = -0.15,yanchor="top"))
   f
 }
 if (params$RBS){
-  shiny::setProgress(0.96,message="Stiching the content it all together...")
+  shiny::setProgress(0.96,message="Stitching the final content together...")
 }
 ```
 

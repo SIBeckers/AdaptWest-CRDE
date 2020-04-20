@@ -1068,7 +1068,7 @@ function(input, output, session) {
     "paReport-reportFormat","paexpMapBttn-map_inputs","climexpMapBttn-opacity",
     "climexpMapBttn-polyopacity","paexpMapBttn-polyopacity","patour-prevBttn",
     "patour-startBttn","patour-stopBttn","patour-nextBttn","paexpMapBttn-opacity",
-    "paReport-reportInteractive","paReport-reportBttn_bttn",
+    "paReport-reportInteractive","paReport-reportBttn_bttn","climExpB2E"
     "climReport-reportInteractive","climexpMapBttn-map_inputs",
     "climReport-reportFormat","climReport-reportBttn_bttn",
     "pamapBttn-map_inputs","paexpMapBttn-opacity","climexpMapBttn-map_inputs",
