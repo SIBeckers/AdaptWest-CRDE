@@ -4,12 +4,9 @@ map <- function(input, output, session, swipe = F, mapbox = F,
                 layer2 = "'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png'",
                 opacity=0.45,
                 OSM=F){
-  setBookmarkExclude(
-    c("bookmarkBttn","tour-nextBttn","tour-prevBttn","tour-startBttn","tour-stopBttn","tour-endBttn")
-  )
-  observeEvent(input$bookmarkBttn, {
-    session$doBookmark()
-  })
+  setBookmarkExclude(c("map_shape_click","map_groups","map_center",
+                       "map_shape_mouseover","map_shape_mouseout","map_click",
+                       "map_inputs_state","map_zoom","map_bounds"))
   if (isFALSE(mapbox)) {
     if (isFALSE(swipe)) {
       map <- function() {
@@ -22,7 +19,6 @@ map <- function(input, output, session, swipe = F, mapbox = F,
             wheelDebounceTime = 100
           )
         ) %>%
-        # mapOptions(zoomToLimits = "always") %>%
         addProviderTiles(
           provider = providers$Esri.WorldShadedRelief ,
           layerId = "EsriWorldRelief", 

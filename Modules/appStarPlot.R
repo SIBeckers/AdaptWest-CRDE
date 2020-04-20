@@ -7,4 +7,5 @@ appStarPlot <- function(input, output, session, data, namecol = "", removecols =
   } else {
     output$appStarPlot <- renderPlot(rplot)
   }
+  setBookmarkExclude(c("resetSP","getallSP"))
 }

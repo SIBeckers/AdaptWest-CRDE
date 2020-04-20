@@ -3,7 +3,9 @@ tourPanel <- function(input, output, session, tourId = 1, tourName = "y2y") {
   # Reactive values--------------------------------------------------------------
   
   tourIndex <- reactiveValues(id = tourId,tourName = tourName,tourMax = NULL,tour = NULL)
-  
+  setBookmarkExclude(
+    c("nextBttn","prevBttn","startBttn","stopBttn","endBttn")
+  )
   
   # Event/Observers -------------------------------------------------------------
   observe({

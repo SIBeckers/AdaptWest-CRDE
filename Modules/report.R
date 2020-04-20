@@ -1,7 +1,8 @@
 report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
   outputDir<-"./www/report" #Should still work when running the app locally.
- 
+  setBookmarkExclude(c("selPoly4Report","reportFormat","reportInteractive","reportBttn",
+                       "reportBttn_bttn"))
   observeEvent(!is.null(polys),{
     if(isTRUE(pa)){
       n<-nrow(polys)
@@ -154,4 +155,5 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       })#end of with progress
     } #end of content
   )#end of download handler
+
 }

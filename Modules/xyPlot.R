@@ -3,7 +3,7 @@ xyPlot <- function(input, output, session,data,data2,namecol,offset=0,pa=F,live=
   # library(dplyr)
   xvar <- reactiveVal(input$"X")
   yvar <- reactiveVal(input$"Y")
-  
+  setBookmarkExclude(c("X","Y","getallSPxy","resetSPxy"))
   metriclist<-metriclist[1:8]
   xvarname<-names(metriclist[which(metriclist==xvar())])
   yvarname<-names(metriclist[which(metriclist==yvar())])

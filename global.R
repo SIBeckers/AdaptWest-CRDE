@@ -45,7 +45,7 @@ library(cowplot)
 library(shinycssloaders)
 library(tinytex)
 
-# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.jquery.version = 1)
 
 
@@ -56,7 +56,7 @@ enableBookmarking(store = "url")
 theuser = "AdaptWest"
 thepassword <- "DataBasin2019"
 loginMenu = F
-reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus=T    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 
 # Protected Areas Data ---- 
 pafile = "./Data/pas.gpkg"

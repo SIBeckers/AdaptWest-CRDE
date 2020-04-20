@@ -1059,18 +1059,38 @@ function(input, output, session) {
   })
   
   #Bookmarking Stuff ----
-  setBookmarkExclude(c("y2ymapBttn-bookmarkBttn","climexpMapBttn-bookmarkBttn","paexpMapBttn-bookmarkBttn","pamapBttn-bookmarkBttn"))
-  observeEvent(
-    # {
-      # input$"y2ymapBttn-bookmarkBttn"
-      # input$"climexpMapBttn-bookmarkBttn"
-      input$"paexpMapBttn-bookmarkBttn"
-      # input$"pamapBttn-bookmarkBttn"
-    ,#},
-    {
-      session$doBookmark()
-    }
+  excludeList<-c(
+    "y2ymapBttn-opacity","climExpLayer","clearTileFill","clearPolyFill",
+    "climFillPolys","patourLayer","paExpLayer","pamapBttn-opacity","paExpLayer",
+    "pamapBttn-polyopacity","paclearTileFill","paFillPolys","paclearPolyFill",
+    "y2ymapBttn-bookmarkBttn","climexpMapBttn-bookmarkBttn","patour-endBttn",
+    "paexpMapBttn-bookmarkBttn","pamapBttn-bookmarkBttn","patour-endBttn",
+    "paReport-reportFormat","paexpMapBttn-map_inputs","climexpMapBttn-opacity",
+    "climexpMapBttn-polyopacity","paexpMapBttn-polyopacity","patour-prevBttn",
+    "patour-startBttn","patour-stopBttn","patour-nextBttn","paexpMapBttn-opacity",
+    "paReport-reportInteractive","paReport-reportBttn_bttn",
+    "climReport-reportInteractive","climexpMapBttn-map_inputs",
+    "climReport-reportFormat","climReport-reportBttn_bttn",
+    "pamapBttn-map_inputs","paexpMapBttn-opacity","climexpMapBttn-map_inputs",
+    "climReport-reportBttn_bttn"
   )
-  
+    
+  observe({
+    shinyJSexclude<- grep("shinyjs", names(input), value = TRUE)
+    setBookmarkExclude(c(excludeList,shinyJSexclude))
+  })
+
+  observeEvent(input$"paexpMapBttn-bookmarkBttn",{
+      session$doBookmark()
+  })
+  observeEvent(input$"y2ymapBttn-bookmarkBttn",{
+    session$doBookmark()
+  })
+  observeEvent(input$"climexpMapBttn-bookmarkBttn",{
+    session$doBookmark()
+  })
+  observeEvent(input$"pamapBttn-bookmarkBttn",{
+    session$doBookmark()
+  })
   
 }
