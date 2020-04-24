@@ -71,6 +71,7 @@ source("./www/report/mapFunction.R")
 
 #SETUP OPTIONS (GO THROUGH)
 # webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+options(shiny.reactlog=F)
 options(shiny.jquery.version = 1)
 loginMenu = F
 reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)

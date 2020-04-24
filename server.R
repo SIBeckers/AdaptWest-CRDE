@@ -127,6 +127,7 @@ function(input, output, session) {
           mpClick$id <- gsub(newId,"",mpClick$id)
           clickedIds$ids <- c(clickedIds$ids, mpClick$id)
           multipolys <- data[data[[idfield]] %in% clickedIds$ids,]
+          multipolys <- multipolys[match(clickedIds$ids,multipolys[[idfield]]),]
           if (anyDuplicated(clickedIds$ids)) {
             dups <- clickedIds$ids[duplicated(clickedIds$ids)]
             clickedIds$ids <- clickedIds$ids[clickedIds$ids != dups]
@@ -700,8 +701,6 @@ function(input, output, session) {
         proxy <- leafletProxy(mapId = mapId) %>% clearGroup("rpas")
         if(isTRUE(calc)){
           mpClickPAs <- mapclick#input[[paste0(mapId,"_shape_click")]]
-          
-          # mpClickPAs$id <- mpClickPAs$id
           clickedIdsPAs$ids <- c(clickedIdsPAs$ids, mpClickPAs$id)
           multipolysPAs <- data[data[[idfield]] %in% clickedIdsPAs$ids,]
           multipolysPAs <- multipolysPAs[match(clickedIdsPAs$ids,multipolysPAs[[idfield]]),]
@@ -1019,18 +1018,22 @@ function(input, output, session) {
       
       #9e) Map polygon click logic ----
         #9e) i. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
-      mapclickPA<-reactive({
-        print(input$"paexpMap-map_shape_click"$id)
-        input$"paexpMap-map_shape_click"
+      mapclickPA<-reactiveValues(click=NULL)
+      observeEvent(input$"paexpMap-map_shape_click",{
+        mapclickPA$click<-input$"paexpMap-map_shape_click"
       })
-      observeEvent(mapclickPA(),{
+
+      
+      observeEvent(mapclickPA$click,{
         multiSelected_pas(
-          selectMultiPolysPAS(mapId = "paexpMap-map",data = pas,mapclick=mapclickPA(),
+          selectMultiPolysPAS(mapId = "paexpMap-map",data = pas,mapclick=mapclickPA$click,
                               idfield = "gridcode", addPolys = T, newId = "",nameField = "PA_NAME",group = "rpas")
         )
        
       })
-      
+      observeEvent(input$tabs,{
+        mapclickPA$click<-NULL
+      })
       observeEvent(multiSelected_pas(),{
         mspas <- isolate(multiSelected_pas()) 
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = T,all=F,reset=T,height=(600+(nrow(mspas)*15)))))
