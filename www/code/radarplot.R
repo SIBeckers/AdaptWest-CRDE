@@ -9,16 +9,16 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T,offs
   if (!is.null(removecols)) {
   data <- data %>%
   remove_rownames() %>%
-  column_to_rownames(var = namecol) %>%
-  as_tibble(rownames = namecol) %>%
+  column_to_rownames(var = all_of(namecol)) %>%
+  as_tibble(rownames = all_of(namecol)) %>%
   select(-removecols)
   }
   data[[namecol]]<-str_wrap(data[[namecol]],35)
   if (isFALSE(interactive)) {
     mname <- sym(namecol)
-    data <- data %>% mutate_at(vars(-namecol), rescale,na.rm=F) %>% rownames_to_column("ROWID") %>%
-      filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = namecol) %>% 
-      as_tibble(rownames = namecol)
+    data <- data %>% mutate_at(vars(-all_of(namecol)), rescale,na.rm=F) %>% rownames_to_column("ROWID") %>%
+      filter(!!mname != "MIN" & !!mname != "MAX") %>% column_to_rownames(var = all_of(namecol)) %>% 
+      as_tibble(rownames = all_of(namecol))
     
     p <- ggRadar(data = data,aes(colour = ROWID),
                 na.rm = F,
@@ -58,10 +58,10 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T,offs
     }
   } else {
     mname <-sym(namecol)
-    data <- data %>% mutate_at(vars(-namecol), rescale,na.rm=F) %>% filter(!!mname != "MIN") %>% filter(!!mname != "MAX")
+    data <- data %>% mutate_at(vars(-all_of(namecol)), rescale,na.rm=F) %>% filter(!!mname != "MIN") %>% filter(!!mname != "MAX")
     names(data)<-gsub(" "," <br> ",names(data))
-    names <- unlist(data %>% select(namecol),use.names = F)
-    data <- data %>% select(-namecol)
+    names <- unlist(data %>% select(all_of(namecol)),use.names = F)
+    data <- data %>% select(-all_of(namecol))
     theta <- c(names(data),names(data)[1])
     col2 <- ggplotColours(n=(nrow(data)+offset))[(1+offset):(offset+nrow(data))]
     p <- plot_ly(

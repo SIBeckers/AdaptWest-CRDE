@@ -1,4 +1,4 @@
-ddownBttnUI <- function(id){
+ddownBttnUI <- function(id,poly=T){
   ns <- NS(id)
   tagList(
     div(
@@ -21,14 +21,17 @@ ddownBttnUI <- function(id){
           max = 1.0,
           value = 0.45
         ),
-        sliderInput(
-          inputId = ns("polyopacity"),
-          label = "Polygon Fill Opacity",
-          min = 0,
-          max = 1.0,
-          value = 0.85
-        ),
-        bookmarkButton(
+        # %>%debounce(1000),
+        if(isTRUE(poly)){
+          sliderInput(
+            inputId = ns("polyopacity"),
+            label = "Polygon Fill Opacity",
+            min = 0,
+            max = 1.0,
+            value = 0.85
+          ) #%>%debounce(1000)
+        }
+        ,bookmarkButton(
           label = "Bookmark App",
           icon = icon("bookmark", lib = "font-awesome"),
           style = "font-size: 18px; class=bookmarkButtn",

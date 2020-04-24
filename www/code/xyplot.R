@@ -63,16 +63,17 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
       data<-bind_rows(data,data2)
       data$Group<- factor(data$Group, levels = c(as.character(unique(data$Group))))
       fig <- plot_ly()
-      p <- fig %>% add_markers(
+      p <- fig %>% plotly::add_markers(
         data = data, x = ~get(xvar),y = ~get(yvar),color = ~Group, 
         colors=c("grey",col2),legendgroup=~Group,
         text = ~I(get(nam)),
+        size=10,
         hovertemplate = paste(
           '<b>Name</b>: %{text}<br>',
           '<b>Forward Climate Refugia</b>: %{y:.3f}<br>',
           '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
         ) 
-      ) %>% layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),
+      ) %>% plotly::layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),
                    legend = list(orientation = 'h',x = 0, y = -0.25,yanchor="top",
                                  tracegroupgap=5)
                   )
@@ -85,16 +86,17 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
         greys="grey"
       }
       fig <- plot_ly()
-      p <- fig %>% add_markers(
+      p <- fig %>% plotly::add_markers(
         data = data, x =~get(xvar),y = ~get(yvar) ,color = ~Group, 
         colors=c("grey"),legendgroup= ~Group,
         text = ~I(get(nam)),
+        size=10,
         hovertemplate = paste(
           '<b>Name</b>: %{text}<br>',
           '<b>Forward Climate Refugia</b>: %{y:.3f}<br>',
           '<b>Backward Climate Refugia</b>: %{x:.3f}<br>'
         )
-      ) %>% layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),
+      ) %>% plotly::layout(xaxis = list(title = xvarname),yaxis=list(title=yvarname),
                    legend = list(orientation = 'h',x = 0, y = -0.25,yanchor="top",
                                  tracegroupgap=5)
                    )

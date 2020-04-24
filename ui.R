@@ -143,7 +143,7 @@ ui <- function(request) {
       id = "climtourMain",
       width = 8,
       mapUI("y2ymap"),
-      ddownBttnUI("y2ymapBttn")
+      ddownBttnUI("y2ymapBttn", poly=F)
     )
   )
   
@@ -242,7 +242,7 @@ ui <- function(request) {
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "6. Table of metrics ",
-            content=list(tableOutput("climtable"))
+            content=list(uiOutput("climtablediv"))
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
@@ -278,7 +278,7 @@ ui <- function(request) {
       id = "patourMain",
       width = 8,
       mapUI("pamap"),
-      ddownBttnUI("pamapBttn"),
+      ddownBttnUI("pamapBttn",poly=F),
       absolutePanel(
         id = "patourPanel",
         top = 20,
@@ -403,7 +403,7 @@ ui <- function(request) {
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(
             title = "6. Table of metrics ",
-            content=list(tableOutput("patable"))
+            content=list(uiOutput("patablediv"))
           ) %>%
           bs_set_opts(panel_type = "success", use_heading_link = T) %>%
           bs_append(

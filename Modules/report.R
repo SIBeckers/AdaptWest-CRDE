@@ -14,7 +14,7 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
           choices = list(
             "Select protected area for report..." ="",
             "Selected in map"=as.list(polys[[namecol]],sorted=F),
-            "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]),sorted=F)
+            "All other protected areas" = as.list(setdiff(data[[namecol]],polys[[namecol]]),sorted=F)
           ),
           multiple=F,
           selected=polys[n,][[namecol]],
@@ -31,9 +31,9 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
           label = "",
           choices = list(
             "Select watershed for report..." ="",
-            "Selected in map..." = as.list(polys2[n,][[namecol]]),
-            "In the same ecoregion"=as.list(setdiff(polys[[namecol]],polys2[[namecol]])),
-            "All other polygons" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
+            "Selected in map..." = as.list(polys2[c((n-n):n),][[namecol]]),
+            "Other watersheds in the same ecoregion"=as.list(setdiff(polys[[namecol]],polys2[[namecol]])),
+            "All other watersheds" = as.list(setdiff(data[[namecol]],polys[[namecol]]))
           ),
           multiple=F,
           selected=polys2[n,][[namecol]],

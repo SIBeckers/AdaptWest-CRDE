@@ -45,99 +45,6 @@ library(cowplot)
 library(shinycssloaders)
 library(tinytex)
 
-webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
-options(shiny.jquery.version = 1)
-
-
-# Global Resources ----
-aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
-aw_tw <- "https://twitter.com/adaptwest"
-enableBookmarking(store = "url")
-theuser = "AdaptWest"
-thepassword <- "DataBasin2019"
-loginMenu = F
-reportStatsStatus=T    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
-
-# Protected Areas Data ---- 
-pafile = "./Data/pas.gpkg"
-ptsfile = "./Data/pas_centroids.gpkg"
-panames<-readRDS("./Data/panames.Rds")
-
-# Watersheds Data ----
-wdfile = "./Data/wds.gpkg"
-
-# Ecoregion Data ----
-ecos <- read_sf('./Data/ecos.gpkg')
-ecol1stats <- fread("./Data/ecoregionlevel1mean.csv",colClasses=list(character=1,numeric=2:9))
-ecol2stats <- fread("./Data/ecoregionlevel2mean.csv",colClasses=list(character=1,numeric=2:9))
-ecol3stats <- fread("./Data/ecoregionlevel3mean.csv",colClasses=list(character=1,numeric=2:9))
-l1min <- fread("./Data/ecoregionlevel1min.csv",colClasses=list(numeric=1:9))
-l1max <- fread("./Data/ecoregionlevel1max.csv",colClasses=list(numeric=1:9))
-l3min <- fread("./Data/ecoregionlevel3min.csv",colClasses=list(numeric=1:9))
-l3max <- fread("./Data/ecoregionlevel3max.csv",colClasses=list(numeric=1:9))
-eco1namekey<-fread("./Data/eco1vals.csv",colClasses=list(numeric=1,character=2))
-eco2namekey<-fread("./Data/eco2vals.csv",colClasses=list(numeric=1,character=2))                   
-eco3namekey<-fread("./Data/eco3vals.csv",colClasses=list(numeric=1,character=2))
-
-# Map Settings ----
-minZoom = 0
-maxZoom = 9
-# zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
-zoomcuts <- c(17500,10000,7500,5000,1000, 100, 10, 1, 1,0)
-
-
-# Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
-tiledir <- "http://www.cacpd.org.s3-website-us-west-2.amazonaws.com/tiledirectory" #FOR ONLINE TILES
-tilelist <- fread("./config_files/tilelist.txt") #Replaces above two lines.
-tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
-tilevect <- tilelist$tileName
-names(tilevect) <- tilelist$tileGroup
-metriclist <- c("intact","elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","NEWNAME")
-names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
-                       'Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                       'Tree Carbon','Soil Carbon',"Name")
-polyfillvect<-c("elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","intact")
-names(polyfillvect)<-c("Topodiversity","Forward Climatic Refugia","Backward Climatic Refugia",
-                       "Bird Refugia","Tree Refugia","Tree Carbon","Soil Carbon",
-                       "Intactness")                    
-# Climate Metrics Tour Data -----
-y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
-y2ybds <- st_bbox(y2yshp)
-y2y <- fread("./config_files/metrictourinputs.csv",na.strings = "")
-y2y$zoomTo <- as.logical(y2y$zoomTo)
-y2y$clear <- as.logical(y2y$clear)
-y2y$tourFileName <- file.path("./www/md/metrictour",y2y$tourFileName)
-y2y$tile1url <- ifelse(!is.na(y2y$tile1),file.path(tiledir,paste0(y2y$tile1,"/{z}/{x}/{y}.png")),NA)
-y2y$tile2url <- ifelse(!is.na(y2y$tile2),file.path(tiledir,paste0(y2y$tile2,"/{z}/{x}/{y}.png")),NA)
-y2y$swipe <- ifelse(!is.na(y2y$tile1) & !is.na(y2y$tile2),T,F)
-
-# Protected Areas Tour Data ----
-pashp <- y2yshp
-pa <- fread("./config_files/patourinputs.csv",na.strings = "")
-pa$zoomTo <- as.logical(pa$zoomTo)
-pa$clear <- as.logical(pa$clear)
-pa$tourFileName <- file.path("./www/md/patour",pa$tourFileName)
-pa$tile1url <- ifelse(!is.na(pa$tile1),file.path(tiledir,paste0(pa$tile1,"/{z}/{x}/{y}.png")),NA)
-pa$tile2url <- ifelse(!is.na(pa$tile2),file.path(tiledir,paste0(pa$tile2,"/{z}/{x}/{y}.png")),NA)
-pa$swipe <- ifelse(!is.na(pa$tile1) & !is.na(pa$tile2),T,F)
-
-
-# Tile info for local tiles: UNCOMMENT FOR LOCAL TILES: -----
-# tiledir = "C:/Users/jbeckers/Data/AdaptWestApp_TMPDIR/tiles" #USE THIS FOR LOCAL TILES
-# tilelist <- fread("./tilelist.txt")
-# tilelist$tileSubdir <- file.path(tiledir,tilelist$tileName) #FOR LOCAL TILES
-# tilevect <- tilelist$tileName
-# names(tilevect) <- tilelist$tileGroup
-# for (i in 1:nrow(tilelist)) {
-#   addResourcePath(prefix=tilelist$tileName[i],directoryPath = tilelist$tileSubdir[i])
-#   tilelist$tileSubdir[i] <- paste0("/",tilelist$tileName[i],"/{z}/{x}/{y}.png")
-# }
-# y2y$tile1url <- paste0("/",y2y$tile1,"/{z}/{x}/{y}.png")
-# y2y$tile2url <- paste0("/",y2y$tile2,"/{z}/{x}/{y}.png")
-# pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
-# pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
-
-
 # Modules ----
 source("./Modules/tourPanelUI.R") #The story map user interface
 source("./Modules/tourPanel.R") #The story map server code
@@ -151,6 +58,8 @@ source("./Modules/xyPlotUI.R")
 source("./Modules/xyPlot.R")
 source("./Modules/reportUI.R")
 source("./Modules/report.R")
+source("./Modules/Table.R")
+source("./Modules/TableUI.R")
 
 # Other Code -----
 source("www/code/tourStep.R")
@@ -159,55 +68,171 @@ source("www/code/radarplot.R")
 source("www/code/xyplot.R")
 source("./www/report/mapFunction.R")
 
-# Setup leaflet sidebyside plugin ----
-myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
-                                          src = c("www/shared/leaflet-side-by-side-gh-pages"),
-                                          script = "leaflet-side-by-side.js")
+
+#SETUP OPTIONS (GO THROUGH)
+# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+options(shiny.jquery.version = 1)
+loginMenu = F
+reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 
 
-registerPlugin <- function(map, plugin) {
-  map$dependencies <- c(map$dependencies, list(plugin))
-  map
-}
+# Global Resources ----
+  aw_gh <- "https://github.com/SIBeckers/AdaptWest" #github link
+  aw_tw <- "https://twitter.com/adaptwest"
+  enableBookmarking(store = "url")
+  theuser = "AdaptWest"
+  thepassword <- "DataBasin2019"
+  
+  # Protected Areas Data ---- 
+  pafile = "./Data/pas.gpkg"
+  ptsfile = "./Data/pas_centroids.gpkg"
+  panames<-readRDS("./Data/panames.Rds")
+  pas <- read_sf(pafile)
+  pts <- read_sf(ptsfile)
+  pas <- pas[-c(pas$PA_NAME == "Wildlife Habitat Protection"),]
+  pts <- pts[-c(pts$PA_NAME == "Wildlife Habitat Protection"),]
+  
+  ## Watersheds Data ----
+  wdfile = "./Data/wds.gpkg"
+  wds <- read_sf(wdfile)
+  # Ecoregion Data ----
+  ecos <- read_sf('./Data/ecos.gpkg')
+  ecol1stats <- fread("./Data/ecoregionlevel1mean.csv",colClasses=list(character=1,numeric=2:9))
+  ecol2stats <- fread("./Data/ecoregionlevel2mean.csv",colClasses=list(character=1,numeric=2:9))
+  ecol3stats <- fread("./Data/ecoregionlevel3mean.csv",colClasses=list(character=1,numeric=2:9))
+  l1min <- fread("./Data/ecoregionlevel1min.csv",colClasses=list(numeric=1:9))
+  l1max <- fread("./Data/ecoregionlevel1max.csv",colClasses=list(numeric=1:9))
+  l3min <- fread("./Data/ecoregionlevel3min.csv",colClasses=list(numeric=1:9))
+  l3max <- fread("./Data/ecoregionlevel3max.csv",colClasses=list(numeric=1:9))
+  eco1namekey<-fread("./Data/eco1vals.csv",colClasses=list(numeric=1,character=2))
+  eco2namekey<-fread("./Data/eco2vals.csv",colClasses=list(numeric=1,character=2))                   
+  eco3namekey<-fread("./Data/eco3vals.csv",colClasses=list(numeric=1,character=2))
+  
+  # Map Settings ----
+  minZoom = 0
+  maxZoom = 9
+  # zoomcuts <- c(20000, 15000, 15000, 10000, 1000, 100, 10, 1, 1,0)
+  zoomcuts <- c(17500,10000,7500,5000,1000, 100, 10, 1, 1,0)
+  
+  
+  # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
+  tiledir <- "http://www.cacpd.org.s3-website-us-west-2.amazonaws.com/tiledirectory" #FOR ONLINE TILES
+  tilelist <- fread("./config_files/tilelist.txt") #Replaces above two lines.
+  tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
+  tilevect <- tilelist$tileName
+  names(tilevect) <- tilelist$tileGroup
+  metriclist <- c("intact","elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","NEWNAME")
+  names(metriclist) <- c('Intactness','Topodiversity','Forward Climatic Refugia',
+                         'Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                         'Tree Carbon','Soil Carbon',"Name")
+  polyfillvect<-c("elevdiv","fwvelref","bwvelref","brdref","treref","treec","soilc","intact")
+  names(polyfillvect)<-c("Topodiversity","Forward Climatic Refugia","Backward Climatic Refugia",
+                         "Bird Refugia","Tree Refugia","Tree Carbon","Soil Carbon",
+                         "Intactness")                    
+  # Climate Metrics Tour Data -----
+  y2yshp <- read_sf("./Data/parks9y2y2.gpkg")
+  y2ybds <- st_bbox(y2yshp)
+  y2y <- fread("./config_files/metrictourinputs.csv",na.strings = "")
+  y2y$zoomTo <- as.logical(y2y$zoomTo)
+  y2y$clear <- as.logical(y2y$clear)
+  y2y$tourFileName <- file.path("./www/md/metrictour",y2y$tourFileName)
+  y2y$tile1url <- ifelse(!is.na(y2y$tile1),file.path(tiledir,paste0(y2y$tile1,"/{z}/{x}/{y}.png")),NA)
+  y2y$tile2url <- ifelse(!is.na(y2y$tile2),file.path(tiledir,paste0(y2y$tile2,"/{z}/{x}/{y}.png")),NA)
+  y2y$swipe <- ifelse(!is.na(y2y$tile1) & !is.na(y2y$tile2),T,F)
+  
+  # Protected Areas Tour Data ----
+  pashp <- y2yshp
+  pa <- fread("./config_files/patourinputs.csv",na.strings = "")
+  pa$zoomTo <- as.logical(pa$zoomTo)
+  pa$clear <- as.logical(pa$clear)
+  pa$tourFileName <- file.path("./www/md/patour",pa$tourFileName)
+  pa$tile1url <- ifelse(!is.na(pa$tile1),file.path(tiledir,paste0(pa$tile1,"/{z}/{x}/{y}.png")),NA)
+  pa$tile2url <- ifelse(!is.na(pa$tile2),file.path(tiledir,paste0(pa$tile2,"/{z}/{x}/{y}.png")),NA)
+  pa$swipe <- ifelse(!is.na(pa$tile1) & !is.na(pa$tile2),T,F)
+  
+  
+  # Tile info for local tiles: UNCOMMENT FOR LOCAL TILES: -----
+  # tiledir = "C:/Users/jbeckers/Data/AdaptWestApp_TMPDIR/tiles" #USE THIS FOR LOCAL TILES
+  # tilelist <- fread("./tilelist.txt")
+  # tilelist$tileSubdir <- file.path(tiledir,tilelist$tileName) #FOR LOCAL TILES
+  # tilevect <- tilelist$tileName
+  # names(tilevect) <- tilelist$tileGroup
+  # for (i in 1:nrow(tilelist)) {
+  #   addResourcePath(prefix=tilelist$tileName[i],directoryPath = tilelist$tileSubdir[i])
+  #   tilelist$tileSubdir[i] <- paste0("/",tilelist$tileName[i],"/{z}/{x}/{y}.png")
+  # }
+  # y2y$tile1url <- paste0("/",y2y$tile1,"/{z}/{x}/{y}.png")
+  # y2y$tile2url <- paste0("/",y2y$tile2,"/{z}/{x}/{y}.png")
+  # pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
+  # pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
+  
+  
+  # Tile info for local tiles: UNCOMMENT FOR LOCAL TILES: -----
+  # tiledir = "C:/Users/jbeckers/Data/AdaptWestApp_TMPDIR/tiles" #USE THIS FOR LOCAL TILES
+  # tilelist <- fread("./tilelist.txt")
+  # tilelist$tileSubdir <- file.path(tiledir,tilelist$tileName) #FOR LOCAL TILES
+  # tilevect <- tilelist$tileName
+  # names(tilevect) <- tilelist$tileGroup
+  # for (i in 1:nrow(tilelist)) {
+  #   addResourcePath(prefix=tilelist$tileName[i],directoryPath = tilelist$tileSubdir[i])
+  #   tilelist$tileSubdir[i] <- paste0("/",tilelist$tileName[i],"/{z}/{x}/{y}.png")
+  # }
+  # y2y$tile1url <- paste0("/",y2y$tile1,"/{z}/{x}/{y}.png")
+  # y2y$tile2url <- paste0("/",y2y$tile2,"/{z}/{x}/{y}.png")
+  # pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
+  # pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
+
+  # Setup leaflet sidebyside plugin ----
+  myLeafletSideBySidePlugin <- htmlDependency("leaflet-side-by-side","2.0.0",
+                                            src = c("www/shared/leaflet-side-by-side-gh-pages"),
+                                            script = "leaflet-side-by-side.js")
 
 
+  registerPlugin <- function(map, plugin) {
+    map$dependencies <- c(map$dependencies, list(plugin))
+    map
+  }
 
+  #Common Reactives ----
+  polygroup <- reactiveVal("ecoregions")
+  clickedIds <- reactiveValues(ids = vector())
+  multiSelected_wds <- reactiveVal(c(NULL))
+  rwds <- reactiveVal(NULL)
+  eregion <- reactiveValues(edata = NULL,bds = NULL)
+  clickedIdsPAs <- reactiveValues(ids = vector())
+  multiSelected_pas <- reactiveVal(c(NULL))
+  rpas <- reactiveVal(NULL)
+  climtourView <- reactiveValues(view = NULL,opacity = NULL)
+  isSwipemetric <- reactiveVal(NULL)
+  patourView <- reactiveValues(view = NULL,opacity = NULL)
+  isSwipepa <- reactiveVal(NULL)
 
-#List of resources for each tab, used to remove from other tabs/reload. I think this will speed things up. ----
-#Not even being implemented right now, so still performance gains to be made I think.
-# homeTablist <- list()
-# metricTourlist <- list()
-# metricExplist <- list("ecos","ecol1stats","ecol2stats","ecol3stats","wds")
-# patourlist <- list("pa")
-# paexplist <- list("pas")
-# globallist <- list("aw_gh","aw_tw","minZoom","maxZoom","theuser","thepassword","zoomcuts","tiledir",
-#                  "tilelist","tilevect","LeafletSideBySidePlugin","registerPlugin","tourStep")
-
-#Report stuff -----
-reportdir<-"./www/report"
-reptmpdir<-"./www/report/tmp"
-repimgdir<-"./www/report/imgs"
-repstaticdir<-"./www/report/static_reports"
-repinterdir<-"./www/report/interactive_reports"
-#Configure the report output using /config_files/reportconfig.csv. 
-#Note that parameters in this file must also be in /www/report/report_template.Rmd
-reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])
-
-#Report Status Stuff
-if(reportStatsStatus==T){
-  if(file.exists("./report_stats/token.rds")){
-    token <- readRDS("./report_stats/token.rds")
-    mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+  
+  #Report stuff -----
+  reportdir<-"./www/report"
+  reptmpdir<-"./www/report/tmp"
+  repimgdir<-"./www/report/imgs"
+  repstaticdir<-"./www/report/static_reports"
+  repinterdir<-"./www/report/interactive_reports"
+  #Configure the report output using /config_files/reportconfig.csv. 
+  #Note that parameters in this file must also be in /www/report/report_template.Rmd
+  reportconfig <- as.list(dcast(melt(fread("./config_files/reportconfig.csv"), id.vars = "parameter"), variable ~ parameter)[,-1])
+  
+  #Report Status Stuff
+  if(reportStatsStatus==T){
+    if(file.exists("./report_stats/token.rds")){
+      token <- readRDS("./report_stats/token.rds")
+      mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+    } else {
+  
+      if(!dir.exists("./report_stats")){dir.create("./report_stats")}
+      mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+    }
   } else {
-
     if(!dir.exists("./report_stats")){dir.create("./report_stats")}
     mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
+    
   }
-} else {
-  if(!dir.exists("./report_stats")){dir.create("./report_stats")}
-  mydownloads <- data.table(Name=character(),Date=numeric(),Interactive=integer(),Format=character(),ProtectedArea=integer(),stringsAsFactors = F)
-  
-}
 
 
 # onStop(function() {

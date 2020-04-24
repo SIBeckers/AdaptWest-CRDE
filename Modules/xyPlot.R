@@ -44,13 +44,4 @@ xyPlot <- function(input, output, session,data,data2,namecol,offset=0,pa=F,live=
   } else {
     return()
   }
-  # output$hoverInfo <- renderPrint({
-  #   if(!is.null(input$plot_hover)){
-  #     hover=input$plot_hover
-  #     dist=sqrt((hover$x-mtcars$mpg)^2+(hover$y-mtcars$disp)^2)
-  #     cat("Weight (lb/1000)\n")
-  #     if(min(dist) < 3)
-  #       mtcars$wt[which.min(dist)]
-  #   }
-  # })
 }

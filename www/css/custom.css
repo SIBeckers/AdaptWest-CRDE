@@ -251,14 +251,19 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   width: 100%;
 }
 
-#climexp-getallSP, #climexp-getallSPxy{
+#climexp-getallSP, #climexp-getallSPxy, #climtable-getallSPtab{
   float: right;
+  margin-right: 10px;
 }
 
 #climexp-bttnRow {
   padding-left: 15px;
   padding-right: 15px;
   
+}
+
+#climexp-resetSP, #climexp-resetSPxy, #climtable-resetSPtab{
+  margin-left: 10px;
 }
 
 #clearTileFill {
@@ -273,7 +278,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   position: relative;
 }
 
-#climexp-getallSP, #climexp-resetSP, #climExpB2E, #climexp-getallSPxy, #climexp-resetSPxy {
+#climexp-getallSP, #climexp-resetSP, #climExpB2E, #climexp-getallSPxy, #climexp-resetSPxy, #climtable-resetSPtab, #climtable-getallSPtab  {
   color: #0078A8;
 }
 
@@ -338,12 +343,13 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   height: calc(100vh - 80px);
 }
 
-#paexp-getallSP, #paexp-resetSP, #paexp-resetSPxy, #paexp-getallSPxy{
+#paexp-getallSP, #paexp-resetSP, #paexp-resetSPxy, #paexp-getallSPxy, #patable-getallSPtab, #patable-resetSPtab{
   color: #0078A8 !important;
 }
 
-#paexp-getallSP,#paexp-getallSPxy {
+#paexp-getallSP,#paexp-getallSPxy,#patable-getallSPxy{
   float: right;
+  margin-right: 10px;
 }
 
 #paexp-bttnRow {
@@ -352,6 +358,9 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   
 }
 
+#paexp-resetSP, #paexp-resetSPxy, #patable-resetSPtab{
+  margin-left: 10px;
+}
 
 
 #paclearTileFill {
