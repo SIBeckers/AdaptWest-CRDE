@@ -37,10 +37,10 @@ ui <- function(request) {
           });'
       )),
     tags$script("
-    Shiny.addCustomMessageHandler('resetValue', function(variableName) {
-      Shiny.onInputChange(variableName, null);
-    });
-  ")
+      Shiny.addCustomMessageHandler('resetValue', function(variableName) {
+        Shiny.onInputChange(variableName, null);
+      });
+    ")
   )
   
   #Title ----
@@ -138,6 +138,11 @@ ui <- function(request) {
     title = "Climate Metrics Tour",
     value = "climtourTab",
     icon = NULL,
+    tags$script("
+      Shiny.addCustomMessageHandler('resetValue', function(variableName) {
+        Shiny.onInputChange(variableName, null);
+      });
+    "),
     sidebarPanel(
       id = "climtourSide",
       class = "mysidebar",
@@ -157,6 +162,11 @@ ui <- function(request) {
     title = "Climate Metrics Explorer",
     value = "climexpTab",
     icon = NULL,
+    tags$script("
+      Shiny.addCustomMessageHandler('resetValue', function(variableName) {
+        Shiny.onInputChange(variableName, null);
+      });
+    "),
     sidebarPanel(
       id = "climexpSide",
       class = "mysidebar",

@@ -71,6 +71,7 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       paramslist$fmt = rpfm
       paramslist$data2 = data
       paramslist$pa  = pa
+      paramslist$appURL = appURL
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
       
       mydownloads<<-rbindlist(

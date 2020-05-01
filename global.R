@@ -8,11 +8,13 @@
 # - Let's try using name states and render UI function to modularize the app
 #
 #SETUP OPTIONS (GO THROUGH) ----
-webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.reactlog=F)
 options(shiny.jquery.version = 1)
 loginMenu = F
-reportStatsStatus=T  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus=F  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
+#appURL = https://adaptwest.shinyapps.io/climate-resilience-data-explorer
 
 # Libraries ----
 #Shiny stuff
