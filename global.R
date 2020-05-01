@@ -7,74 +7,82 @@
 #     - we will use URL bookmarking so that people can share a URL. 
 # - Let's try using name states and render UI function to modularize the app
 #
-# Libraries ----
-library(shinythemes)
-library(mapview)
-library(shiny)
-library(shinyWidgets)
-library(htmltools)
-library(htmlwidgets)
-library(bsplus)
-library(leaflet)
-library(leafem)
-library(markdown)
-library(knitr)
-library(rmarkdown)
-library(sf)
-library(plotly)
-library(leaflet.extras)
-library(shinyjs)
-library(data.table)
-library(dplyr)
-library(stringr)
-library(kableExtra)
-library(rdrop2)
-library(utils)
-library(readr)
-library(webshot)
-library(tibble)
-library(scales)
-library(ggplot2)
-library(ggiraphExtra)
-library(viridis)
-library(scales)
-library(combinat)
-library(RColorBrewer)
-library(flextable)
-library(cowplot)
-library(shinycssloaders)
-library(tinytex)
-
-# Modules ----
-source("./Modules/tourPanelUI.R") #The story map user interface
-source("./Modules/tourPanel.R") #The story map server code
-source("./Modules/mapUI.R")
-source("./Modules/map.R")
-source("./Modules/ddownBttnUI.R")
-source("./Modules/ddownBttn.R")
-source("./Modules/appStarPlotUI.R")
-source("./Modules/appStarPlot.R")
-source("./Modules/xyPlotUI.R")
-source("./Modules/xyPlot.R")
-source("./Modules/reportUI.R")
-source("./Modules/report.R")
-source("./Modules/Table.R")
-source("./Modules/TableUI.R")
-
-# Other Code -----
-source("www/code/tourStep.R")
-source("www/code/myicon.R")
-source("www/code/radarplot.R")
-source("www/code/xyplot.R")
-source("./www/report/mapFunction.R")
-
-
-#SETUP OPTIONS (GO THROUGH)
-# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+#SETUP OPTIONS (GO THROUGH) ----
+webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.reactlog=F)
 options(shiny.jquery.version = 1)
 loginMenu = F
-reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus=T  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+
+# Libraries ----
+#Shiny stuff
+  library(shiny)
+  library(shinyWidgets)
+  library(shinythemes)
+  library(htmltools)
+  library(htmlwidgets)
+  library(bsplus)
+  library(shinyjs)
+  library(webshot)
+  library(flextable)
+  library(shinycssloaders)
+  library(tinytex)
+
+#Map Stuff
+  library(leaflet)
+  library(leafem)
+  library(leaflet.extras)
+  # library(mapview)
+  library(sf)
+
+#Markdown Stuff
+  library(markdown)
+  library(knitr)
+  library(rmarkdown)
+  library(kableExtra)
+
+#Data and wrangling Stuff
+  library(data.table)
+  library(dplyr)
+  library(stringr)
+  library(rdrop2)
+  library(utils)
+  library(readr)
+  library(tibble)
+  library(scales)
+  library(tidyselect)
+
+#Plot Stuff
+  library(plotly)
+  library(ggplot2)
+  library(ggiraphExtra)
+  library(viridis)
+  library(scales)
+  library(RColorBrewer)
+  library(cowplot)
+
+# Modules ----
+  source("./Modules/tourPanelUI.R") #The story map user interface
+  source("./Modules/tourPanel.R") #The story map server code
+  source("./Modules/mapUI.R")
+  source("./Modules/map.R")
+  source("./Modules/ddownBttnUI.R")
+  source("./Modules/ddownBttn.R")
+  source("./Modules/appStarPlotUI.R")
+  source("./Modules/appStarPlot.R")
+  source("./Modules/xyPlotUI.R")
+  source("./Modules/xyPlot.R")
+  source("./Modules/reportUI.R")
+  source("./Modules/report.R")
+  source("./Modules/Table.R")
+  source("./Modules/TableUI.R")
+
+# Other Code -----
+  source("www/code/tourStep.R")
+  source("www/code/myicon.R")
+  source("www/code/radarplot.R")
+  source("www/code/xyplot.R")
+  source("./www/report/mapFunction.R")
 
 
 # Global Resources ----
@@ -151,21 +159,6 @@ reportStatsStatus=F    #Keep track of stats globally (T) (e.g. from Dropbox) or 
   pa$tile2url <- ifelse(!is.na(pa$tile2),file.path(tiledir,paste0(pa$tile2,"/{z}/{x}/{y}.png")),NA)
   pa$swipe <- ifelse(!is.na(pa$tile1) & !is.na(pa$tile2),T,F)
   
-  
-  # Tile info for local tiles: UNCOMMENT FOR LOCAL TILES: -----
-  # tiledir = "C:/Users/jbeckers/Data/AdaptWestApp_TMPDIR/tiles" #USE THIS FOR LOCAL TILES
-  # tilelist <- fread("./tilelist.txt")
-  # tilelist$tileSubdir <- file.path(tiledir,tilelist$tileName) #FOR LOCAL TILES
-  # tilevect <- tilelist$tileName
-  # names(tilevect) <- tilelist$tileGroup
-  # for (i in 1:nrow(tilelist)) {
-  #   addResourcePath(prefix=tilelist$tileName[i],directoryPath = tilelist$tileSubdir[i])
-  #   tilelist$tileSubdir[i] <- paste0("/",tilelist$tileName[i],"/{z}/{x}/{y}.png")
-  # }
-  # y2y$tile1url <- paste0("/",y2y$tile1,"/{z}/{x}/{y}.png")
-  # y2y$tile2url <- paste0("/",y2y$tile2,"/{z}/{x}/{y}.png")
-  # pa$tile1url <- paste0("/",pa$tile1,"/{z}/{x}/{y}.png")
-  # pa$tile2url <- paste0("/",pa$tile2,"/{z}/{x}/{y}.png")
   
   
   # Tile info for local tiles: UNCOMMENT FOR LOCAL TILES: -----
