@@ -13,14 +13,11 @@ xyPlot <- function(input, output, session,data,data2,namecol,offset=0,pa=F,live=
     # data <- data %>% select(starts_with(xvar()),starts_with(yvar()),namecol) %>% mutate_at(.vars=1:2,funs(as.numeric)) %>% st_drop_geometry()
     data <- data %>% st_drop_geometry()
     data2<- data2 %>% st_drop_geometry()
-    # data2 <- data2 %>% select(starts_with(xvar()),starts_with(yvar()),namecol) %>% mutate_at(.vars=1:2,funs(as.numeric)) %>% st_drop_geometry()
     sctplot <- xyplot(data = data, data2=data2, xvar = xvar(), yvar = yvar(),xvarname=xvarname,yvarname=yvarname,nam=namecol,offset=offset,pa=pa,live=live)
     if(isTRUE(live)){
       output$xyPlot <- renderPlotly(sctplot)
     } else {output$xyPlot <- renderPlot(sctplot)}
   } else if (!is.null(data) & !is.null(data2) & xvar() == yvar()) {
-    # data <- data %>% select(starts_with(xvar()),namecol) %>% mutate_at(.vars=1,funs(as.numeric)) %>% st_drop_geometry()
-    # data2 <- data2 %>% select(starts_with(xvar()),namecol) %>% mutate_at(.vars=1,funs(as.numeric)) %>% st_drop_geometry() 
     data <- data %>% st_drop_geometry()
     data2<- data2 %>% st_drop_geometry()
     sctplot <- xyplot(data = data,data2 = data2, xvar = xvar(), yvar = xvar(),xvarname=xvarname,yvarname=xvarname,nam=namecol,offset=offset,pa=pa,live=live)
@@ -28,14 +25,13 @@ xyPlot <- function(input, output, session,data,data2,namecol,offset=0,pa=F,live=
       output$xyPlot <- renderPlotly(sctplot)
     } else {output$xyPlot <- renderPlot(sctplot)}
   } else if (!is.null(data) & is.null(data2) & xvar() != yvar()) {
-    # data <- data %>% select(starts_with(xvar()),starts_with(yvar()),namecol) %>% mutate_at(.vars=1:2,funs(as.numeric)) %>% st_drop_geometry()
+
     data <- data %>% st_drop_geometry()
     sctplot <- xyplot(data = data, xvar = xvar(), yvar = yvar(),xvarname=xvarname,yvarname=yvarname,data2=NULL,nam=namecol,offset=offset,pa=pa,live=live)
     if(isTRUE(live)){
       output$xyPlot <- renderPlotly(sctplot)
     } else {output$xyPlot <- renderPlot(sctplot)}
   } else if (!is.null(data) & is.null(data2) & xvar() == yvar()) {
-    # data <- data %>% select(starts_with(xvar()),namecol) %>% mutate_at(.vars=1,funs(as.numeric)) %>% st_drop_geometry()
     data <- data %>% st_drop_geometry()
     sctplot <- xyplot(data = data, xvar = xvar(), yvar = xvar(),xvarname=xvarname,yvarname=xvarname,data2=NULL,nam=namecol,offset=offset,pa=pa,live=live)
     if(isTRUE(live)){

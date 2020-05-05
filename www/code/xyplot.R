@@ -5,28 +5,28 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
   }
   if(isFALSE(live)){
     if (!is.null(data2)) {
-    col2 <- ggplotColours(n=(nrow(data2)+offset))[(1+offset):(offset+nrow(data2))]
-    if(isFALSE(pa)){
-      data[[nam]]<-" Surrounding Ecoregion "
-      greys="grey"
-    } else {
-      data[[nam]]<-" Surrounding Biome(s) "
-      greys="grey"
-    }
-    data<-bind_rows(data,data2)
-    if(isFALSE(word)){
-      p<- ggplot()+
-        geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys,col2),name="Legend")+
-        xlab(xvarname)+
-        ylab(yvarname)+
-        theme_bw()
-    } else {
-      p<- ggplot()+
-        geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+scale_color_manual(values=c(greys,col2),name="Legend")+
-        xlab(xvarname)+
-        ylab(yvarname)+
-        theme_bw()
-    }
+      col2 <- ggplotColours(n=(nrow(data2)+offset))[(1+offset):(offset+nrow(data2))]
+      if(isFALSE(pa)){
+        data[[nam]]<-" Surrounding Ecoregion "
+        greys="grey"
+      } else {
+        data[[nam]]<-" Surrounding Biome(s) "
+        greys="grey"
+      }
+      data<-bind_rows(data,data2)
+      if(isFALSE(word)){
+        p<- ggplot()+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys,col2),name="Legend")+
+          xlab(xvarname)+
+          ylab(yvarname)+
+          theme_bw()
+      } else {
+        p<- ggplot()+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+scale_color_manual(values=c(greys,col2),name="Legend")+
+          xlab(xvarname)+
+          ylab(yvarname)+
+          theme_bw()
+      }
     } else {
       if(isFALSE(pa)){
         data[[nam]]<-" Surrounding Ecoregion "
@@ -37,13 +37,13 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
       }
       if(isFALSE(word)){
         p<- ggplot()+
-          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+scale_color_manual(values=c(greys),name="Legend")+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=3)+#scale_color_manual(values=greys,name="Legend")+
           xlab(xvarname)+
           ylab(yvarname)+
           theme_bw()
       } else {
         p<- ggplot()+
-          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+scale_color_manual(values=c(greys),name="Legend")+
+          geom_point(data=data,aes_string(x=xvar,y=yvar,color=nam),show.legend=T,size=1)+#scale_color_manual(values=greys,name="Legend")+
           xlab(xvarname)+
           ylab(yvarname)+
           theme_bw()
@@ -77,7 +77,7 @@ xyplot <- function(data,data2,xvar, yvar,xvarname,yvarname,nam,offset=0,pa=F,liv
                    legend = list(orientation = 'h',x = 0, y = -0.25,yanchor="top",
                                  tracegroupgap=5)
                   )
-    } else{
+    } else {
       if(isFALSE(pa)){
         data$Group<-" Surrounding Ecoregion "
         greys="grey"

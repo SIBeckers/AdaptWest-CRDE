@@ -6,24 +6,24 @@
 source("global.R")
 
 function(input, output, session) {
-
-  
-  #Run once ----  
+  #A. Create the maps and buttons for the explorers, just runs once ----  
   observeEvent(input$tabs=="paexpTab",{
-    shinyjs::click("paexpacc-0-heading")
+    shinyjs::click("paexpacc-0-heading") # Close the about section initially
     callModule(map, "paexpMap", OSM=F) #Protected Areas Explorer Map
     callModule(ddownBttn,"paexpMapBttn") #Settings button on Protected Areas Explorer Map
   },once = T)  
   
   observeEvent(input$tab=="climexpTab",{
-    shinyjs::click("climexpacc-0-heading")
+    shinyjs::click("climexpacc-0-heading") # Close the about section initially
     callModule(map, "climexpMap",OSM=F) # Climate Metrics Explorer Map server logic
     callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
   },once = T)
   
-  # 5). Home Page Logic ---- 
+  #B.  Tab Logic ----- 
   observeEvent(input$tabs,{
     if (input$tabs == "homeTab") {
+      #1. Home Tab Logic -----
+      #Setup links to the various tabs using the images and text on the home page. Alternative to using a(href="").
       shinyjs::onclick("climexpimg",  updateNavbarPage(session, inputId = "tabs", selected = "climexpTab"))
       shinyjs::onclick("climtourimg",  updateNavbarPage(session, inputId = "tabs", selected = "climtourTab"))
       shinyjs::onclick("climtourLink",  updateNavbarPage(session, inputId = "tabs", selected = "climtourTab"))
@@ -34,55 +34,75 @@ function(input, output, session) {
       shinyjs::onclick("paexpLink",  updateNavbarPage(session, inputId = "tabs", selected = "paexpTab"))
       
     } else if (input$tabs == "climtourTab") {
-    # 6). Metric Tour Logic----
-      # climtourView <- reactiveValues(view = NULL,opacity = NULL)
-      # isSwipemetric <- reactiveVal(NULL)
-      y2ytour <- callModule(tourPanel, "y2ytour", tourName = "y2y")
-      shinyjs::click("y2ytour-stopBttn")
-      callModule(ddownBttn,"y2ymapBttn") #Settings button on Y2Y Tour Map
-      callModule(map, "y2ymap", swipe = F,OSM=F)
-      proxy<-leafletProxy("y2ymap-map") 
-      proxy %>% setView(-122.8271,55.71267,5)
-      observeEvent(input$"y2ymap-snapshot",{
-        mapshot(proxy,file="AdaptWest-CRDE-CM_Snapshot.png",removecontrols=c("zoomControl","layersControl","homeButton","global"))
+    # 2). Metric Tour Logic----
+      y2ytour <- callModule(tourPanel, "y2ytour", tourName = "y2y") # Initiate the tour
+      shinyjs::click("y2ytour-stopBttn") # Simulate a click on the stop botton to start it at the beginning, each time.
+      callModule(ddownBttn,"y2ymapBttn") # Settings button on Y2Y Tour Map
+      callModule(map, "y2ymap", swipe = F,OSM=F,view=c(-122.8271,55.71267,5)) # Create the starting map for the tour.
+      isSwipemetric(F) #Start the maps with a non-swipe map.
+      observeEvent(y2ytour$id(),{runjs("climtourSide.scrollTo(0,0)")}) #Make sure the tour scrolls to the top each time it moves to a new page.
+      #Get the current map layer opacity and update the map.
+      observeEvent(input$"y2ymapBttn-opacity",{
+          isSwipemetric(tourStep(mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),rSwipe = isSwipemetric(),
+                               shpdata=y2yshp, opac = input$"y2ymapBttn-opacity",OSM=F))
       })
-      isSwipemetric(F)
-      observeEvent(y2ytour$id(),{runjs("window.scrollTo(0,0)")})
+      #Observe changes in isSwipeMetric, which is set by tour step (which is controlled by the tour buttons)
       observe({
-        if (!is.null(input$"y2ymap-map_bounds")) {
-          climtourView$view <- input$"y2ymap-map_bounds"}
-        })
-      observe({
-        if (!is.null(input$"y2ymapBttn-opacity")) {
-          climtourView$opacity <- input$"y2ymapBttn-opacity"}
+        isSwipemetric(
+          tourStep(
+            mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),
+            rSwipe = isSwipemetric(),shpdata=y2yshp, 
+            opac = input$"y2ymapBttn-opacity",OSM=F
+          )
+        )
       })
-      observe({isSwipemetric(tourStep(mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),rSwipe = isSwipemetric(),view = isolate(climtourView$view),
-                                      shpdata=y2yshp, opac = climtourView$opacity,OSM=F))
-        })
     
     } else if (input$tabs == "patourTab") {
-      #7). PA Tour Logic ----
-      # patourView <- reactiveValues(view = NULL,opacity = NULL)
-      # isSwipepa <- reactiveVal(NULL)
-      patour <- callModule(tourPanel, "patour", tourName = "pa")
-      shinyjs::click("patour-stopBttn")
-      callModule(map,"pamap", OSM = F)
-      proxy <- leafletProxy(mapId = "pamap-map")
+      #3). PA Tour Logic ----
+      patour <- callModule(tourPanel, "patour", tourName = "pa") #Start the pa tour panel
+      shinyjs::click("patour-stopBttn") #Stop the tour so it starts at first slide each time.
+      callModule(map,"pamap", OSM = F) #Initiate the tour map
+      proxy <- leafletProxy("pamap-map") #setup a proxy object so we can modify the map below.
       callModule(ddownBttn,"pamapBttn") #Settings button on Protected Areas Tour Map
-      observeEvent(patour$id(),{runjs("window.scrollTo(0,0)")})
-      isSwipepa(F)
+      observeEvent(patour$id(),{runjs("patourSide.scrollTo(0,0)")}) #Make sure tour text scrolls to the top each time the page turns
+      isSwipepa(F) #Initialize the map as a non-swipe map.
+      #Get the current map layer opacity and update the map.
+      observeEvent(input$"pamapBttn-opacity",{
+        isSwipepa(tourStep(mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),shpdata=pashp,#view=isolate(patourView$view),
+                           opac=input$"pamapBttn-opacity", OSM = T, showAll=F))
+      })
+      #Observe changes in isSwipepa, which is set by tour step (which is controlled by the tour buttons)
       observe({
-        if (!is.null(input$"pamap-map_bounds")) {
-          patourView$view = input$"pamap-map_bounds"}
+        isSwipepa(
+          tourStep(
+            mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),
+            shpdata=pashp,opac=input$"pamapBttn-opacity", OSM = T, showAll=F
+          )
+        )
+        #Also, if there was a tile layer selected, add it back in.
+        proxy %>% 
+          clearGroup("metrics")
+        if (input$patourLayer != "") {
+          data <- tilelist[tileName %in% input$patourLayer,]
+          proxy %>%
+            addTiles(
+              urlTemplate = data$tileSubdir,
+              attribution = data$tileAttribution,
+              group = "metrics",
+              layerId = data$tileGroup,
+              options = tileOptions(
+                tms = T,
+                minZoom = minZoom,
+                maxZoom = maxZoom,
+                unloadInvisibleTiles = T,
+                noWrap = T,
+                opacity = input$"pamapBttn-opacity",
+                zIndex = 9000
+              )
+            )
+        }
       })
-      observe({
-        if (!is.null(input$"pamapBttn-opacity")) {
-          patourView$opacity = input$"pamapBttn-opacity"}
-      })
-      observe({isSwipepa(tourStep(mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),view=isolate(patourView$view),shpdata=pashp,
-                                opac=patourView$opacity, OSM = T, showAll=T))
-      })
-     
+      #If the user changes the tiles, change the tiles.
       observe({
         proxy %>% 
           clearGroup("metrics")
@@ -108,9 +128,13 @@ function(input, output, session) {
       })
   
     } else if (input$tabs == "climexpTab") {
-      
-      #8). Metric Explorer ----
-      #8a) Setup ----
+      #4). Metric Explorer ----
+      #4a) Setup ----
+      #Watch for a click to another tab, if so we have to clear some stuff off this
+      #tab because it isn't cleared otherwise. We are being pretty explicit here
+      #and are probably forcing removal of things that are being removed normally
+      #anyways but I want to be sure. This basically makes it so a user can leave this
+      #tab and when they come back it is fresh, like they've never seen it before.
       observeEvent(input$tabs,{
         removeUI(selector = "div:has(>#climExpB2E)", session = session)
         removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
@@ -132,9 +156,9 @@ function(input, output, session) {
         session$sendCustomMessage(type = "resetValue", message = "climexpMap-map_shape_click")
         mpclickObs$destroy()
         polygroup("ecoregions")
-        print("EXEC")
       },ignoreInit=T,ignoreNULL=T,priority=2)
-      
+      #A function to select multiple polygons on the map, including clicks on preselected
+      #polygons so that we can unselect them.
       selectMultiPolys <- function(mapId,shpClick=NULL,
                                    data = y2yshp[y2yshp$TOURID %in% y2y$tourId[y2ytour$id()],],
                                    idfield = "TOURID", addPolys = T, newId = "mp_", nameField = NULL, group = NULL) {
@@ -148,9 +172,6 @@ function(input, output, session) {
         multipolys <- multipolys[match(clickedIds$ids,multipolys[[idfield]]),]
         if (anyDuplicated(isolate(clickedIds$ids))) {
           dups <- clickedIds$ids[duplicated(clickedIds$ids)]
-          foo<-clickedIds$ids[clickedIds$ids==dups]
-          print(paste0("Calc dups:", dups))
-          print(clickedIds$ids[clickedIds$ids==dups])
           clickedIds$ids <- clickedIds$ids[clickedIds$ids != dups]
           multipolys <- multipolys[multipolys[[idfield]] != dups, ]
           proxy %>% removeShape(paste0(newId,dups))
@@ -159,11 +180,8 @@ function(input, output, session) {
         if (is.null(nameField)) {
           nameField = idfield
         }
-        
         #Do we actually want to add the polygon to the map? or just capture them?
         if (isTRUE(addPolys)) {
-          print(multipolys)
-          print(clickedIds$ids)
           if(!is.null(multipolys)){
             if(nrow(multipolys)>0){
               proxy %>%
@@ -188,12 +206,13 @@ function(input, output, session) {
         return(multipolys)
       }
       
-      callModule(map, "climexpMap",OSM=F) # Climate Metrics Explorer Map server logic
+      
+      callModule(map, "climexpMap",OSM=F) # Initiate the climate metrics explorer map.
       callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
       proxy <- leafletProxy("climexpMap-map") # Represents the map so that we can make changes to it
       proxy %>% addMapPane(name = "swds", zIndex=1000)
       polygroup("ecoregions")
-      #8b) Add tiles----
+      #4b) Add tiles to map ----
       tobs<-observe({
         proxy %>% 
           clearGroup("metrics") 
@@ -296,144 +315,30 @@ function(input, output, session) {
         }
       })
      
-      #8c) Get All button press in Outputs ----
-      gaspObs<-observeEvent(input$"climexp-getallSP",{
-        multiSelected_wds(rwds())
-        msws<-isolate(multiSelected_wds())
-        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
-        clickedIds$ids<-msws$FIDNUM2
-        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
-        edata <- eregion$edata
-        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                          'Tree Carbon','Soil Carbon')
-        spdat <- rbind(edata,mswds)
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
-        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
-        proxy %>%
-          addPolygons(
-            data = msws,
-            fillColor = "red",
-            fillOpacity = 0.05,
-            weight = 5,
-            color = "black",
-            stroke = T,
-            label = ~NEWNAME,
-            layerId = ~paste0("mp_",FIDNUM2),
-            group = "swds",
-            highlightOptions=highlightOptions(
-              color="white",weight=1.5)
-          )
+      
+      
+      #4c) Clear Tiles Button Logic ----
+      observeEvent(input$clearTileFill,{
+        if(is.null(input$clearTileFill)){return()}
+        updateSelectizeInput(
+          session = session,
+          inputId = "climExpLayer",
+          selected= NULL,
+          choices = c("Select metric: " = "", tilevect),
+          options = list(maxOptions = 12)
+        )
+        proxy %>% removeControl("climexpTileLegend")
       })
-      
-      gaspxyObs<-observeEvent(input$"climexp-getallSPxy",{
-        multiSelected_wds(rwds())
-        msws<-isolate(multiSelected_wds())
-        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
-        clickedIds$ids<-msws$FIDNUM2
-        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
-        edata <- eregion$edata
-        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                          'Tree Carbon','Soil Carbon')
-        spdat <- rbind(edata,mswds)
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
-        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
-        proxy %>%
-          addPolygons(
-            data = msws,
-            fillColor = "red",
-            fillOpacity = 0.05,
-            weight = 5,
-            color = "black",
-            stroke = T,
-            label = ~NEWNAME,
-            layerId = ~paste0("mp_",FIDNUM2),
-            group = "swds",
-            highlightOptions=highlightOptions(
-              color="white",weight=1.5)
-          )
-      })
-      
-      gasptabObs<-observeEvent(input$"climtable-getallSPtab",{
-        multiSelected_wds(rwds())
-        msws<-isolate(multiSelected_wds())
-        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
-        clickedIds$ids<-msws$FIDNUM2
-        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
-        edata <- eregion$edata
-        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                          'Tree Carbon','Soil Carbon')
-        spdat <- rbind(edata,mswds)
-        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
-        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
-        proxy %>%
-          addPolygons(
-            data = msws,
-            fillColor = "red",
-            fillOpacity = 0.05,
-            weight = 5,
-            color = "black",
-            stroke = T,
-            label = ~NEWNAME,
-            layerId = ~paste0("mp_",FIDNUM2),
-            group = "swds",
-            highlightOptions=highlightOptions(
-              color="white",weight=1.5)
-          )
-      })
-      
-      #8d) Clear All button press in Output ----
-      observeEvent(input$"climexp-resetSP",{
-        multiSelected_wds(NULL)
-        proxy %>% clearGroup('swds')
-        mswds<-NULL
-        spdat<-NULL
-        clickedIds$ids<-NULL
-        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
-        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
-        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
-        callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
-      })
-      
-      observeEvent(input$"climexp-resetSPxy",{
-          multiSelected_wds(NULL)
-          proxy %>% clearGroup('swds')
-          mswds<-NULL
-          spdat<-NULL
-          clickedIds$ids<-NULL
-          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
-          removeUI(selector = "div:has(>#climtable", session = session)
-          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
-          callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
-          callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
-        })
-      
-      observeEvent(input$"climtable-resetSPtab",{
-        multiSelected_wds(NULL)
-        proxy %>% clearGroup('swds')
-        mswds<-NULL
-        spdat<-NULL
-        clickedIds$ids<-NULL
-        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
-        removeUI(selector = "div:has(>#climtable", session = session)
-        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
-        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
-        callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
-      })
-      
-      
-      #8e Add polygons and fill by mean value ----
-      observeEvent(polygroup(),{
-        observeEvent(
-          {input$climFillPolys
+      #4d) Add polygons and fill by mean value ----
+      observeEvent(
+        #Watch for changes in which variable should be shown, the desired opacity
+        #of the polygon fill or for changes in which polygons we are looking at.
+        {input$climFillPolys
           input$"climexpMapBttn-polyopacity"
-          },{
-          if(polygroup() == "ecoregions" & input$climFillPolys != ""){
+          polygroup()
+        },{
+          pgroup<-isolate(polygroup()) 
+          if(pgroup == "ecoregions" & input$climFillPolys != ""){
             nam<-names(polyfillvect)[which(polyfillvect==input$climFillPolys)]
             var<-paste0(input$climFillPolys,"3")
             cols<-colorNumeric(
@@ -442,7 +347,7 @@ function(input, output, session) {
               reverse=F
             )
             proxy %>%
-              clearGroup("ecoregions") %>%
+              clearGroup("ecoregions") %>% clearGroup("wds") %>%
               addPolygons(
                 data=ecos,
                 fillColor = ~cols(rescale(na.omit(ecos[[var]]),to=c(100,0))),
@@ -467,9 +372,9 @@ function(input, output, session) {
                 className= "info legend polyLegend",
                 labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(na.omit(ecos[[var]])))), decreasing = T))
               )
-          } else if(polygroup() == "ecoregions" & input$climFillPolys == ""){
+          } else if(pgroup == "ecoregions" & input$climFillPolys == ""){
             proxy %>%
-              clearGroup("ecoregions") %>%
+              clearGroup("ecoregions") %>% clearGroup("wds") %>%
               addPolygons(
                 data=ecos,
                 fillColor = NA,
@@ -483,25 +388,25 @@ function(input, output, session) {
                 group = "ecoregions",
                 highlightOptions=highlightOptions(
                   color="white",weight=2.5)
-              )
-          } else if (polygroup()=="wds" & input$climFillPolys =="") {
-              proxy %>%
-                clearGroup("ecoregions") %>%
-                clearGroup("wds") %>%
-                addPolygons(
-                  data = rwds(),
-                  fillColor = NA,
-                  fillOpacity=0,
-                  weight = 1,
-                  color = "blue",
-                  stroke = T,
-                  label = ~htmlEscape(NEWNAME),
-                  layerId = ~FIDNUM2,
-                  group = "wds",
-                  highlightOptions=highlightOptions(
-                    color="white",weight=2.5)
-                )
-          } else if (polygroup()=="wds" & input$climFillPolys != ""){
+              )  %>% removeControl("climexpPolyLegend")
+          } else if (pgroup == "wds" & input$climFillPolys =="") {
+            proxy %>%
+              clearGroup("ecoregions") %>%
+              clearGroup("wds") %>%
+              addPolygons(
+                data = rwds(),
+                fillColor = NA,
+                fillOpacity=0,
+                weight = 1,
+                color = "blue",
+                stroke = T,
+                label = ~htmlEscape(NEWNAME),
+                layerId = ~FIDNUM2,
+                group = "wds",
+                highlightOptions=highlightOptions(
+                  color="white",weight=2.5)
+              )  %>% removeControl("climexpPolyLegend")
+          } else if (pgroup == "wds" & input$climFillPolys != ""){
             var<-input$climFillPolys
             nam<-names(polyfillvect)[which(polyfillvect==var)]
             if(is.null(rwds())){return()}
@@ -512,6 +417,7 @@ function(input, output, session) {
               reverse=F
             )
             proxy %>%
+              clearGroup("ecoregions") %>%
               clearGroup("wds") %>%
               addPolygons(
                 data = data,
@@ -537,108 +443,169 @@ function(input, output, session) {
                 className= "info legend polyLegend",
                 labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(na.omit(data[[var]])))), decreasing = T))
               )
-          } else if(is.null(polygroup()) | is.null(input$climFillPolys)){
-          }
+          } 
         })
+      
+      #4e) Clear Polygon Fill Button Logic ----
+      observeEvent(input$clearPolyFill,{
+        if(is.null(input$clearPolyFill)){return()}
+        updateSelectizeInput(
+          session = session,
+          inputId = "climFillPolys",
+          selected= NULL,
+          choices = c("Fill visible polygons with ..." = "",
+                      polyfillvect),
+          options = list(maxOptions = 12)
+        )
       })
-        
-      #8f) Map Polygon Click Logic----
-      mpclickObs<-observeEvent(input$"climexpMap-map_shape_click", {
-        click <- input$"climexpMap-map_shape_click"
-        print(is.reactive(click))
-        #If the polygon is an ecoregion:
-          # add starplot user interface
-          # add return to ecoregions button
-          # get the ecoregion data for the clicked polygon
-        if (click$group == "ecoregions") {
-          # 8e) i. If the clicked polygon is an ecoregion ----
-          
-          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
-          output$climtablediv <- renderUI(div(id="climtable",TableUI("climtable",all=T,reset=T)))
-          output$b2ecoBttn <- renderUI(
-            div(
-              class = "b2eBttn",
-              actionBttn(
-                inputId = "climExpB2E",
-                label = "Back to Ecoregions",
-                icon = icon("undo", class = "fas fas-lg", lib = "font-awesome"),
-                color = "primary", 
-                size = "md",
-                style = "unite",
-                block = F
-              )
-            )
+      
+      #4f) Get All button press in Output accordion slots ----
+      #This observer watches the getALL button in the starplot panel
+      gaspObs<-observeEvent(input$"climexp-getallSP",{
+        multiSelected_wds(rwds()) #Get all the data
+        msws<-isolate(multiSelected_wds()) #isolate that data
+        #update the starplot and xyplot
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
+        #Convert the data for plotting
+        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
+        edata <- eregion$edata
+        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                          'Tree Carbon','Soil Carbon')
+        spdat <- rbind(edata,mswds)
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
+        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
+        #Plot the polygons on the map
+        proxy %>%
+          addPolygons(
+            data = msws,
+            fillColor = "red",
+            fillOpacity = 0.05,
+            weight = 5,
+            color = "black",
+            stroke = T,
+            label = ~NEWNAME,
+            layerId = ~paste0("mp_",FIDNUM2),
+            group = "swds",
+            highlightOptions=highlightOptions(
+              color="white",weight=1.5)
           )
-          #e) Get the ecoregion data
-          eregion$edata <- ecos[which(ecos$ecoreg3 == click$id),]
-          min <- l3min[which(l3min$ecr3_id ==eregion$edata$ecoreg3),2:9]
-          max <- l3max[which(l3max$ecr3_id == eregion$edata$ecoreg3),2:9]
-          min$NEWNAME <- "MIN"
-          max$NEWNAME <- "MAX"
-          eregion$bds <- st_bbox(eregion$edata)
-          #e) Get the watershed data for watersheds within that ecoregion.
-          bds <- unname(eregion$bds)
-          rwds(wds[wds$ecoreg3 == eregion$edata$ecoreg3,])
-          foo <- isolate(rwds())
-          # e) Fix any missing name issues
-          if (any(is.na(foo$NEWNAME))) {
-            foo$NEWNAME <- paste0("Watershed: ", foo$FIDNUM2)
-            rwds(foo)
-          }
-          #e)Fix any duplicated name issues
-          if(any(duplicated(foo$NEWNAME))){
-            foo$NEWNAME[duplicated(foo$NEWNAME)]<-paste0(foo$NEWNAME[duplicated(foo$NEWNAME)],"_B")
-            rwds(foo)
-          }
-          
-          #e) Remove ecoregion polygons and add the watershed polygons
-            proxy %>% 
-              flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4]) %>%
-              clearGroup("ecoregions")
-          polygroup("wds")
-            
-          #e) Do some data wrangling to get the starplot to plot
-          eregion$edata <- eregion$edata %>% select(intact3,elevdiv3,fwvelref3,bwvelref3,brdref3,treref3,treec3,soilc3) %>% st_drop_geometry() %>% mutate_all(as.numeric)
-          names(eregion$edata) <- c("intact","elevdiv","fwvelref" ,"bwvelref", "brdref","treref","treec","soilc")
-          eregion$edata$NEWNAME <-  "Ecoregion Avg"
-          
-          eregion$edata <- rbind(eregion$edata,min,max)
-          names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                            'Tree Carbon','Soil Carbon',"Name")
-          callModule(xyPlot,"climexp",data=rwds(),data2= NULL, namecol="NEWNAME",offset=1)
-          callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
-          callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
-          rm(click)
-          # polygroup("wds")
-          #8e) ii. If the clicked polygon is a watershed ----
-        } else if (click$group == "wds" | click$group == "swds" ) {
-          
-          multiSelected_wds(
-            selectMultiPolys(mapId = "climexpMap-map",shpClick = isolate(click), data = rwds(),
-                             idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
-          )
-          msds<-isolate(multiSelected_wds())
-          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msds)*15)))))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)))))
-          
-          mswds <- st_drop_geometry(msds) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
-          edata <- eregion$edata
-          names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
-                            'Tree Carbon','Soil Carbon')
-          
-          spdat <- rbind(edata,mswds)
-          if (nrow(spdat) > 1){
-            callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F)
-            callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
-            callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
-          }
-          rm(click)
-          polygroup("wds")
-        }
-        
       })
-        #8f) If the back to ecoregions button is pressed ----
+      #This observer watches the getALL button in the xyplot panel
+      gaspxyObs<-observeEvent(input$"climexp-getallSPxy",{
+        multiSelected_wds(rwds()) #Get all the data
+        msws<-isolate(multiSelected_wds()) #isolate that data
+        #update the starplot and xyplot
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
+        #Convert the data for plotting
+        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
+        edata <- eregion$edata
+        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                          'Tree Carbon','Soil Carbon')
+        spdat <- rbind(edata,mswds)
+        #plot the data
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
+        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
+        #Add the polygons to the map.
+        proxy %>%
+          addPolygons(
+            data = msws,
+            fillColor = "red",
+            fillOpacity = 0.05,
+            weight = 5,
+            color = "black",
+            stroke = T,
+            label = ~NEWNAME,
+            layerId = ~paste0("mp_",FIDNUM2),
+            group = "swds",
+            highlightOptions=highlightOptions(
+              color="white",weight=1.5)
+          )
+      })
+      #This observer watches the getAll button in the table panel.
+      gasptabObs<-observeEvent(input$"climtable-getallSPtab",{
+        multiSelected_wds(rwds()) #Get all the data
+        msws<-isolate(multiSelected_wds()) #isolate that data
+        #update the starplot and xyplot
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
+        #Convert the data for plotting
+        mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
+        edata <- eregion$edata
+        names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                          'Tree Carbon','Soil Carbon')
+        spdat <- rbind(edata,mswds)
+        #plot the data
+        callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
+        callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
+        #Add the polygons to the map.
+        proxy %>%
+          addPolygons(
+            data = msws,
+            fillColor = "red",
+            fillOpacity = 0.05,
+            weight = 5,
+            color = "black",
+            stroke = T,
+            label = ~NEWNAME,
+            layerId = ~paste0("mp_",FIDNUM2),
+            group = "swds",
+            highlightOptions=highlightOptions(
+              color="white",weight=1.5)
+          )
+      })
+      
+      #4g) Clear All button press in Output ----
+      #Observes the clear all button press in the starplot panel
+      observeEvent(input$"climexp-resetSP",{
+        multiSelected_wds(NULL) #Clear the selected polygons reactive variable
+        proxy %>% clearGroup('swds') #Clear the selected polygons from the map
+        mswds<-NULL  
+        spdat<-NULL
+        clickedIds$ids<-NULL #Make sure our variable of clicked polygon ides is also cleared
+        #Reinitialize the starplot and xy plot so we can reset their heights
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        #Redraw the starplot, xy plot, and table with just the ecoregion average and the non-selected polygon data in the xy plot.
+        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
+        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
+        callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
+      })
+      #Observes the clear all button press in the xy panel, otherwise same as above.
+      observeEvent(input$"climexp-resetSPxy",{
+        multiSelected_wds(NULL) 
+        proxy %>% clearGroup('swds')
+        mswds<-NULL
+        spdat<-NULL
+        clickedIds$ids<-NULL
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        removeUI(selector = "div:has(>#climtable", session = session)
+        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
+        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
+        callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
+      })
+      #Observes the clear all button in the table panel, otherwise same as above.
+      observeEvent(input$"climtable-resetSPtab",{
+        multiSelected_wds(NULL)
+        proxy %>% clearGroup('swds')
+        mswds<-NULL
+        spdat<-NULL
+        clickedIds$ids<-NULL
+        output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        removeUI(selector = "div:has(>#climtable", session = session)
+        callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
+        callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
+        callModule(Table,"climtable",tabdat=eregion$edata[1,] %>% select(c(9,1:8)))
+      })
+      
+      
+      #4h) If the back to ecoregions button is pressed ----
       observeEvent(input$climExpB2E,{
         removeUI(selector = "div:has(>#climExpB2E)", session = session)
         removeUI(selector = "div:has(>#climexp-appStarPlot)", session = session)
@@ -658,60 +625,131 @@ function(input, output, session) {
           clearGroup("swds") %>%
           setView(lng = -100, lat = 55, zoom = 3)
       })
-      #8g) XYPlot logic ----
-      observeEvent(rwds(),{
-        if(!is.null(rwds())){
-          callModule(xyPlot,"climexp",data=rwds(),
-                     data2= NULL, namecol="NEWNAME",offset=1)
+      #4i) XYPlot logic ----
+      # observeEvent(rwds(),{
+      #   if(!is.null(rwds())){
+      #     callModule(xyPlot,"climexp",data=rwds(),
+      #                data2= NULL, namecol="NEWNAME",offset=1)
+      #   }
+      # })
+      # observeEvent(multiSelected_wds(),{
+      #   observeEvent(input$"climexp-X",{
+      #     if (is.null(multiSelected_wds())) {
+      #       callModule(xyPlot,"climexp",data=rwds(),
+      #                  data2= NULL, namecol="NEWNAME",offset=1)
+      #     } else {
+      #       callModule(xyPlot,"climexp",data=rwds(),
+      #                  data2= multiSelected_wds(), namecol="NEWNAME",offset=1)
+      #     }
+      #   })
+      #   observeEvent(input$"climexp-Y",{
+      #     if (is.null(multiSelected_wds())) {
+      #       callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME",offset=1)
+      #     } else {
+      #       callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME",offset=1)
+      #     }
+      #   })
+      # })
+
+      #4j) Map Polygon Click Logic----
+      mpclickObs<-observeEvent(input$"climexpMap-map_shape_click", {
+        click <- input$"climexpMap-map_shape_click"
+        #If the polygon clicked is an ecoregion:
+          # add starplot user interface
+          # add return to ecoregions button
+          # get the ecoregion data for the clicked polygon and switch to a view of it.
+        if (click$group == "ecoregions") {
+        # 4fi) Clicked polygon is ecoregion ----
+          #Generate the starplot,xyplot and table views, with a standard height
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+          output$climtablediv <- renderUI(div(id="climtable",TableUI("climtable",all=T,reset=T)))
+          #Generate a back to ecoregion button on the map when we are viewing watersheds
+          output$b2ecoBttn <- renderUI(
+            div(
+              class = "b2eBttn",
+              actionBttn(
+                inputId = "climExpB2E",
+                label = "Back to Ecoregions",
+                icon = icon("undo", class = "fas fas-lg", lib = "font-awesome"),
+                color = "primary", 
+                size = "md",
+                style = "unite",
+                block = F
+              )
+            )
+          )
+          #Get the ecoregion data
+          eregion$edata <- ecos[which(ecos$ecoreg3 == click$id),]
+          min <- l3min[which(l3min$ecr3_id ==eregion$edata$ecoreg3),2:9]
+          max <- l3max[which(l3max$ecr3_id == eregion$edata$ecoreg3),2:9]
+          min$NEWNAME <- "MIN"
+          max$NEWNAME <- "MAX"
+          eregion$bds <- st_bbox(eregion$edata)
+          #Get the watershed data for watersheds within that ecoregion.
+          bds <- unname(eregion$bds)
+          rwds(wds[wds$ecoreg3 == eregion$edata$ecoreg3,])
+          foo <- isolate(rwds()) #Hold the watersheds in a temporary variable
+          #Fix any missing name issues
+          if (any(is.na(foo$NEWNAME))) {
+            foo$NEWNAME <- paste0("Watershed: ", foo$FIDNUM2)
+            rwds(foo)
+          }
+          #Fix any duplicated name issues
+          if(any(duplicated(foo$NEWNAME))){
+            foo$NEWNAME[duplicated(foo$NEWNAME)]<-paste0(foo$NEWNAME[duplicated(foo$NEWNAME)],"_B")
+            rwds(foo)
+          }
+          #Remove ecoregion polygons and add the watershed polygons from the map
+            proxy %>% 
+              flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4]) %>%
+              clearGroup("ecoregions")
+          
+          #Do some data wrangling to get the starplot to plot
+          eregion$edata <- eregion$edata %>% select(intact3,elevdiv3,fwvelref3,bwvelref3,brdref3,treref3,treec3,soilc3) %>% st_drop_geometry() %>% mutate_all(as.numeric)
+          names(eregion$edata) <- c("intact","elevdiv","fwvelref" ,"bwvelref", "brdref","treref","treec","soilc")
+          eregion$edata$NEWNAME <-  "Ecoregion Avg"
+          eregion$edata <- rbind(eregion$edata,min,max)
+          names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                            'Tree Carbon','Soil Carbon',"Name")
+          #Create the plots with the ecoregion data.
+          print(rwds())
+          callModule(xyPlot, "climexp", data = isolate(rwds()), data2 = NULL, namecol = "NEWNAME", offset = 1) #WHY ISN'T THIS WORKING!
+          callModule(appStarPlot, "climexp", data = eregion$edata, namecol = "Name", removecols = NULL, live = T)
+          callModule(Table, "climtable", tabdat=eregion$edata[1,] %>% select(c(9, 1:8)))
+          polygroup("wds") #Set the polygon group to watersheds
+          #4fii) Clicked polygon is watershed----
+        } else if (click$group == "wds" | click$group == "swds" ) {
+          multiSelected_wds(
+            selectMultiPolys(mapId = "climexpMap-map",shpClick = isolate(click), data = rwds(),
+                             idfield = "FIDNUM2", addPolys = T, newId = "mp_",nameField = "NEWNAME",group = "swds")
+          )
+          msds<-isolate(multiSelected_wds())
+          output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msds)*15)))))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)))))
+          
+          mswds <- st_drop_geometry(msds) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
+          edata <- eregion$edata
+          names(mswds) <- c("Name",'Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
+                            'Tree Carbon','Soil Carbon')
+          
+          spdat <- rbind(edata,mswds)
+          if (nrow(spdat) > 1){
+            callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F)
+            callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
+            callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
+          }
+          # polygroup("wds")
         }
       })
-      
-      observeEvent(multiSelected_wds(),{
-        observeEvent(input$"climexp-X",{
-          if (is.null(multiSelected_wds())) {
-            callModule(xyPlot,"climexp",data=rwds(),
-                       data2= NULL, namecol="NEWNAME",offset=1)
-          } else {
-            callModule(xyPlot,"climexp",data=rwds(),
-                      data2= multiSelected_wds(), namecol="NEWNAME",offset=1)
-          }
-        })
-        observeEvent(input$"climexp-Y",{
-          if (is.null(multiSelected_wds())) {
-            callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME",offset=1)
-          } else {  
-            callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME",offset=1)
-          }
-        })
-      })
-      #8h) Clear Tiles ----
-      observeEvent(input$clearTileFill,{
-        if(is.null(input$clearTileFill)){return()}
-        updateSelectizeInput(
-          session = session,
-          inputId = "climExpLayer",
-          selected= NULL,
-          choices = c("Select metric: " = "", tilevect),
-          options = list(maxOptions = 12)
-        )
-        proxy %>% removeControl("climexpTileLegend")
-      })
-      #8i) Clear Polygon Fill ----
-      observeEvent(input$clearPolyFill,{
-        if(is.null(input$clearPolyFill)){return()}
-        updateSelectizeInput(
-          session = session,
-          inputId = "climFillPolys",
-          selected= NULL,
-          choices = c("Fill visible polygons with ..." = "",
-                      polyfillvect),
-          options = list(maxOptions = 12)
-        )
-        proxy %>% removeControl("climexpPolyLegend")
-      })
-      
     } else if (input$tabs == "paexpTab") {
-    #9). PA Explorer Logic ----
+    #5). PA Explorer Logic ----
+      #5a) Setup ----
+      #Watch for a click to another tab, if so we have to clear some stuff off this
+      #tab because it isn't cleared otherwise. We are being pretty explicit here
+      #and are probably forcing removal of things that are being removed normally
+      #anyways but I want to be sure. This basically makes it so a user can leave this
+      #tab and when they come back it is fresh, like they've never seen it before.
       observeEvent(input$tabs,{
         session$sendCustomMessage(type = "resetValue", message = "paexpMap-map_shape_click")
         multiSelected_pas(NULL)
@@ -733,12 +771,10 @@ function(input, output, session) {
         mpclickObsPAs$destroy()
         mpcbObs$destroy()
         mpcaObs$destroy()
-        print("EXEC PA DESTROY
-              ")
       },ignoreInit=T,ignoreNULL=T,priority=2)
       
-      
-      
+      #A function to select multiple polygons on the map, including clicks on preselected
+      #polygons so that we can unselect them.
       selectMultiPolysPAS <- function(mapId,calc=T,mapclick=NULL,
                                       data = y2yshp[y2yshp$TOURID %in% y2y$tourId[y2ytour$id()],],
                                       idfield = "TOURID", addPolys = T, newId = "", nameField = NULL, group = NULL) {
@@ -793,9 +829,9 @@ function(input, output, session) {
         return(multipolysPAs)
       }
       
-      proxy <- leafletProxy("paexpMap-map")
+      proxy <- leafletProxy("paexpMap-map") #Proxy variable of the map so we can modify it below
     
-      #9a) Get protected area polyons that are in view and at scale ----
+      #A function that gets polygons in view at any given moment.
       inBounds_PAs <- reactive({
         if (is.null(input$"paexpMap-map_zoom"))
           return(NULL)
@@ -826,7 +862,111 @@ function(input, output, session) {
         return(data)
       }) %>% debounce(500)
       
-      #9b) Add polygons to the map based on the view and scale.----
+      #5b) Add tiles from dropdown ----
+      observe({
+        proxy %>% 
+          clearGroup("metrics")
+        if (input$paExpLayer != "") {
+          data <- tilelist[tileName %in% input$paExpLayer,]
+          if(data$tileName == "fwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"paexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(255,0,0,maxColorValue = 255),
+                         rgb(255,127,127,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("High","Medium","Low"),
+                title = paste0("Legend: Tile Fill<br>",data$tileGroup),
+                opacity = input$"paexpMapBttn-opacity",
+                layerId = "paexpTileLegend",
+                group = "pas",
+                className= "info legend Legend"
+              )
+          } else if(data$tileName =="bwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"paexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(0,112,255,maxColorValue = 255),
+                         rgb(190,232,255,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("High","Medium","Low"),
+                title = paste0("Legend: Tile Fill <br>",data$tileGroup),
+                opacity = input$"paexpMapBttn-opacity",
+                layerId = "paexpTileLegend",
+                group = "pas",
+                className= "info legend Legend"
+              )
+          } else {
+            cols<-colorNumeric(
+              palette="RdYlBu",
+              domain=c(0,100),
+              reverse=F
+            )
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"paexpMapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                pal=cols,
+                values=c(0:100),
+                title = paste0("Legend: Tile Fill (Quantiles)<br>",data$tileGroup),
+                opacity = input$"paexpMapBttn-opacity",
+                layerId = "paexpTileLegend",
+                group = "pas",
+                className= "info legend Legend",
+                labFormat = labelFormat(suffix="%",transform = function(x) sort(x, decreasing = TRUE))
+              )
+          }
+          
+        }
+      })
+      
+      #5c) Add polygons to the map based on the view and scale.----
       observeEvent(inBounds_PAs(),{
         rpas(inBounds_PAs())
         rps<-isolate(rpas())
@@ -897,7 +1037,7 @@ function(input, output, session) {
         }
       })
       
-      #9c) Clear all button press in Outputs----
+      #5d) Clear all button press in Outputs----
       observeEvent(input$"paexp-resetSP",{
         multiSelected_pas(NULL)
         dupsPAs<-NULL
@@ -955,125 +1095,21 @@ function(input, output, session) {
         output$patablediv<-NULL
       })
       
-      #9d) Add tiles from dropdown ----
-      observe({
-        proxy %>% 
-          clearGroup("metrics")
-        if (input$paExpLayer != "") {
-          data <- tilelist[tileName %in% input$paExpLayer,]
-          if(data$tileName == "fwshpath"){
-            proxy %>%
-            addTiles(
-              urlTemplate = data$tileSubdir,
-              attribution = data$tileAttribution,
-              group = "metrics",
-              layerId = data$tileGroup,
-              options = tileOptions(
-                tms = T,
-                minZoom = minZoom,
-                maxZoom = maxZoom,
-                unloadInvisibleTiles = T,
-                noWrap = T,
-                opacity = input$"paexpMapBttn-opacity",
-                zIndex = 9000
-              )
-            ) %>%
-            addLegend(
-              position = "bottomright",
-              colors=c(rgb(255,0,0,maxColorValue = 255),
-                       rgb(255,127,127,maxColorValue = 255),
-                       rgb(225,225,225,maxColorValue = 255)),
-              values=c(150,450,750),
-              labels=c("High","Medium","Low"),
-              title = paste0("Legend: Tile Fill<br>",data$tileGroup),
-              opacity = input$"paexpMapBttn-opacity",
-              layerId = "paexpTileLegend",
-              group = "pas",
-              className= "info legend Legend"
-            )
-          } else if(data$tileName =="bwshpath"){
-            proxy %>%
-            addTiles(
-              urlTemplate = data$tileSubdir,
-              attribution = data$tileAttribution,
-              group = "metrics",
-              layerId = data$tileGroup,
-              options = tileOptions(
-                tms = T,
-                minZoom = minZoom,
-                maxZoom = maxZoom,
-                unloadInvisibleTiles = T,
-                noWrap = T,
-                opacity = input$"paexpMapBttn-opacity",
-                zIndex = 9000
-              )
-            ) %>%
-            addLegend(
-              position = "bottomright",
-              colors=c(rgb(0,112,255,maxColorValue = 255),
-                       rgb(190,232,255,maxColorValue = 255),
-                       rgb(225,225,225,maxColorValue = 255)),
-              values=c(150,450,750),
-              labels=c("High","Medium","Low"),
-              title = paste0("Legend: Tile Fill <br>",data$tileGroup),
-              opacity = input$"paexpMapBttn-opacity",
-              layerId = "paexpTileLegend",
-              group = "pas",
-              className= "info legend Legend"
-            )
-          } else {
-            cols<-colorNumeric(
-              palette="RdYlBu",
-              domain=c(0,100),
-              reverse=F
-            )
-            proxy %>%
-            addTiles(
-              urlTemplate = data$tileSubdir,
-              attribution = data$tileAttribution,
-              group = "metrics",
-              layerId = data$tileGroup,
-              options = tileOptions(
-                tms = T,
-                minZoom = minZoom,
-                maxZoom = maxZoom,
-                unloadInvisibleTiles = T,
-                noWrap = T,
-                opacity = input$"paexpMapBttn-opacity",
-                zIndex = 9000
-              )
-            ) %>%
-            addLegend(
-              position = "bottomright",
-              pal=cols,
-              values=c(0:100),
-              title = paste0("Legend: Tile Fill (Quantiles)<br>",data$tileGroup),
-              opacity = input$"paexpMapBttn-opacity",
-              layerId = "paexpTileLegend",
-              group = "pas",
-              className= "info legend Legend",
-              labFormat = labelFormat(suffix="%",transform = function(x) sort(x, decreasing = TRUE))
-            )
-          }
-          
-        }
-      })
       
-      #9e) Map polygon click logic ----
-        #9e) i. Get the protected areas that have been clicked, do some data wrangling and create the starplot.
+      #5e) Map polygon click logic ----
+      #Get the protected areas that have been clicked, do some data wrangling and create the starplot.
       mapclickPA<-reactiveValues(click=NULL)
+      
       mpcbObs<-observeEvent(input$"paexpMap-map_shape_click",{
         mapclickPA$click<-input$"paexpMap-map_shape_click"
       })
 
-      
       mpcaObs<-observeEvent(mapclickPA$click,{
         multiSelected_pas(
           selectMultiPolysPAS(mapId = "paexpMap-map",data = pas,mapclick=mapclickPA$click,
-                              idfield = "gridcode", addPolys = T, newId = "",nameField = "PA_NAME",group = "rpas")
-        )
-       
+                              idfield = "gridcode", addPolys = T, newId = "",nameField = "PA_NAME",group = "rpas"))
       })
+      
       mpclickObsPAs<-observeEvent(multiSelected_pas(),{
         mspas <- isolate(multiSelected_pas()) 
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = T,all=F,reset=T,height=(600+(nrow(mspas)*15)),pa=T)))
@@ -1105,22 +1141,8 @@ function(input, output, session) {
         }      
       }) 
       
-      #9e) iii. Logic to handle if no polygons are selected but were in the past----
-      # observe(
-      #   if (!is.null(multiSelected_pas())) {
-      #     print(multiSelected_pas())
-      #     if (nrow(multiSelected_pas()) == 0) {
-      #       removeUI(selector = "div:has(>#paexp-appStarPlot)", session = session)
-      #       removeUI(selector = "div:has(>#paexp-xyPlot)", session = session)
-      #       removeUI(selector = "div:has(>#patable)", session = session)
-      #       output$paexpStarplotDiv <- NULL
-      #       output$paexpXYplotdiv <- NULL
-      #       output$patablediv<-NULL
-      #       # multiSelected_pas<-NULL
-      #     } 
-      #   }
-      # )
-      #9f) XY Plot Logic ----
+     
+      #5f) XY Plot Logic ----
       observeEvent(multiSelected_pas(),{
       mspas <- isolate(multiSelected_pas())
        observeEvent(input$"paexp-X",{
@@ -1142,7 +1164,7 @@ function(input, output, session) {
           }
         })
       })
-      #9g) Clear Tiles ----
+      #5g) Clear Tiles ----
       observeEvent(input$paclearTileFill,{
         if(is.null(input$paclearTileFill)){return()}
         updateSelectizeInput(
@@ -1154,7 +1176,7 @@ function(input, output, session) {
         )
         proxy %>% removeControl("paexpTileLegend")
       })
-      #9h) Clear Polygon Fill ----
+      #5h) Clear Polygon Fill ----
       observeEvent(input$paclearPolyFill,{
         if(is.null(input$paclearPolyFill)){return()}
         updateSelectizeInput(
@@ -1170,7 +1192,7 @@ function(input, output, session) {
     }
   }) #End of observe which tab we are on.
 
-  #WRITE REPORT STATS TO DROPBOX ----
+  #C. Report statics processing ----
   session$onSessionEnded(function() {
     downfrequency <- mydownloads %>% group_by(Name) %>% tally()
     repFrequency <- mydownloads %>% group_by(Format) %>% tally()
@@ -1222,7 +1244,10 @@ function(input, output, session) {
     }
   })
   
-  #Bookmarking Stuff ----
+  #D. Bookmarking App Control ----
+  #Right now we are just allowing for bookmarking of tabs. In the future we
+  #could allow for book marking of a selected Ecoregion, Watershed, PA, or even
+  #a group of watersheds or protected areas.
   excludeList<-c(
     "y2ymapBttn-opacity","climExpLayer","clearTileFill","clearPolyFill",
     "climFillPolys","patourLayer","paExpLayer","pamapBttn-opacity",

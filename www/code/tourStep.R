@@ -1,4 +1,4 @@
-tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL, 
+tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,
                      shpdata = NULL,opac = NULL, OSM = F,showAll = F){
   if(isTRUE(showAll)){
     if(tourid <=2) {
@@ -14,18 +14,23 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL,
   }
   bds <- unname(st_bbox(shp))
   isSwipe = NULL
+  if (isFALSE(setup$zoomTo)) {
+    view=c(-122.8271,55.71267,5)
+  } else {
+    view=NULL
+  }
   if (isTRUE(setup$swipe)) {
      isSwipe = TRUE
      if (isTRUE(OSM)) {
       callModule(map, mapid, swipe = T,
                 layer1 = paste0("'", setup$tile1url,"'"),
                 layer2 = paste0("'", setup$tile2url,"'"),
-                opacity = opac, OSM = T)
+                opacity = opac, OSM = T,view=view)
      } else {
        callModule(map, mapid, swipe = T,
                   layer1 = paste0("'", setup$tile1url,"'"),
                   layer2 = paste0("'", setup$tile2url,"'"),
-                  opacity = opac, OSM = F)
+                  opacity = opac, OSM = F,view=view)
      }
      proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
      proxy %>% 
@@ -56,9 +61,9 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL,
       if (!is.na(setup$tile1)) {
         isSwipe = FALSE
         if (isTRUE(OSM)) {
-          callModule(map, mapid, swipe = F,OSM = T)
+          callModule(map, mapid, swipe = F,OSM = T,view=view)
         } else {
-          callModule(map, mapid, swipe = F)
+          callModule(map, mapid, swipe = F,view=view)
         }
         proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
           proxy %>%
@@ -81,8 +86,8 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL,
           )
       } else if (is.na(setup$tile1)) {
         if (isTRUE(OSM)) {
-          callModule(map, mapid, swipe = F,OSM = T)
-        } else {callModule(map, mapid, swipe = F)}
+          callModule(map, mapid, swipe = F,OSM = T,view=view)
+        } else {callModule(map, mapid, swipe = F,view=view)}
         isSwipe = FALSE
       }
     } 
@@ -99,12 +104,8 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,view = NULL,
         fillOpacity = 0.0,
         smoothFactor = 2.0
       )
-    if (isFALSE(setup$zoomTo)) {
-      proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
-      proxy %>% setView(-122.8271,55.71267,5)
-    } else if (isTRUE(setup$zoomTo)) {
-      proxy <- leafletProxy(mapId = paste0(mapid,"-map"))
-      proxy %>% flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
-    }
+  if (isTRUE(setup$zoomTo)) {
+    proxy %>% flyToBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+  }
   return(isSwipe) 
 }

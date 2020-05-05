@@ -11,7 +11,7 @@
 # webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
 options(shiny.reactlog=F)
 options(shiny.jquery.version = 1)
-loginMenu = F
+ 
 reportStatsStatus=F  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
 #appURL = https://adaptwest.shinyapps.io/climate-resilience-data-explorer
@@ -189,7 +189,7 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
     map
   }
 
-  #Common Reactives ----
+  #Common Reactive Variables ----
   polygroup <- reactiveVal("ecoregions")
   clickedIds <- reactiveValues(ids = vector())
   multiSelected_wds <- reactiveVal(c(NULL))
@@ -198,9 +198,7 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   clickedIdsPAs <- reactiveValues(ids = vector())
   multiSelected_pas <- reactiveVal(c(NULL))
   rpas <- reactiveVal(NULL)
-  climtourView <- reactiveValues(view = NULL,opacity = NULL)
   isSwipemetric <- reactiveVal(NULL)
-  patourView <- reactiveValues(view = NULL,opacity = NULL)
   isSwipepa <- reactiveVal(NULL)
 
   

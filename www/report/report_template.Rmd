@@ -124,7 +124,7 @@ Cite this app and report as:
 <blockquote>Beckers J, Carroll C. 2020. AdaptWest climate resilience data explorer. doi: [doi](http://dx.doi.org/[doi]).</blockquote>
 
 For further information and citation refer to: 
-<blockquote>Carroll C, Noss RF. 2020. Rewilding in the face of climate change. Conservation Biology (Early View). doi: [doi](http://dx.doi.org/[doi]).</blockquote>
+<blockquote>Carroll C, Noss RF. 2020. Rewilding in the face of climate change. Conservation Biology (Early View). doi: [10.1111/cobi.13531](http://dx.doi.org/10.1111/cobi.13531).</blockquote>
 
 ```{r, results = 'asis', echo = F}
 if (params$RBS){
