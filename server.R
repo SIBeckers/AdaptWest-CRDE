@@ -466,7 +466,7 @@ function(input, output, session) {
         msws<-isolate(multiSelected_wds()) #isolate that data
         #update the starplot and xyplot
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)),x=input$"climexp-X",y=input$"climexp-Y")))
         clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
         #Convert the data for plotting
         mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
@@ -498,7 +498,7 @@ function(input, output, session) {
         msws<-isolate(multiSelected_wds()) #isolate that data
         #update the starplot and xyplot
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)),x=input$"climexp-X",y=input$"climexp-Y")))
         clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
         #Convert the data for plotting
         mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
@@ -531,7 +531,7 @@ function(input, output, session) {
         msws<-isolate(multiSelected_wds()) #isolate that data
         #update the starplot and xyplot
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msws)*15)))))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)))))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msws)*15)),x=input$"climexp-X",y=input$"climexp-Y")))
         clickedIds$ids<-msws$FIDNUM2 #update the clicked ids to all of them.
         #Convert the data for plotting
         mswds <- st_drop_geometry(msws) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
@@ -569,7 +569,7 @@ function(input, output, session) {
         clickedIds$ids<-NULL #Make sure our variable of clicked polygon ides is also cleared
         #Reinitialize the starplot and xy plot so we can reset their heights
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500,x=input$"climexp-X",y=input$"climexp-Y")))
         #Redraw the starplot, xy plot, and table with just the ecoregion average and the non-selected polygon data in the xy plot.
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
         callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
@@ -583,7 +583,7 @@ function(input, output, session) {
         spdat<-NULL
         clickedIds$ids<-NULL
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500,x=input$"climexp-X",y=input$"climexp-Y")))
         removeUI(selector = "div:has(>#climtable", session = session)
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
         callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
@@ -597,7 +597,7 @@ function(input, output, session) {
         spdat<-NULL
         clickedIds$ids<-NULL
         output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+        output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500,x=input$"climexp-X",y=input$"climexp-Y")))
         removeUI(selector = "div:has(>#climtable", session = session)
         callModule(appStarPlot,"climexp",data = eregion$edata,namecol = "Name",removecols = NULL, live = T)
         callModule(xyPlot,"climexp",data = rwds(),data2=NULL,namecol = "NEWNAME",offset=1)
@@ -627,8 +627,14 @@ function(input, output, session) {
       })
       #4i) XYPlot logic ----
       observeEvent(rwds(),{
-        callModule(xyPlot,"climexp",data=rwds(),data2=NULL,
+        observeEvent(input$"climexp-X",{
+          callModule(xyPlot,"climexp",data=rwds(),data2=NULL,
                    namecol="NEWNAME",offset=1)
+        })
+        observeEvent(input$"climexp-Y",{
+          callModule(xyPlot,"climexp",data=rwds(),data2=NULL,
+                     namecol="NEWNAME",offset=1)
+        })
       })
       
       observeEvent(multiSelected_wds(),{
@@ -663,7 +669,7 @@ function(input, output, session) {
         # 4fi) Clicked polygon is ecoregion ----
           #Generate the starplot,xyplot and table views, with a standard height
           output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=600)))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500)))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=500,x=input$"climexp-X",y=input$"climexp-Y")))
           output$climtablediv <- renderUI(div(id="climtable",TableUI("climtable",all=T,reset=T)))
           #Generate a back to ecoregion button on the map when we are viewing watersheds
           output$b2ecoBttn <- renderUI(
@@ -727,7 +733,7 @@ function(input, output, session) {
           )
           msds<-isolate(multiSelected_wds())
           output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msds)*15)))))
-          # output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)))))
+          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)),x=input$"climexp-X",y=input$"climexp-Y")))
           
           mswds <- st_drop_geometry(msds) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
           edata <- eregion$edata
@@ -736,7 +742,6 @@ function(input, output, session) {
           
           spdat <- rbind(edata,mswds)
           if (nrow(spdat) > 1){
-            # callModule(xyPlot, "climexp", data = rwds(), data2 = NULL, namecol = "NEWNAME", offset = 1) #WHY ISN'T THIS WORKING!
             callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F)
             callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
             callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
@@ -1114,7 +1119,7 @@ function(input, output, session) {
       mpclickObsPAs<-observeEvent(multiSelected_pas(),{
         mspas <- isolate(multiSelected_pas()) 
         output$paexpStarplotDiv <- renderUI(div(id = "paExpStarPlot", appStarPlotUI("paexp", live = T,all=F,reset=T,height=(600+(nrow(mspas)*15)),pa=T)))
-        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T,live=T,height=(500+(nrow(mspas)*15)))))
+        output$paexpXYplotdiv <- renderUI(div(id = "paExpXYPlot", xyPlotUI("paexp",all=F,reset=T,pa=T,live=T,height=(500+(nrow(mspas)*15)),x=input$"paexp-X",y=input$"paexp-Y")))
         output$patablediv <- renderUI(div(id="patable",TableUI("patable",all=F,reset=T)))
         if(nrow(mspas) >0){
           callModule(report,"paReport",polys=mspas,data=pas)

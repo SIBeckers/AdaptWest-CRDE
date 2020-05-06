@@ -1,4 +1,4 @@
-xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
+xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500,x=NULL,y=NULL) {
   ns <- NS(id)
   if (isTRUE(reset) & isTRUE(all)) {
     tagList(
@@ -33,7 +33,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("X"),
             label = "X-variable",
             choices = c("Select X axis: " = "", metriclist[1:8]),
-            selected = "fwvelref",
+            selected = ifelse(is.null(x),"fwvelref",x),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -42,7 +42,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("Y"),
             label = "Y-variable",
             choices = c("Select Y axis: " = "", metriclist[1:8]),
-            selected = "bwvelref",
+            selected = ifelse(is.null(y),"bwvelref",y),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -81,7 +81,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("X"),
             label = "X-variable",
             choices = c("Select X axis: " = "", metriclist[1:8]),
-            selected = "fwvelref",
+            selected = ifelse(is.null(x),"fwvelref",x),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -90,7 +90,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("Y"),
             label = "Y-variable",
             choices = c("Select Y axis: " = "", metriclist[1:8]),
-            selected = "bwvelref",
+            selected = ifelse(is.null(y),"bwvelref",y),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -129,7 +129,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
                      inputId = ns("X"),
                      label = "X-variable",
                      choices = c("Select X axis: " = "", metriclist[1:8]),
-                     selected = "fwvelref",
+                     selected = ifelse(is.null(x),"fwvelref",x),
                      multiple  = F,
                      width = "auto",
                      options = list(maxOptions = 12)
@@ -138,7 +138,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
                      inputId = ns("Y"),
                      label = "Y-variable",
                      choices = c("Select Y axis: " = "", metriclist[1:8]),
-                     selected = "bwvelref",
+                     selected = ifelse(is.null(y),"bwvelref",y),
                      multiple  = F,
                      width = "auto",
                      options = list(maxOptions = 12)
@@ -167,7 +167,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("X"),
             label = "X-variable",
             choices = c("Select X axis: " = "", metriclist[1:8]),
-            selected = "fwvelref",
+            selected = ifelse(is.null(x),"fwvelref",x),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
@@ -176,7 +176,7 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500) {
             inputId = ns("Y"),
             label = "Y-variable",
             choices = c("Select Y axis: " = "", metriclist[1:8]),
-            selected = "bwvelref",
+            selected = ifelse(is.null(y),"bwvelref",y),
             multiple  = F,
             width = "auto",
             options = list(maxOptions = 12)
