@@ -94,7 +94,8 @@ radarplot <- function(data,namecol = "", removecols = NULL, interactive = T,offs
         )
       ),
       legend = list(
-        orientation = "h"
+        orientation = "h",
+        tracegroupgap=1,font=list(size="0.5em")
       ),
       margin = list(r=60)
     )

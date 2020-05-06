@@ -626,30 +626,31 @@ function(input, output, session) {
           setView(lng = -100, lat = 55, zoom = 3)
       })
       #4i) XYPlot logic ----
-      # observeEvent(rwds(),{
-      #   if(!is.null(rwds())){
-      #     callModule(xyPlot,"climexp",data=rwds(),
-      #                data2= NULL, namecol="NEWNAME",offset=1)
-      #   }
-      # })
-      # observeEvent(multiSelected_wds(),{
-      #   observeEvent(input$"climexp-X",{
-      #     if (is.null(multiSelected_wds())) {
-      #       callModule(xyPlot,"climexp",data=rwds(),
-      #                  data2= NULL, namecol="NEWNAME",offset=1)
-      #     } else {
-      #       callModule(xyPlot,"climexp",data=rwds(),
-      #                  data2= multiSelected_wds(), namecol="NEWNAME",offset=1)
-      #     }
-      #   })
-      #   observeEvent(input$"climexp-Y",{
-      #     if (is.null(multiSelected_wds())) {
-      #       callModule(xyPlot,"climexp",data=rwds(),data2=NULL,namecol="NEWNAME",offset=1)
-      #     } else {
-      #       callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),namecol="NEWNAME",offset=1)
-      #     }
-      #   })
-      # })
+      observeEvent(rwds(),{
+        callModule(xyPlot,"climexp",data=rwds(),data2=NULL,
+                   namecol="NEWNAME",offset=1)
+      })
+      
+      observeEvent(multiSelected_wds(),{
+        observeEvent(input$"climexp-X",{
+          if (is.null(multiSelected_wds())) {
+            callModule(xyPlot,"climexp",data=rwds(),
+                       data2= NULL, namecol="NEWNAME",offset=1)
+          } else {
+            callModule(xyPlot,"climexp",data=rwds(),
+                       data2= multiSelected_wds(), namecol="NEWNAME",offset=1)
+          }
+        })
+        observeEvent(input$"climexp-Y",{
+          if (is.null(multiSelected_wds())) {
+            callModule(xyPlot,"climexp",data=rwds(),data2=NULL,
+                       namecol="NEWNAME",offset=1)
+          } else {
+            callModule(xyPlot,"climexp",data=rwds(),data2=multiSelected_wds(),
+                       namecol="NEWNAME",offset=1)
+          }
+        })
+      })
 
       #4j) Map Polygon Click Logic----
       mpclickObs<-observeEvent(input$"climexpMap-map_shape_click", {
@@ -713,11 +714,11 @@ function(input, output, session) {
           names(eregion$edata) <- c('Intactness','Topodiversity','Forward Climatic Refugia','Backward Climatic Refugia','Bird Refugia','Tree Refugia',
                             'Tree Carbon','Soil Carbon',"Name")
           #Create the plots with the ecoregion data.
-          print(rwds())
-          callModule(xyPlot, "climexp", data = isolate(rwds()), data2 = NULL, namecol = "NEWNAME", offset = 1) #WHY ISN'T THIS WORKING!
+          callModule(xyPlot, "climexp", data = rwds(), data2 = NULL, namecol = "NEWNAME", offset = 1) #WHY ISN'T THIS WORKING!
           callModule(appStarPlot, "climexp", data = eregion$edata, namecol = "Name", removecols = NULL, live = T)
           callModule(Table, "climtable", tabdat=eregion$edata[1,] %>% select(c(9, 1:8)))
           polygroup("wds") #Set the polygon group to watersheds
+          
           #4fii) Clicked polygon is watershed----
         } else if (click$group == "wds" | click$group == "swds" ) {
           multiSelected_wds(
@@ -726,7 +727,7 @@ function(input, output, session) {
           )
           msds<-isolate(multiSelected_wds())
           output$climexpStarplotDiv <- renderUI(div(id = "climExpStarPlot", appStarPlotUI("climexp", live = T,all=T,reset=T,height=(600+(nrow(msds)*15)))))
-          output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)))))
+          # output$climexpXYplotdiv <- renderUI(div(id = "climExpXYPlot", xyPlotUI("climexp",all=T,reset=T,live=T,height=(500+(nrow(msds)*15)))))
           
           mswds <- st_drop_geometry(msds) %>% select(-c(1,11:14)) %>% mutate_at(2:9,as.numeric)
           edata <- eregion$edata
@@ -735,11 +736,11 @@ function(input, output, session) {
           
           spdat <- rbind(edata,mswds)
           if (nrow(spdat) > 1){
+            # callModule(xyPlot, "climexp", data = rwds(), data2 = NULL, namecol = "NEWNAME", offset = 1) #WHY ISN'T THIS WORKING!
             callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F)
             callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
             callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
           }
-          # polygroup("wds")
         }
       })
     } else if (input$tabs == "paexpTab") {
@@ -1193,16 +1194,21 @@ function(input, output, session) {
   }) #End of observe which tab we are on.
 
   #C. Report statics processing ----
+  #The app keeps track of which areas of interest are viewed most often and which
+  #report formats are used most often. Purely for interest sake. No other user 
+  #information is stored or transmitted.
   session$onSessionEnded(function() {
     downfrequency <- mydownloads %>% group_by(Name) %>% tally()
     repFrequency <- mydownloads %>% group_by(Format) %>% tally()
     interactiveFrequency <- mydownloads %>% group_by(Interactive) %>% tally()
     paFrequency <- mydownloads %>% group_by(ProtectedArea) %>% tally()
+    #Create some temporary csvs with the new data (re-writes data that was downloaded during initialization)
     write_csv(downfrequency,"./report_stats/downloadfrequency.csv")
     write_csv(repFrequency,"./report_stats/reportFrequency.csv")
     write_csv(interactiveFrequency,"./report_stats/interactiveFrequency.csv")
     write_csv(paFrequency,"./report_stats/paFrequency.csv")
     write_csv(mydownloads,"./report_stats/downloads.csv")
+    #If we are reporting this to dropbox files, upload the csvs now.
     if(isTRUE(reportStatsStatus)){
       drop_upload(file = './report_stats/downloadfrequency.csv',dtoken=token)
       drop_upload(file = "./report_stats/reportFrequency.csv",dtoken=token)
@@ -1211,7 +1217,11 @@ function(input, output, session) {
       drop_upload(file = "./report_stats/downloads.csv",dtoken=token)
       file.remove(list.files(path="./report_stats",pattern=".csv",full.names=T))
     }
+    #App cleanup work. If the reports storage gets too large we start removing
+    #files Eventually we could replace this so that we remove least examined regions
+    #first and keep "popular regions
     reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+    #First get rid of temporary files and temporary html files
     if(reps_size>1E7){
       print(utils:::format.object_size(reps_size, units="MB"))
       dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
@@ -1223,18 +1233,26 @@ function(input, output, session) {
         lapply(htmlfiles,unlink,force=T)
       }
     }
+    #Next let's get rid of the static reports. They are 3x bigger than the inter
+    #active report format but they are slower to generate. I do think they will
+    #be more popular though as html isn't generally thought of as an offline format
     if(reps_size>1E9){
       statreps<-list.files(path=repstaticdir,full.names=T)
       if(length(statreps)>0) {
         lapply(statsreps,unlink,force=T)
       }
     }
+    #Last step, get rid of the interative reports.
     if(reps_size>5.2E9) {
       interreps<-list.files(path=repinterdir,full.names=T)
       if(length(interreps)>0){
         lapply(interreps,unlink,force=T)
       }
       reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
+      #If that still doesn't work, get rid of any static images that are generated
+      #when producing the static reports. #By keeping these, generating new static
+      #reports for should be sped up even if the report itself has already been
+      #deleted.
       if(reps_size>5.2E9) {
         imgs<-list.files(path=repimgdir,full.names=T,pattern=".png")
         if(length(imgs)>0){
@@ -1263,13 +1281,13 @@ function(input, output, session) {
     "y2ymapBttn-map_inputs","y2ytour-startBttn","y2ytour-endBttn","y2ytour-stopBttn",
     "climReport-reportInteractive"
   )
-    
+  #Get lists of the shinyjs and plotly callback objects so we can exclude them too
   observe({
     shinyJSexclude<- grep("shinyjs", names(input), value = TRUE)
     plotlyExclude <-grep("plotly", names(input), value = TRUE)
     setBookmarkExclude(c(excludeList,shinyJSexclude,plotlyExclude))
   })
-
+  #Enable the bookmark buttons on each of the four tabs.
   observeEvent(input$"paexpMapBttn-bookmarkBttn",{
       session$doBookmark()
   })

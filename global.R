@@ -192,11 +192,11 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   #Common Reactive Variables ----
   polygroup <- reactiveVal("ecoregions")
   clickedIds <- reactiveValues(ids = vector())
-  multiSelected_wds <- reactiveVal(c(NULL))
+  multiSelected_wds <- reactiveVal(NULL)
   rwds <- reactiveVal(NULL)
   eregion <- reactiveValues(edata = NULL,bds = NULL)
   clickedIdsPAs <- reactiveValues(ids = vector())
-  multiSelected_pas <- reactiveVal(c(NULL))
+  multiSelected_pas <- reactiveVal(NULL)
   rpas <- reactiveVal(NULL)
   isSwipemetric <- reactiveVal(NULL)
   isSwipepa <- reactiveVal(NULL)
