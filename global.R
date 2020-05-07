@@ -216,9 +216,9 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   if(reportStatsStatus==T){
     if(file.exists("./report_stats/token.rds")){
       token <- readRDS("./report_stats/token.rds")
-      drop_download("downloads.csv",local_path="./report_stats/downloads.csv",
-                     dtoken=token,overwrite=T,verbose=T)
-      mydownloads <- read_csv("./report_stats/mydownloads.csv")
+      mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/downloads.csv",
+                     dtoken=token)
+      print(head(mydownloads))
     } else {
   
       if(!dir.exists("./report_stats")){dir.create("./report_stats")}
