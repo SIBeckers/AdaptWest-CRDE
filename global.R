@@ -8,11 +8,16 @@
 # - Let's try using name states and render UI function to modularize the app
 #
 #SETUP OPTIONS (GO THROUGH) ----
-webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+#Detect if we are on shinyapps.io linux machine or a local machine
+if(Sys.info()[['sysname']] == 'Linux'){
+  reportStatsStatus = T  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+  webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+} else {
+  reportStatsStatus = F  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+}
 options(shiny.reactlog = F)
 options(shiny.jquery.version = 1)
  
-reportStatsStatus = T #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
 #appURL = https://adaptwest.shinyapps.io/climate-resilience-data-explorer
 
@@ -93,6 +98,15 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   enableBookmarking(store = "url")
   theuser = "AdaptWest"
   thepassword <- "DataBasin2019"
+  
+  # Fonts ----
+  if(Sys.info()[['sysname']] == 'Linux'){
+    dir.create('~/.fonts')
+    file.copy("www/fonts/Roboto regular.ttf", "~/.fonts")
+    file.copy("www/fonts/Roboto 500.ttf", "~/.fonts")
+    file.copy("www/fonts/Work Sans 700.ttf", "~/.fonts")
+    system('fc-cache -f ~/.fonts')
+  }
   
   # Protected Areas Data ---- 
   pafile = "./Data/pas.gpkg"
@@ -216,7 +230,7 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   if(reportStatsStatus==T){
     if(file.exists("./report_stats/token.rds")){
       token <- readRDS("./report_stats/token.rds")
-      mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/downloads.csv",
+      mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",
                      dtoken=token)
       print(head(mydownloads))
     } else {

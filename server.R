@@ -61,11 +61,13 @@ function(input, output, session) {
       #3). PA Tour Logic ----
       patour <- callModule(tourPanel, "patour", tourName = "pa") #Start the pa tour panel
       shinyjs::click("patour-stopBttn") #Stop the tour so it starts at first slide each time.
-      callModule(map,"pamap", OSM = F) #Initiate the tour map
-      proxy <- leafletProxy("pamap-map") #setup a proxy object so we can modify the map below.
       callModule(ddownBttn,"pamapBttn") #Settings button on Protected Areas Tour Map
-      observeEvent(patour$id(),{runjs("patourSide.scrollTo(0,0)")}) #Make sure tour text scrolls to the top each time the page turns
+      callModule(map,"pamap", OSM = F,view=c(-122.8271,55.71267,5)) #Initiate the tour map
       isSwipepa(F) #Initialize the map as a non-swipe map.
+      proxy <- leafletProxy("pamap-map") #setup a proxy object so we can modify the map below.
+      
+      observeEvent(patour$id(),{runjs("patourSide.scrollTo(0,0)")}) #Make sure tour text scrolls to the top each time the page turns
+      
       #Get the current map layer opacity and update the map.
       observeEvent(input$"pamapBttn-opacity",{
         isSwipepa(tourStep(mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),shpdata=pashp,#view=isolate(patourView$view),
@@ -76,7 +78,7 @@ function(input, output, session) {
         isSwipepa(
           tourStep(
             mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),
-            shpdata=pashp,opac=input$"pamapBttn-opacity", OSM = T, showAll=F
+            shpdata=pashp,opac=input$"pamapBttn-opacity", OSM = F,showAll=T
           )
         )
         #Also, if there was a tile layer selected, add it back in.
