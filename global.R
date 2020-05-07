@@ -8,11 +8,11 @@
 # - Let's try using name states and render UI function to modularize the app
 #
 #SETUP OPTIONS (GO THROUGH) ----
-# webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
-options(shiny.reactlog=F)
+webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+options(shiny.reactlog = F)
 options(shiny.jquery.version = 1)
  
-reportStatsStatus=F  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
+reportStatsStatus = T #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
 #appURL = https://adaptwest.shinyapps.io/climate-resilience-data-explorer
 
@@ -216,7 +216,9 @@ appURL = "http://cwfis.shinyapps.io/dev_AdaptWest"
   if(reportStatsStatus==T){
     if(file.exists("./report_stats/token.rds")){
       token <- readRDS("./report_stats/token.rds")
-      mydownloads <- drop_read_csv("downloads.csv",dest="./report_stats/",dtoken=token)
+      drop_download("downloads.csv",local_path="./report_stats/downloads.csv",
+                     dtoken=token,overwrite=T,verbose=T)
+      mydownloads <- read_csv("./report_stats/mydownloads.csv")
     } else {
   
       if(!dir.exists("./report_stats")){dir.create("./report_stats")}

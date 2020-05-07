@@ -55,7 +55,7 @@ if(isFALSE(params$html)){
 } else if(params$fmt=="word_document"){
   knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
                      error = F,tidy = T,fig.height="5.5",fig.width="5.5",dpi=600,
-                      fig.align = "center", strip.white = T,cache = F)
+                     strip.white = T,cache = F)
 } else {
   knitr::opts_chunk$set(echo = params$printCode,message = FALSE, warning = FALSE,
                      error = F,tidy = T, out.width="100%",
@@ -265,9 +265,9 @@ if (params$RBS){
 
 
 ```{r, results = 'asis', echo = F}
-if (params$fmt == "word_document") {
-  cat('#####')
-}
+# if (params$fmt == "word_document") {
+#   cat('#####')
+# }
 if (params$RBS){
   shiny::setProgress(0.23)
 }
@@ -647,9 +647,9 @@ Microrefugia occur both within and outside of macro-refugia (areas of lowest cli
 **How to interpret the map:** The map above shows topographic diversity. Red shades indicate areas with highest topodiversity and microrefugia potential, whereas blue shades indicate areas with lowest topodiversity and microrefugia potential. The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/environmental-diversity-north-america). 
 
 ```{r, results = 'asis', echo = F}
-if (params$fmt == "word_document") {
-  cat('#####')
-}
+# if (params$fmt == "word_document") {
+#   cat('#####')
+# }
 if (params$RBS){
   shiny::setProgress(0.49)
 }
@@ -862,14 +862,24 @@ if (params$RBS){
   shiny::setProgress(0.53)
 }
 ```
-```{r results="asis",eval=!is.na(params$poly$brdref)}
+
+`r if(!is.na(params$poly$brdref)){"**Biotic velocity** is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates."}`
+
+`r if(!is.na(params$poly$brdref)){"Biotic velocity provides a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported as a species-specific refugia index or averaged across a taxonomic group."}`
+`r if(!is.na(params$poly$brdref)){"When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions more biodiverse than expected based on climate alone."}`
+`r if(!is.na(params$poly$brdref)){"Biotic-velocity-based refugia vary depending on the species considered. The metrics shown here, from [Stralberg et al. 2018,](https://onlinelibrary.wiley.com/doi/abs/10.1111/geb.12731) combine data on refugia for 268 songbird and 324 tree species in the US and Canada."}`
+
+`r if(!is.na(params$poly$brdref)){"**How to interpret the map:** The map above shows refugia based on climatic niche models for songbirds"}``r if(!is.na(params$poly$brdref)){ifelse(params$html,"(top panel)","(left panel)")}``r if(!is.na(params$poly$brdref)){", and trees "}``r if(!is.na(params$poly$brdref)){ifelse(params$html,"(bottom panel).","(right panel).")}``r if(!is.na(params$poly$brdref)){"Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds). Data are currently limited to Canada and the US. We hope to add data for Mexico in the future."}`
+
+```{r results="asis",eval=F}
+#!is.na(params$poly$brdref)
 p(strong("Biotic velocity"),"is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.")
 p("Biotic velocity provides a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported as a species-specific refugia index or averaged across a taxonomic group.")
 p("When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions more biodiverse than expected based on climate alone.")
-p("Biotic-velocity-based refugia vary depending on the species considered. The metrics shown here, from",a(href="https://onlinelibrary.wiley.com/doi/abs/10.1111/geb.12731","Stralberg et al. 2018")," combine data on refugia for 268 songbird and 324 tree species in the US and Canada.")
+p("Biotic-velocity-based refugia vary depending on the species considered. The metrics shown here, from",a(href="https://onlinelibrary.wiley.com/doi/abs/10.1111/geb.12731",ifelse(params$fmt=="word_document",h6("Stralberg et al. 2018,"),"Stralberg et al. 2018,")),"combine data on refugia for 268 songbird and 324 tree species in the US and Canada.")
 
 p(strong("How to interpret the map:")," The map above shows refugia based on climatic niche models for songbirds",
-  ifelse(params$html,"(top panel)","(left panel)"),"and trees ",ifelse(params$html,"(bottom panel)","(right panel)"),". Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds","here"),". Data is currently limited to Canada and the US. We hope to add data for Mexico in the future.")
+  ifelse(params$html,"(top panel)","(left panel)"),"and trees ",ifelse(params$html,"(bottom panel).","(right panel).")," Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds",ifelse(params$fmt=="word_document","######(here.","here")),"Data are currently limited to Canada and the US. We hope to add data for Mexico in the future.")
 ```
 
 ```{r, results = 'asis', echo = F}
@@ -1489,7 +1499,7 @@ Alternately, planners can integrate multiple climate exposure metrics for an are
 A starplot provides a compact way to communicate contrasts between the intensity of different climate exposure stressors in a region.
 
 **How to interpret the starplot:** The starplot above shows the climate resilience value of `r paste(params$poly$Name)` in terms of eight metrics described above, as compared to that of the ecoregion as a whole. The starplot is scaled relative to the maximum and minimum of the values found within the `r ifelse(isTRUE(params$pa),"Level 1","Level 3")` ecoregion that the `r ifelse(isTRUE(params$pa),"protected area","watershed")` is found in.
-For more information on patterns of climate resilience within North American watersheds and management areas, see this app's `r a(href=paste0(params$appURL,'/?_inputs_&tabs="climtourTab"'),strong("Climate Metric Tour"))` and `r a(href=paste0(params$appURL,'/?_inputs_&tabs="patourTab"'),strong("Protected Area Tour"))` tabs. To view and compare maps of climate resilience metrics, see this app's `r a(href=paste0(params$appURL,'/?_inputs_&tabs="climexpTab"'),strong("Climate Resilience Metrics Explorer"))` and `r a(href=paste0(params$appURL,'/?_inputs_&tabs="paexpTab"'),strong("Protected Area Explorer"))` tabs.
+For more information on patterns of climate resilience within North American watersheds and management areas, see this app's`r a(href=paste0(params$appURL,'/?_inputs_&tabs="climtourTab"'),strong("Climate Metric Tour"))`and`r a(href=paste0(params$appURL,'/?_inputs_&tabs="patourTab"'),strong("Protected Area Tour"))`tabs. To view and compare maps of climate resilience metrics, see this app's`r tags$a(href=paste0(params$appURL,'/?_inputs_&tabs="climexpTab"'),strong("Climate Resilience Metrics Explorer"))`and`r a(href=paste0(params$appURL,'/?_inputs_&tabs="paexpTab"'),strong("Protected Area Explorer"))`tabs.
 
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
@@ -1708,6 +1718,6 @@ if (params$RBS){
 }
 ```
 
-**Scatterplots** - This page shows several x-y scatterplots for `r paste(params$poly$Name)`. Each plot shows values for `r paste(params$poly$Name)` for two metrics, in the context of values shown in the biome as a whole. Gray points show values for all `r ifelse(isTRUE(params$pa),"protected areas","watersheds")` falling within the corresponding `r ifelse(isTRUE(params$pa),"L1 ecoregion","L3 Ecoregion")`. To create and compare custom scatterplots of climate resilience metrics, see this app's `r a(href=paste0(params$appURL,'/?_inputs_&tabs="climexpTab"'),strong("Climate Resilience Metrics Explorer"))` and `r a(href=paste0(params$appURL,'/?_inputs_&tabs="paexpTab"'),strong("Protected Area Explorer"))` tabs.
+**Scatterplots** - This page shows several x-y scatterplots for `r paste(params$poly$Name)`. Each plot shows values for `r paste(params$poly$Name)` for two metrics, in the context of values shown in the biome as a whole. Gray points show values for all `r ifelse(isTRUE(params$pa),"protected areas","watersheds")` falling within the corresponding `r ifelse(isTRUE(params$pa),"L1 ecoregion","L3 Ecoregion")`. To create and compare custom scatterplots of climate resilience metrics, see this app's`r a(href=paste0(params$appURL,'/?_inputs_&tabs="climexpTab"'),strong("Climate Resilience Metrics Explorer"))`and`r a(href=paste0(params$appURL,'/?_inputs_&tabs="paexpTab"'),strong("Protected Area Explorer"))`tabs.
 
 
