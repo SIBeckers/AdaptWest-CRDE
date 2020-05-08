@@ -871,17 +871,6 @@ if (params$RBS){
 
 `r if(!is.na(params$poly$brdref)){"**How to interpret the map:** The map above shows refugia based on climatic niche models for songbirds"}``r if(!is.na(params$poly$brdref)){ifelse(params$html,"(top panel)","(left panel)")}``r if(!is.na(params$poly$brdref)){", and trees "}``r if(!is.na(params$poly$brdref)){ifelse(params$html,"(bottom panel).","(right panel).")}``r if(!is.na(params$poly$brdref)){"Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded [here](https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds). Data are currently limited to Canada and the US. We hope to add data for Mexico in the future."}`
 
-```{r results="asis",eval=F}
-#!is.na(params$poly$brdref)
-p(strong("Biotic velocity"),"is a metric that combines data from climate projections with data on the distributions of individual species. Climatic niche models based on correlations between species distributions and current climatic conditions are then projected forward to predict distribution under future climates. Biotic velocity represents the distance between a site and the nearest site projected to be climatically suitable for the species under future projected climates.")
-p("Biotic velocity provides a lower estimate of migration requirements than does climatic velocity because the metric assumes local populations can adapt to any climatic conditions found within the full range of the species current distribution. The metric can be reported as a species-specific refugia index or averaged across a taxonomic group.")
-p("When compared to refugia defined by low climatic velocity, biotic velocity highlights the influence of biogeographic factors (including past refugia locations) which have made certain regions more biodiverse than expected based on climate alone.")
-p("Biotic-velocity-based refugia vary depending on the species considered. The metrics shown here, from",a(href="https://onlinelibrary.wiley.com/doi/abs/10.1111/geb.12731",ifelse(params$fmt=="word_document",h6("Stralberg et al. 2018,"),"Stralberg et al. 2018,")),"combine data on refugia for 268 songbird and 324 tree species in the US and Canada.")
-
-p(strong("How to interpret the map:")," The map above shows refugia based on climatic niche models for songbirds",
-  ifelse(params$html,"(top panel)","(left panel)"),"and trees ",ifelse(params$html,"(bottom panel).","(right panel).")," Red shades indicate areas with highest refugia value, whereas blue shades indicate areas with lowest refugia value (i.e., highest biotic velocity). The spatial data can be downloaded",a(href="https://adaptwest.databasin.org/pages/climatic-macrorefugia-for-trees-and-songbirds",ifelse(params$fmt=="word_document","######(here.","here")),"Data are currently limited to Canada and the US. We hope to add data for Mexico in the future.")
-```
-
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
   cat('#####')

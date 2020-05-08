@@ -16,7 +16,8 @@ map <- function(input, output, session, swipe = F,
           maxZoom = maxZoom,
           worldCopyJump = T,
           preferCanvas = F,
-          wheelDebounceTime = 100
+          wheelDebounceTime = 100,
+          zoomSnap=0.5
         )
       ) %>%
       addProviderTiles(
@@ -117,7 +118,8 @@ map <- function(input, output, session, swipe = F,
           minZoom = minZoom,
           maxZoom = maxZoom,
           worldCopyJump = T,
-          preferCanvas = F
+          preferCanvas = F,
+          zoomSnap=0.5
         )
       ) %>%
       # mapOptions(zoomToLimits = "always") %>%

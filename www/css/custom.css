@@ -50,7 +50,7 @@ body, h1, h2, h3, h4, h5, h6, p, li {
 }
 
 body {
-  overflow-y: hidden;
+  overflow-y: hidden
 }
 
 html, body {
@@ -189,10 +189,10 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 }
 
 #homeSidebarBottom {
-  text-align: left;
-  position: absolute;
-  bottom:10px;
-  width:96%;
+    text-align: left;
+    bottom: 75px;
+    width: 94%;
+    left: 25px;
 }
 
 #homeSidebarR2{
@@ -205,6 +205,7 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 
 #homeMain {
   height: calc(100vh - 80px);
+  overflow-y: auto
 }
 .homeCol {
   width: 46%;

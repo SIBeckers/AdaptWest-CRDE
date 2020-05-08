@@ -20,6 +20,8 @@ knitr::include_graphics("../img/2_starplot.jpg",dpi=NA)
 ```
 
 <p align="center">
-_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. \n<br>\nAll spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
+_Use the dropdown menu to display spatial data corresponding to each of the eight metrics in the starplot. 
+<br>
+All spatial data used in this viewer are freely available for download at the [AdaptWest website](http://adaptwest.databasin.org)_
 </p>
 

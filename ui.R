@@ -97,7 +97,7 @@ ui <- function(request) {
         fluidRow(
           div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeTextHead"), 
               id = "climexpLink", style = "text-align: center;cursor:pointer;text-align: justify"),
-          style = "text-align: center; height: 12.5vh; max-height: 100%;max-width: 100%;"
+          style = "text-align: center; height: 8.5vh; max-height: 100%;max-width: 100%;"
         )
       ),
       column(
@@ -127,7 +127,7 @@ ui <- function(request) {
           div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeTextHead"), 
               style = "text-align: center; cursor:pointer;text-align: justify;"
           ),
-          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
+          style = "text-align: center; height: 8.5vh; max-height: 100%; max-width: 100%;"
         )
       )
     )

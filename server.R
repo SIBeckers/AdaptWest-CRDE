@@ -38,97 +38,313 @@ function(input, output, session) {
       y2ytour <- callModule(tourPanel, "y2ytour", tourName = "y2y") # Initiate the tour
       shinyjs::click("y2ytour-stopBttn") # Simulate a click on the stop botton to start it at the beginning, each time.
       callModule(ddownBttn,"y2ymapBttn") # Settings button on Y2Y Tour Map
-      callModule(map, "y2ymap", swipe = F,OSM=F,view=c(-122.8271,55.71267,5)) # Create the starting map for the tour.
+      callModule(map, "y2ymap", swipe = F,OSM=F,view=c(-122.8271,55.71267,4.5)) # Create the starting map for the tour.
       isSwipemetric(F) #Start the maps with a non-swipe map.
       observeEvent(y2ytour$id(),{runjs("climtourSide.scrollTo(0,0)")}) #Make sure the tour scrolls to the top each time it moves to a new page.
-      #Get the current map layer opacity and update the map.
+      #2b) Update map with opacity change. 
+      #Needed for the swipe maps.
       observeEvent(input$"y2ymapBttn-opacity",{
-          isSwipemetric(tourStep(mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),rSwipe = isSwipemetric(),
-                               shpdata=y2yshp, opac = input$"y2ymapBttn-opacity",OSM=F))
+        isSwipemetric(tourStep(mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),rSwipe = isSwipemetric(),
+                               shpdata=y2yshp, opac = input$"y2ymapBttn-opacity",OSM=F,addPoly=F))
       })
-      #Observe changes in isSwipeMetric, which is set by tour step (which is controlled by the tour buttons)
+      #2c) Observe changes in tour step.
+      #Is actually watching isSwipeMetric, which is set by www/code/tourstep.R 
+      #(which is controlled by the tour buttons)
       observe({
         isSwipemetric(
           tourStep(
             mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),
             rSwipe = isSwipemetric(),shpdata=y2yshp, 
-            opac = input$"y2ymapBttn-opacity",OSM=F
+            opac = input$"y2ymapBttn-opacity",OSM=F,addPoly=F))
+        id<-isolate(y2ytour$id())
+        if(is.null(id)){
+          return()
+        }
+        proxy <- leafletProxy(mapId = "y2ymap-map")
+        if (any(y2y$tile1[id]  == "fwshpath",y2y$tile2[id]== "fwshpath",na.rm=T)){
+          proxy %>%
+            addLegend(
+              position = "bottomleft",
+              colors=c(rgb(255,0,0,maxColorValue = 255),
+                       rgb(255,127,127,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("High","Medium","Low"),
+              title = paste0("Legend: Tile Fill<br>",names(tilevect)[4]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendl",
+              group = "pas",
+              className= "info legend Legend"
+            )
+        }
+        if(any(y2y$tile1[id] =="bwshpath",y2y$tile2[id]=="bwshpath",na.rm=T)){
+          proxy %>%
+            addLegend(
+              position = "bottomright",
+              colors=c(rgb(0,112,255,maxColorValue = 255),
+                       rgb(190,232,255,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("High","Medium","Low"),
+              title = paste0("Legend: Tile Fill <br>",names(tilevect)[5]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendr",
+              group = "pas",
+              className= "info legend Legend"
+            )
+        }
+        if (all(!is.na(y2y$tile1[id]),y2y$tile1[id] != "fwshpath")){
+          cols<-colorNumeric(
+            palette="RdYlBu",
+            domain=c(0,100),
+            reverse=F
           )
-        )
+          proxy %>%
+            addLegend(
+              position = "bottomleft",
+              pal=cols,
+              values=c(0:100),
+              title = paste0("Legend: Tile Fill (Quantiles)<br>",names(tilevect)[which(as.character(tilevect)==y2y$tile1[id])]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendl",
+              group = "pas",
+              className= "info legend Legend",
+              labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
+            )
+        }
+        if (all(!is.na(y2y$tile2[id]) & y2y$tile2[id] != "bwshpath" )){
+          cols<-colorNumeric(
+            palette="RdYlBu",
+            domain=c(0,100),
+            reverse=F
+          )
+          proxy %>%
+            addLegend(
+              position = "bottomright",
+              pal=cols,
+              values=c(0:100),
+              title = paste0("Legend: Tile Fill (Quantiles)<br>",names(tilevect)[which(as.character(tilevect)==y2y$tile2[id])]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendr",
+              group = "pas",
+              className= "info legend Legend",
+              labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
+            )
+        }
+        if(is.na(y2y$tile1[id])){
+          proxy %>% removeControl("y2ymapTileLegendl")
+        }
+        if(is.na(y2y$tile2[id])){
+          proxy %>% removeControl("y2ymapTileLegendr")
+        }
+      })
+      #Observe changes in the tiles.
+      tobsmetricTour<-observeEvent(y2ytour$id(),{
+        id<-isolate(y2ytour$id())
+        if(is.null(id)){
+          return()
+        }
+        proxy <- leafletProxy(mapId = "y2ymap-map")
+        if (any(y2y$tile1[id]  == "fwshpath",y2y$tile2[id]== "fwshpath",na.rm=T)){
+          proxy %>%
+            addLegend(
+              position = "bottomleft",
+              colors=c(rgb(255,0,0,maxColorValue = 255),
+                       rgb(255,127,127,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("High","Medium","Low"),
+              title = paste0("Legend: Tile Fill<br>",names(tilevect)[4]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendl",
+              group = "pas",
+              className= "info legend Legend"
+            )
+        }
+        if(any(y2y$tile1[id] =="bwshpath",y2y$tile2[id]=="bwshpath",na.rm=T)){
+          proxy %>%
+            addLegend(
+              position = "bottomright",
+              colors=c(rgb(0,112,255,maxColorValue = 255),
+                       rgb(190,232,255,maxColorValue = 255),
+                       rgb(225,225,225,maxColorValue = 255)),
+              values=c(150,450,750),
+              labels=c("High","Medium","Low"),
+              title = paste0("Legend: Tile Fill <br>",names(tilevect)[5]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendr",
+              group = "pas",
+              className= "info legend Legend"
+            )
+        }
+        if (all(!is.na(y2y$tile1[id]),y2y$tile1[id] != "fwshpath")){
+          cols<-colorNumeric(
+            palette="RdYlBu",
+            domain=c(0,100),
+            reverse=F
+          )
+          proxy %>%
+            addLegend(
+              position = "bottomleft",
+              pal=cols,
+              values=c(0:100),
+              title = paste0("Legend: Tile Fill (Quantiles)<br>",names(tilevect)[which(as.character(tilevect)==y2y$tile1[id])]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendl",
+              group = "pas",
+              className= "info legend Legend",
+              labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
+            )
+        }
+        if (all(!is.na(y2y$tile2[id]) & y2y$tile2[id] != "bwshpath" )){
+          cols<-colorNumeric(
+            palette="RdYlBu",
+            domain=c(0,100),
+            reverse=F
+          )
+          proxy %>%
+            addLegend(
+              position = "bottomright",
+              pal=cols,
+              values=c(0:100),
+              title = paste0("Legend: Tile Fill (Quantiles)<br>",names(tilevect)[which(as.character(tilevect)==y2y$tile2[id])]),
+              opacity = input$"y2ymapBttn-opacity",
+              layerId = "y2ymapTileLegendr",
+              group = "pas",
+              className= "info legend Legend",
+              labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
+            )
+        }
+        if(is.na(y2y$tile1[id])){
+          proxy %>% removeControl("y2ymapTileLegendl")
+        }
+        if(is.na(y2y$tile2[id])){
+          proxy %>% removeControl("y2ymapTileLegendr")
+        }
       })
     
     } else if (input$tabs == "patourTab") {
       #3). PA Tour Logic ----
+      #3a) Setup ----
       patour <- callModule(tourPanel, "patour", tourName = "pa") #Start the pa tour panel
       shinyjs::click("patour-stopBttn") #Stop the tour so it starts at first slide each time.
       callModule(ddownBttn,"pamapBttn") #Settings button on Protected Areas Tour Map
       callModule(map,"pamap", OSM = F,view=c(-122.8271,55.71267,5)) #Initiate the tour map
       isSwipepa(F) #Initialize the map as a non-swipe map.
       proxy <- leafletProxy("pamap-map") #setup a proxy object so we can modify the map below.
-      
       observeEvent(patour$id(),{runjs("patourSide.scrollTo(0,0)")}) #Make sure tour text scrolls to the top each time the page turns
       
-      #Get the current map layer opacity and update the map.
-      observeEvent(input$"pamapBttn-opacity",{
-        isSwipepa(tourStep(mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),shpdata=pashp,#view=isolate(patourView$view),
-                           opac=input$"pamapBttn-opacity", OSM = T, showAll=F))
-      })
-      #Observe changes in isSwipepa, which is set by tour step (which is controlled by the tour buttons)
+      #3b) Observe changes in tourStep ----
+      #By watching isSwipepa which is updated by the tourstep function which is updated by the buttons.
       observe({
         isSwipepa(
           tourStep(
             mapid="pamap",tourinfo=pa,tourid=patour$id(),rSwipe=isSwipepa(),
-            shpdata=pashp,opac=input$"pamapBttn-opacity", OSM = F,showAll=T
-          )
-        )
-        #Also, if there was a tile layer selected, add it back in.
+            shpdata=pashp,opac=input$"pamapBttn-opacity", OSM = F,showAll=T))
+       })
+      #3c) Change tiles and tile opacity ----
+      tobsPAtour<-observe({
         proxy %>% 
-          clearGroup("metrics")
+          clearGroup("metrics") 
         if (input$patourLayer != "") {
           data <- tilelist[tileName %in% input$patourLayer,]
-          proxy %>%
-            addTiles(
-              urlTemplate = data$tileSubdir,
-              attribution = data$tileAttribution,
-              group = "metrics",
-              layerId = data$tileGroup,
-              options = tileOptions(
-                tms = T,
-                minZoom = minZoom,
-                maxZoom = maxZoom,
-                unloadInvisibleTiles = T,
-                noWrap = T,
+          if(data$tileName == "fwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"pamapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(255,0,0,maxColorValue = 255),
+                         rgb(255,127,127,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("High","Medium","Low"),
+                title = paste0("Legend: Tile Fill<br>",data$tileGroup),
                 opacity = input$"pamapBttn-opacity",
-                zIndex = 9000
+                layerId = "patourTileLegend",
+                group = "pas",
+                className= "info legend Legend"
               )
+          } else if(data$tileName =="bwshpath"){
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"pamapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                colors=c(rgb(0,112,255,maxColorValue = 255),
+                         rgb(190,232,255,maxColorValue = 255),
+                         rgb(225,225,225,maxColorValue = 255)),
+                values=c(150,450,750),
+                labels=c("High","Medium","Low"),
+                title = paste0("Legend: Tile Fill <br>",data$tileGroup),
+                opacity = input$"pamapBttn-opacity",
+                layerId = "patourTileLegend",
+                group = "pas",
+                className= "info legend Legend"
+              )
+          } else {
+            cols<-colorNumeric(
+              palette="RdYlBu",
+              domain=c(0,100),
+              reverse=F
             )
+            proxy %>%
+              addTiles(
+                urlTemplate = data$tileSubdir,
+                attribution = data$tileAttribution,
+                group = "metrics",
+                layerId = data$tileGroup,
+                options = tileOptions(
+                  tms = T,
+                  minZoom = minZoom,
+                  maxZoom = maxZoom,
+                  unloadInvisibleTiles = T,
+                  noWrap = T,
+                  opacity = input$"pamapBttn-opacity",
+                  zIndex = 9000
+                )
+              ) %>%
+              addLegend(
+                position = "bottomright",
+                pal=cols,
+                values=c(0:100),
+                title = paste0("Legend: Tile Fill (Quantiles)<br>",data$tileGroup),
+                opacity = input$"pamapBttn-opacity",
+                layerId = "patourTileLegend",
+                group = "pas",
+                className= "info legend Legend",
+                labFormat = labelFormat(suffix = "%",transform = function(x) sort(x, decreasing = TRUE))
+              )
+          }
         }
       })
-      #If the user changes the tiles, change the tiles.
-      observe({
-        proxy %>% 
-          clearGroup("metrics")
-        if (input$patourLayer != "") {
-          data <- tilelist[tileName %in% input$patourLayer,]
-          proxy %>%
-          addTiles(
-            urlTemplate = data$tileSubdir,
-            attribution = data$tileAttribution,
-            group = "metrics",
-            layerId = data$tileGroup,
-            options = tileOptions(
-              tms = T,
-              minZoom = minZoom,
-              maxZoom = maxZoom,
-              unloadInvisibleTiles = T,
-              noWrap = T,
-              opacity = input$"pamapBttn-opacity",
-              zIndex = 9000
-            )
-          )
-        }
-      })
-  
+      
     } else if (input$tabs == "climexpTab") {
       #4). Metric Explorer ----
       #4a) Setup ----
@@ -860,7 +1076,7 @@ function(input, output, session) {
         ind <- st_intersects(pts,clip,sparse=F)
         if (any(ind)) {
           data <- pas[ind,]
-          data <- data[data$AREA >= zoomcuts[input$"paexpMap-map_zoom"],]
+          data <- data[data$AREA >= zoomcuts[floor(input$"paexpMap-map_zoom")],]
           if (length(data) < 1) {
             data <- pas[1,]
           }
