@@ -35,27 +35,19 @@ function(input, output, session) {
       
     } else if (input$tabs == "climtourTab") {
     # 2). Metric Tour Logic----
+      #2a) Setup ----
       y2ytour <- callModule(tourPanel, "y2ytour", tourName = "y2y") # Initiate the tour
       shinyjs::click("y2ytour-stopBttn") # Simulate a click on the stop botton to start it at the beginning, each time.
       callModule(ddownBttn,"y2ymapBttn") # Settings button on Y2Y Tour Map
       callModule(map, "y2ymap", swipe = F,OSM=F,view=c(-122.8271,55.71267,4.5)) # Create the starting map for the tour.
       isSwipemetric(F) #Start the maps with a non-swipe map.
       observeEvent(y2ytour$id(),{runjs("climtourSide.scrollTo(0,0)")}) #Make sure the tour scrolls to the top each time it moves to a new page.
-      #2b) Update map with opacity change. 
+      #2b) Update map with opacity change.----
       #Needed for the swipe maps.
       observeEvent(input$"y2ymapBttn-opacity",{
+        y2y$clear[y2ytour$id()]<-T
         isSwipemetric(tourStep(mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),rSwipe = isSwipemetric(),
                                shpdata=y2yshp, opac = input$"y2ymapBttn-opacity",OSM=F,addPoly=F))
-      })
-      #2c) Observe changes in tour step.
-      #Is actually watching isSwipeMetric, which is set by www/code/tourstep.R 
-      #(which is controlled by the tour buttons)
-      observe({
-        isSwipemetric(
-          tourStep(
-            mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),
-            rSwipe = isSwipemetric(),shpdata=y2yshp, 
-            opac = input$"y2ymapBttn-opacity",OSM=F,addPoly=F))
         id<-isolate(y2ytour$id())
         if(is.null(id)){
           return()
@@ -138,7 +130,17 @@ function(input, output, session) {
           proxy %>% removeControl("y2ymapTileLegendr")
         }
       })
-      #Observe changes in the tiles.
+      #2c) Observe changes in tour step. ----
+      #Is actually watching isSwipeMetric, which is set by www/code/tourstep.R 
+      #(which is controlled by the tour buttons)
+      observe({
+        isSwipemetric(
+          tourStep(
+            mapid = "y2ymap",tourinfo = y2y,tourid = y2ytour$id(),
+            rSwipe = isSwipemetric(),shpdata=y2yshp, 
+            opac = input$"y2ymapBttn-opacity",OSM=F,addPoly=F))
+      })
+      #2d) Observe changes in the tiles. ----
       tobsmetricTour<-observeEvent(y2ytour$id(),{
         id<-isolate(y2ytour$id())
         if(is.null(id)){
