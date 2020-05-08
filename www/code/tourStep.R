@@ -115,7 +115,8 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,
       weight = 2,color = "blue",
       layerId = paste0("shp",shp$TOURID),
       fillOpacity = 0.0,
-      smoothFactor = 2.0
+      smoothFactor = 2.0,
+      label = ~htmlEscape(shp$Name)
     )
   }
   if (isTRUE(setup$zoomTo)) {
@@ -123,3 +124,4 @@ tourStep <- function(mapid = "", tourinfo,tourid,rSwipe,
   }
   return(isSwipe) 
 }
+

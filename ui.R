@@ -77,59 +77,73 @@ ui <- function(request) {
     ),
     mainPanel(
       id = "homeMain",
-      column(
-        width = 6,
-        id = "homeCol1",
-        class = "homeCol",
-        fluidRow(
-          img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 33.625vh;"
+      #Explor Icon Row
+      fluidRow(
+        id="homeRow1",
+        class="homeRow",
+        column(
+          width = 6,
+          class = "homeColL", 
+          fluidRow(
+            img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;")
+          ),
+          fluidRow(
+            div(
+              h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeTextHead"), 
+              id = "climexpLink", style = "text-align: center;cursor:pointer;text-align: justify"
+            )
+          )
         ),
-        fluidRow(
-          div(h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeTextHead"), 
-              id = "climtourLink", style = " text-align: center;cursor:pointer; text-align: justify;"),
-          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
+        column(
+          width = 6,
+          class = "homeColR",
+          fluidRow(
+            img(id = "paexpimg",src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;")
+          ),
+          fluidRow(
+            div(
+              h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeTextHead"), 
+              id = "paexpLink",style = "text-align: center; cursor:pointer;text-align: justify;"
+            )
+          )
         ),
-        fluidRow(
-          img(id = "climexpimg", src = "img/HomeScreen/metricexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 33.625vh;"
-        ),
-        fluidRow(
-          div(h5("Climate Metrics Explorer – Explore and summarize climate resilience data by watershed." ,class = "homeTextHead"), 
-              id = "climexpLink", style = "text-align: center;cursor:pointer;text-align: justify"),
-          style = "text-align: center; height: 8.5vh; max-height: 100%;max-width: 100%;"
-        )
+        style = "text-align: center; height: 33.625vh"
       ),
-      column(
-        width = 6,
-        id = "homeCol2",
-        class = "homeCol",
-        
-        fluidRow(
-          id = "patourimg", 
-          img(src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 33.625vh;"
-        ),
-        fluidRow(
-          id = "patourLink",
-          div(h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeTextHead"), 
-              style = "text-align: center;cursor:pointer; text-align: justify;"
+        # style = "text-align: center; height: 10.5vh; max-height: 100%; max-width: 100%;"
+      #Tour Icon Row
+      fluidRow(
+        id="homeRow2",
+        class="homeRow",
+        column(
+          width = 6,
+          class = "homeColL",
+          fluidRow(
+            img(id = "climtourimg", src = "img/HomeScreen/metrictourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;")
           ),
-          style = "text-align: center; height: 12.5vh; max-height: 100%; max-width: 100%;"
+          fluidRow(
+            div(
+              h5("Climate Metrics Tour – Learn about the concepts and methods underlying key climate resilience metrics.",class = "homeTextHead"), 
+              id = "climtourLink", style = " text-align: center;cursor:pointer; text-align: justify;"
+            )
+          )
         ),
-        fluidRow(
-          id = "paexpimg", 
-          img(src = "img/HomeScreen/paexplorerthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;"),
-          style = "text-align: center; height: 33.625vh;"
-        ),
-        fluidRow(
-          id = "paexpLink", 
-          div(h5("Protected Area Explorer – Explore and compare the climate vulnerability and resilience of North America’s protected areas.",class = "homeTextHead"), 
-              style = "text-align: center; cursor:pointer;text-align: justify;"
+        column(
+          width = 6,
+          class = "homeColR",
+          fluidRow(
+            img(id = "patourimg",src = "img/HomeScreen/patourthumb169.png",style = "cursor:pointer; max-width: 100%; max-height: 100%; height: auto; width: auto;")
           ),
-          style = "text-align: center; height: 8.5vh; max-height: 100%; max-width: 100%;"
-        )
+          fluidRow(
+            div(
+              h5("Protected Area Tour – Learn about key climate resilience metrics via a comparison across the major protected areas of the Yellowstone-to-Yukon region.", class = "homeTextHead"), 
+              id = "patourLink", style = "text-align: center;cursor:pointer; text-align: justify;"
+            )
+          )
+        ),
+        style = "text-align: center; height: 33.625vh"
       )
+      
+        # style = "text-align: center; height: 8.5vh; max-height: 100%; max-width: 100%;"
     )
   )
   

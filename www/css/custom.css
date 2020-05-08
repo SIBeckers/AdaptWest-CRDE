@@ -19,7 +19,7 @@
 	right: 25px;
 	border-bottom-width: 0px;
 }
-}
+
 
 .col-sm-12:nth-child(1){
   height: 8vh;
@@ -207,12 +207,12 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   height: calc(100vh - 80px);
   overflow-y: auto
 }
-.homeCol {
-  width: 46%;
+.homeColL {
+  width:48%;
 }
-
-#homeCol2 {
-  margin-left: 4%;
+.homeColR {
+  width:48%;
+  float: right;
 }
 
 /*-----------------------------------------------------------------
@@ -397,6 +397,9 @@ a.btn:hover, a.btn:focus, a.btn.focus {
     display:none;
     overflow-y: auto;
   }
+  .homeTextHead {
+    font-size: 14px;
+  }
   #homeMain {
     width: 100%;
   }
@@ -414,8 +417,20 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   #homeMain {
     overflow-y: auto;
   }
-  .homeCol {
+  .homeColR {
+    width:100%;
+  }
+  .homeColL {
     width: 100%;
+  }
+  .homeRow{
+    height: auto;
+  }
+  .homeRowText{
+    height: auto;
+  }
+  .homeTextHead {
+    font-size: 12px;
   }
   #climtourMain{
     overflow-y: auto;
@@ -428,8 +443,5 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   }
   #paexpMain {
     overflow-y: auto;
-  }
-  .titleimg {
-    display: none;
   }
 }
