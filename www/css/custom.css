@@ -2,11 +2,38 @@
 /*-----------------------------------------------------------------
                     CSS THAT APPLIES TO ENTIRE WEBPAGE
 -------------------------------------------------------------------*/
+.btn-twitter {
+	position: fixed !important;
+	right: 65px;
+	border-bottom-width: 0px;
+}
+#tabs > li:nth-child(7) > a:nth-child(1) {
+  padding: 0px;
+}
+
+#tabs > li:nth-child(6) > a:nth-child(1) {
+  padding: 0px;
+}
+.btn-github {
+  position: fixed !important;
+	right: 25px;
+	border-bottom-width: 0px;
+}
+
+
 .col-sm-12:nth-child(1){
   height: 8vh;
 }
+.footer {
+  text-align: right;
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 56vh;
+}
+
 body, h1, h2, h3, h4, h5, h6, p, li {
-  font-family: "Roboto","Helvetica Neue", sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 #tourbttn{
  position: absolute;
@@ -23,7 +50,7 @@ body, h1, h2, h3, h4, h5, h6, p, li {
 }
 
 body {
-  overflow-y: hidden;
+  overflow-y: hidden
 }
 
 html, body {
@@ -91,6 +118,10 @@ header{
 	padding-right: 15px;
 } 
 
+.selectize-dropdown-content {
+  max-height: 25vh;
+}
+
 .control-label, .selectize-control.single{ 
 	font-size: 16px; 
 	line-height: 16px;
@@ -111,60 +142,77 @@ a:hover, a:focus {
 	margin-top: 1.5px;
 }
 
+
+.mystyle {
+  width: auto !important;
+}
+
+a.btn:hover, a.btn:focus, a.btn.focus {
+  color: #178acc;
+  text-decoration: none;
+}
+
+.fa-twitter {
+  font-size: 1.33333333em;
+  line-height: .75em;
+  vertical-align: -15%;
+}
+
+.fa-github {
+  font-size: 1.33333333em;
+  line-height: .75em;
+  vertical-align: -15%;
+}
+
+
 /*-----------------------------------------------------------------
                     HOME TAB CSS
 -------------------------------------------------------------------*/
-.homegridl {
- 	border-block: #39a8e8;
-	border-right-width: 3px;
-	border-right-style: solid;
-	border-right-color:#39a8e8;
-	border-bottom-width: 3px;
-	border-bottom-style: solid;
-	border-bottom-color:#39a8e8;
-	width: 50%;
-	padding-bottom: 10px;
-}
-
-.homegridlb {
- 	border-block: #39a8e8;
-	border-right-width: 3px;
-	border-right-style: solid;
-	border-right-color:#39a8e8;
-}
-.homegridr {
- 	border-block: #39a8e8;
-	border-bottom-width: 3px;
-	border-bottom-style: solid;
-	border-bottom-color:#39a8e8;
-	width: 50%;
-	padding-right: 18px;
-	padding-bottom: 10px;
-}
-
 .homeText {
- font-size: 16px !important;
+ /*font-size: 16px !important;*/
  font-family: Roboto, "Helvetica Neue", sans-serif !important;
  line-height: 1.2;
+}
+.homeTextHead {
+ /*font-size: 16px !important;*/
+ font-family: Roboto, "Helvetica Neue", sans-serif !important;
+ line-height: 1.2;
+ text-align: center;
+ font-size: 1.2em;
 }
 
 #homeSidebar{
   text-align: center;
   position: relative;
-   height: calc(100vh - 115px);
+  height: calc(100vh - 115px);
+  max-height: calc(100vh - 115px);
 }
 
-
+#homeSidebarBottom {
+    text-align: left;
+    bottom: 75px;
+    width: 94%;
+    left: 25px;
+}
 
 #homeSidebarR2{
   padding: 5px;
+  text-align: center;
 }
 #homeSidebarR1{
   text-align:left;
 }
 
 #homeMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
+  overflow-y: auto
+}
+.homeColL {
+  width:48%;
+}
+.homeColR {
+  width:48%;
+  float: right;
 }
 
 /*-----------------------------------------------------------------
@@ -172,12 +220,15 @@ a:hover, a:focus {
 -------------------------------------------------------------------*/
 
 #climtourMain{
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
+  max-height: calc(100vh - 80px);
+  
 }
 
 
+
 /*-----------------------------------------------------------------
-                    Climate Metrics Exploter CSS
+                    Climate Metrics Explorer CSS
 -------------------------------------------------------------------*/
 #climexpSide{
   min-width: 10%;
@@ -185,24 +236,51 @@ a:hover, a:focus {
   /*overflow-y: auto;*/
   min-height: auto;
   height: auto;
-  max-height: 88vh;
+  max-height: calc(100vh - 115px);
+}
+
+#climexpMain{
+  height: calc(100vh - 80px);
+}
+
+#climExpB2E.bttn-unite.bttn-primary:focus, #climExpB2E.bttn-unite.bttn-primary:hover {
+  color: white !important;
+}
+
+#climtable{
+  table-layout: fixed;
+  width: 100%;
+}
+
+#climexp-getallSP, #climexp-getallSPxy, #climtable-getallSPtab{
+  float: right;
+  margin-right: 10px;
+}
+
+#climexp-bttnRow {
+  padding-left: 15px;
+  padding-right: 15px;
   
 }
-/*
-#climexpPanel{
-  background-color: rgb(255, 255, 255);
-  background-color: rgba(255,255,255,0.8);
-  padding: 10px;
-  transition: opacity 50ms 50ms;
-  border: 1px solid;
-  border-radius: 15px;
-  z-index: 1200;
-  height: calc(100vh - 115px);
-}
-*/
-#climexpMain{
-  height: calc(100vh - 115px);
 
+#climexp-resetSP, #climexp-resetSPxy, #climtable-resetSPtab{
+  margin-left: 10px;
+}
+
+#clearTileFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
+#clearPolyFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
+#climexp-getallSP, #climexp-resetSP, #climExpB2E, #climexp-getallSPxy, #climexp-resetSPxy, #climtable-resetSPtab, #climtable-getallSPtab  {
+  color: #0078A8;
 }
 
 /*-----------------------------------------------------------------
@@ -221,9 +299,17 @@ a:hover, a:focus {
   height: calc(100vh - 115px);
 }
 */
+
+
 #patourMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
 }
+#patourPanel {
+  background-color: white;
+  padding:5px;
+  border-radius: 5px;
+}
+
 
 /*-----------------------------------------------------------------
                     PA Explorer CSS
@@ -240,19 +326,89 @@ a:hover, a:focus {
   
 }
 
+#patable{
+  table-layout: fixed;
+  width: 100%;
+}
+
+#paexpSide {
+  min-width: 10%;
+  max-width: 100%;
+  overflow-y: auto;
+  min-height: auto;
+  height: auto;
+  max-height: calc(100vh - 115px);
+}
+
 #paexpMain {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 80px);
+}
+
+#paexp-getallSP, #paexp-resetSP, #paexp-resetSPxy, #paexp-getallSPxy, #patable-getallSPtab, #patable-resetSPtab{
+  color: #0078A8 !important;
+}
+
+#paexp-getallSP,#paexp-getallSPxy,#patable-getallSPxy{
+  float: right;
+  margin-right: 10px;
+}
+
+#paexp-bttnRow {
+  padding-left: 15px;
+  padding-right: 15px;
+  
+}
+
+#paexp-resetSP, #paexp-resetSPxy, #patable-resetSPtab{
+  margin-left: 10px;
+}
+
+
+#paclearTileFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
+}
+
+#paclearPolyFill {
+  right: -75%;
+  top: -51px;
+  position: relative;
 }
 
 /*-----------------------------------------------------------------
                     Stuff for smaller screens
 -------------------------------------------------------------------*/
 
-@media (max-width: 1900px){
+@media (max-width: 1920px){
+  
+  .homeText {
+    font-size: 16px;
+  }
+  
+}
+@media only screen and (max-width: 1440px) {
   .titleimg {
     display: none;
   }
 }
+@media only screen and (max-width: 1100px) {
+  #homeSidebar{
+    display:none;
+    overflow-y: auto;
+  }
+  .homeTextHead {
+    font-size: 14px;
+  }
+  #homeMain {
+    width: 100%;
+  }
+  .titleimg {
+    display: none;
+  }
+  
+}
+
 @media only screen and (max-width: 900px) {
   #homeSidebar{
     display:none;
@@ -260,6 +416,21 @@ a:hover, a:focus {
   }
   #homeMain {
     overflow-y: auto;
+  }
+  .homeColR {
+    width:100%;
+  }
+  .homeColL {
+    width: 100%;
+  }
+  .homeRow{
+    height: auto;
+  }
+  .homeRowText{
+    height: auto;
+  }
+  .homeTextHead {
+    font-size: 12px;
   }
   #climtourMain{
     overflow-y: auto;

@@ -1,0 +1,16 @@
+parameter,status
+table,TRUE
+l1data,TRUE
+l2data,TRUE
+l3data,TRUE
+fwvel,TRUE
+bwvel,TRUE
+topodiv,TRUE
+biovel,TRUE
+climconn,TRUE
+carbon,TRUE
+intact,TRUE
+starplot,TRUE
+scatterplot, FALSE
+printCode,FALSE
+RBS,TRUE

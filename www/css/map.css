@@ -3,17 +3,26 @@
 .ddownBttn {
   position: absolute;
   top: 15px;
-  right: 15px;
+  right: 25px;
   left: auto;
   bottom: auto;
 }
 
+.b2eBttn {
+  position: absolute;
+  top: 15px;
+  right: auto;
+  left: 20px;
+  bottom: auto;
+}
+ 
 #global {
   width: 44px;
   height: 44px;
   line-height: 40px;
   padding-top: 4px;
   padding-left: 8px;
+  color: #0078A8;
 }
 #locate {
   width: 44px;
@@ -21,7 +30,16 @@
   line-height: 40px;
   padding-top: 4px;
   padding-left: 8px;
+}
 
+.leaflet-touch .leaflet-bar a:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+
+}
+.leaflet-touch .leaflet-bar a:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .leaflet-bar:nth-child(n+2){
@@ -34,10 +52,21 @@
 .leaflet-control-zoom {
   width: 44px;
   top: 12px;
+  color: #0078A8;
+}
+
+.leaflet-touch .leaflet-control-layers, .leaflet-touch {
+	/* border: 2px solid rgba(0,0,0,0.2); */
+}
+
+ .leaflet-touch .leaflet-control-layers {
+	/* box-shadow: none; */
+	border: none;
 }
 
 .leaflet-control-layers {
   top: 10px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
 }
 
 .leaflet-touch .leaflet-bar a {
@@ -46,4 +75,17 @@
   font-size: 30px;
   font-weight: 900;
   padding-top: 8px;
+  color: #0078A8;
+}
+.leaflet-touch .leaflet-bar {
+  border: 0;
+  border-radius: 4px;
+}
+
+.leaflet-top {
+  top: 45px;
+}
+
+#pamap-map .leaflet-top {
+  top: 90px;
 }

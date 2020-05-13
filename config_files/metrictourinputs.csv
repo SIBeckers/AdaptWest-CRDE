@@ -1,0 +1,15 @@
+tourId,tourFileName,tile1,tile2,polygon,zoomTo,clear
+1,00_metrictour_intro.Rmd,,,1,F,T
+2,01_metrictour_climateadaptation.Rmd,fwvel500,,1,F,T
+3,02_metrictour_climatedata.Rmd,fwvel500,,1,F,F
+4,03_metrictour_climdissim.Rmd,fwvel500,,1,F,F
+5,04_metrictour_climatevelocity.Rmd,fwvel500,bwvel500,1,F,T
+6,05_metrictour_topodiversity.Rmd,elevdiv500,,1,F,T
+7,06_metrictour_bioticvelocity.Rmd,birdref500,treeref500,1,F,T
+8,07_metrictour_connectivity.Rmd,fwshpath,bwshpath,1,F,T
+9,08_metrictour_carbon.Rmd,treena500,soilc500,1,F,T
+10,09_metrictour_intactness.Rmd,intact500,,1,F,T
+11,10_metrictour_comparingmetrics.Rmd,,,1,F,T
+
+
+

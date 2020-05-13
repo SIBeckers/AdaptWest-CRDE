@@ -4,7 +4,10 @@ output: html_fragment
 css: "../../css/custom.css"
 ---
 ### AdaptWest Climate Resilience Data Explorer
+
+
 <div class="row", id="homeSidebarR1">
+  <br>
   <span class="homeText">Welcome to the AdaptWest Climate Resilience Data Explorer. AdaptWest is a spatial database designed to help land management agencies and other organizations implement strategies that promote resilience, protect biodiversity, and conserve and enhance the adaptation potential of natural systems in the face of a changing climate.</span>
   </br>
   </br>
@@ -16,28 +19,20 @@ css: "../../css/custom.css"
     <li><span class="homeText">Explore information resources that can help conservation practitioners enhance climate resilience and connectivity and address climate change threats in the context of regional planning;</span></li>
     <li><span class="homeText">Support conservation management that increases the adaptive capacity of the landscape and its ability to support native species and ecosystems into the future by protecting areas which play a key role in facilitating climate adaptation and mitigation.</span></li>
   </ul>
-  </br>
-  <span class="homeText">This viewer was developed via collaboration between Carlos Carroll (Klamath Center for Conservation Research) and Justin Beckers (Canadian Forest Service, Natural Resources Canada). All data displayed in this viewer is freely-available at <a href=http:/adaptwest.databasin.org>http:/adaptwest.databasin.org.</a></span>
-  </br>
-  </br>
-  <span class="homeText">Development of this application was supported by:</span>
+  <br>
+  <span class="homeText">This viewer was developed through collaboration between: <ul style="list-style-type: none;"><li>Justin Beckers</li><li>Carlos Carroll (Klamath Center for Conservation Research)</li></ul>All data displayed in this tool are freely-available at <a href=http:/adaptwest.databasin.org>http:/adaptwest.databasin.org.</a></span><br><br>
 </div>
 
 
-<div class="row", id = "homeSidebarR2">
- </br>
- </br>
-  <div id = "links", style = "background: white;">
-    <a href = "http://www.wilburforce.org/", style = "background: white; font-color: #ffffff; margin-bottom:20px;padding-bottom:20px">
-      <img src = "../../logos/wilburforcelogo.jpg", width = "58.8%"/>
-    </a>
-    <a href = "https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/13497", style = "font-color: #ffffff;margin-bottom:20px;padding-bottom:20px">
-     <img src = "../../logos/canada-2c-nrcan-cfs-curves.jpg", width = "40.16%"/>
-    </a>
-    </br>
-    <br style = "background: white; padding-bottom: 20px;"/>
-    <a href = "https://adaptwest.databasin.org/",style = "background: white; font-color: #3c8dbc">
-      <img src = "../../logos/adaptwestbanner.jpg", width = "100%"/>
-    </a>
-  </div>
+<div class="row", id = "homeSidebarBottom">
+  <span class="homeText">Development of this application was supported by:</span>
+  <br>
+  <br>
+</div>
+<div class="row", id = "homeSidebarR2", style = "background: white; font-color: #ffffff;">
+    <div id = "links">
+      <a href = "http://www.wilburforce.org/", style = "background: white; color: #ffffff !important;">
+        <img src = "../../logos/wilburforcelogo.jpg", width = "44.81%"/>
+      </a>
+    </div>
 </div>
