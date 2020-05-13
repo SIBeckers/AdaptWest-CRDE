@@ -2,7 +2,7 @@
 #AdaptWestApp ui.R
 #Author - Justin F. Beckers
 #Start Date - March 8, 2019
-#Version - 0.2
+#Version - 1.0.0
 #Notes 
 # - Using bookmarking. This means that the entire UI must be served by a single
 #   function. But luckily this function can call many other functions or scripts.
@@ -51,14 +51,6 @@ ui <- function(request) {
             tags$img(src = "./logos/adaptwestbanner_svg.svg", style = "height: 46.5px; font-family: Roboto;"),
       class = "titleimg", style="font-family: Roboto, Helvetica Neue, sans-serif !important;")
   )
-  
-  #Footer ----
-  # footer = tagList(
-  #   div(class="footer",
-  #     shinydashboardPlus::socialButton(url = aw_gh, type = "github"),
-  #     shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
-  #   )
-  # )
   
   #Home Tab ----
   homeTab <- tabPanel(
@@ -109,7 +101,6 @@ ui <- function(request) {
         ),
         style = "text-align: center; height: 33.625vh"
       ),
-        # style = "text-align: center; height: 10.5vh; max-height: 100%; max-width: 100%;"
       #Tour Icon Row
       fluidRow(
         id="homeRow2",
@@ -142,8 +133,6 @@ ui <- function(request) {
         ),
         style = "text-align: center; height: 33.625vh"
       )
-      
-        # style = "text-align: center; height: 8.5vh; max-height: 100%; max-width: 100%;"
     )
   )
   
@@ -188,7 +177,6 @@ ui <- function(request) {
       fluidRow(
         id = "climexpSideR1",
         h4("Menu",style="padding-left: 15px")
-        # HTML('<i class="fa fa-minus fa-lg mycolIcon" id="climexpPanelIcon" data-toggle="collapse" data-target="#climexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
       ),
       fluidRow(
         id = "climexpSideR2",
@@ -350,8 +338,7 @@ ui <- function(request) {
       fluidRow(
         id = "paexpSideR1",
         h4("Menu",style="padding-left: 15px")
-        # HTML('<i class="fa fa-minus fa-lg mycolIcon" id="paexpPanelIcon" data-toggle="collapse" data-target="#paexpSideR2"></i><strong style="padding:2px"> Menu </strong>')
-      ),
+       ),
       fluidRow(
         id = "paexpSideR2",
         bs_accordion(id = "paexpacc") %>%
@@ -438,8 +425,8 @@ ui <- function(request) {
           bs_append(
             title = "7. Generate a report", 
             content = 
-              list(reportUI('paReport')
-                
+              list(
+                reportUI('paReport')
               )
           )
       )
@@ -451,11 +438,11 @@ ui <- function(request) {
       ddownBttnUI("paexpMapBttn")
     )
   )
-  test<-tabPanel(
+  gh<-tabPanel(
     title=
       shinydashboardPlus::socialButton(url = aw_gh, type = "github")
   )
-  test2<-tabPanel(
+  tw<-tabPanel(
     title= shinydashboardPlus::socialButton(url = aw_tw, type = "twitter")
   )
   #NavBar Page ----
@@ -478,8 +465,8 @@ ui <- function(request) {
       climExpTab,
       paTourTab,
       paExpTab,
-      test,
-      test2
+      gh,
+      tw
     )
   ) 
 }

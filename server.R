@@ -1,7 +1,7 @@
 #AdaptWestApp server.R
 #Author - Justin F. Beckers
 #Start Date - March 8, 2019
-#Version - 0.1
+#Version - 1.0.0
 #Notes
 source("global.R")
 
