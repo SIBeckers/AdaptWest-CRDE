@@ -121,7 +121,7 @@ dispersal under climate change). The threat to biodiversity from climate change 
 Conservation practitioners can use the data presented in this report to help inform management strategies in particular watersheds and management areas. This information can also provide context as to how threats and opportunities in their region compare with those in other areas.
 
 Cite this app and report as: 
-<blockquote>Beckers J, Carroll C. 2020. AdaptWest climate resilience data explorer. doi: [doi](http://dx.doi.org/[doi]).</blockquote>
+<blockquote>Beckers J, Carroll C. 2020. AdaptWest climate resilience data explorer. doi: [10.5281/zenodo.3824538](https://doi.org/10.5281/zenodo.3824538]).</blockquote>
 
 For further information and citation refer to: 
 <blockquote>Carroll C, Noss RF. 2020. Rewilding in the face of climate change. Conservation Biology (Early View). doi: [10.1111/cobi.13531](http://dx.doi.org/10.1111/cobi.13531).</blockquote>
