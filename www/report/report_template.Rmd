@@ -235,7 +235,7 @@ if(params$fmt %in% c("word_document")){
         paste0("L2 ecoregion: ",l2name),
         paste0("L3 ecoregion: ",l3name)
         ),
-      footnote_as_chunk = T
+      footnote_as_chunk = F
       ) %>%
     kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down"))
 } else {
