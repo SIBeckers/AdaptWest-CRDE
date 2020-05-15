@@ -87,7 +87,7 @@ appURL = "https://adaptwest.shinyapps.io/climate-resilience-data-explorer" #Wher
   source("www/code/myicon.R")
   source("www/code/radarplot.R")
   source("www/code/xyplot.R")
-  source("./www/report/mapFunction.R")
+  source("www/report/mapFunction.R")
 
 
 # Global Resources ----

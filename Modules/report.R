@@ -1,4 +1,4 @@
-report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",outname="AdaptWest_Metrics_Report") {
+report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,namecol="PA_NAME",idcol="gridcode",outname="AdaptWest_Metrics_Report") {
   ROIdata<-reactiveValues(roi=NULL)
   outputDir<-"./www/report" #Should still work when running the app locally.
   setBookmarkExclude(c("selPoly4Report","reportFormat","reportInteractive","reportBttn",
@@ -50,6 +50,7 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
     bar<-data[bar,]
     rm(foo)
     names(bar)[which(names(bar)==namecol)]<-"Name"
+    names(bar)[which(names(bar)==idcol)]<-"ID"
     ROIdata$roi<-bar
     rm(bar)
   })
@@ -73,7 +74,7 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       paramslist$pa  = pa
       paramslist$appURL = appURL
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
-      
+      if(isTRUE(pa)){paramslist$poly$ID<-paste0("pa",paramslist$poly$ID)}
       mydownloads<<-rbindlist(
         list(mydownloads,
              data.table(ROIdata$roi$Name,as.numeric(Sys.time()),

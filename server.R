@@ -962,7 +962,7 @@ function(input, output, session) {
           
           spdat <- rbind(edata,mswds)
           if (nrow(spdat) > 1){
-            callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F)
+            callModule(report,"climReport",polys=rwds(),polys2=msds,data=wds,namecol="NEWNAME",pa=F,idcol="FIDNUM2")
             callModule(appStarPlot,"climexp",data = spdat,namecol = "Name",removecols = NULL, live = T)
             callModule(Table,"climtable",tabdat=rbind(edata %>%slice(1) %>% select(c(9,1:8)),mswds %>% select(c(9,1:8))))
           }
@@ -1447,7 +1447,7 @@ function(input, output, session) {
     #first and keep "popular regions
     reps_size<-sum(file.info(list.files(path=reportdir,all.files=T,recursive=T,full.names=T))$size)
     #First get rid of temporary files and temporary html files
-    if(reps_size>1E7){
+    if(reps_size > 1E7){
       print(utils:::format.object_size(reps_size, units="MB"))
       dirs<-list.dirs(reptmpdir,full.names=T,recursive = F)
       htmlfiles<-list.files(path=reptmpdir,full.names=T,recursive=F,pattern=".html")
@@ -1461,14 +1461,14 @@ function(input, output, session) {
     #Next let's get rid of the static reports. They are 3x bigger than the inter
     #active report format but they are slower to generate. I do think they will
     #be more popular though as html isn't generally thought of as an offline format
-    if(reps_size>1E9){
+    if(reps_size > 1E9){
       statreps<-list.files(path=repstaticdir,full.names=T)
       if(length(statreps)>0) {
         lapply(statsreps,unlink,force=T)
       }
     }
     #Last step, get rid of the interative reports.
-    if(reps_size>5.2E9) {
+    if(reps_size > 5.2E9) {
       interreps<-list.files(path=repinterdir,full.names=T)
       if(length(interreps)>0){
         lapply(interreps,unlink,force=T)
@@ -1478,7 +1478,7 @@ function(input, output, session) {
       #when producing the static reports. #By keeping these, generating new static
       #reports for should be sped up even if the report itself has already been
       #deleted.
-      if(reps_size>5.2E9) {
+      if(reps_size > 5.2E9) {
         imgs<-list.files(path=repimgdir,full.names=T,pattern=".png")
         if(length(imgs)>0){
           lapply(imgs,unlink,force=T)

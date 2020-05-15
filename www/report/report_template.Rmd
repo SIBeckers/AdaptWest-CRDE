@@ -83,7 +83,7 @@ cols<-colorNumeric(
   domain=c(0,100),
   reverse=F
 )
-polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc) 
+polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc)
 
 if(isTRUE(params$html)) {
   chunktype = "hold"
@@ -286,14 +286,14 @@ if(params$fmt=="word_document"){
 ```{r fwdvel, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$fwvelref)}
 ind<-which(tilelist$tileName=="fwvel500")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"))){
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
-  } else if(!file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/fwsvel_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"))){
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),dpi=600)
+  } else if(!file.exists(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/fwsvel_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/fwsvel_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/fwsvel_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),dpi=600)
   } else {
     m <- fullmap %>%
       clearGroup("metrics") %>%
@@ -337,12 +337,12 @@ if(isFALSE(params$html)){
       fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
       mapview::mapshot(
         x= m,
-        url = paste0(getwd(),"/tmp/fwsvel_",params$poly$Name,".html"),
-        file=paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),
+        url = paste0(getwd(),"/tmp/fwsvel_",params$poly$ID,".html"),
+        file=paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),
         remove_url=F,
         selfcontained=T
       )
-    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$Name,".png"),dpi=600)
+    knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),dpi=600)
   }
 } else {
   m <- fullmap %>%
@@ -416,14 +416,14 @@ if (params$RBS){
 ```{r bwdvel, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$bwvelref)}
 ind<-which(tilelist$tileName=="bwvel500")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))){
-    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))
-  } else if(!file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/bwsvel_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"))){
+    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"))
+  } else if(!file.exists(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/bwsvel_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/bwsvel_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/bwsvel_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% 
     addPolygons(
@@ -466,12 +466,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/bwsvel_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/bwsvel_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"))
   }
 } else {
   m <- fullmap %>% clearGroup("metrics") %>%
@@ -537,14 +537,14 @@ if (params$RBS){
 ```{r Topodiversity, echo = params$printCode, results = chunktype, out.width = ow, fig.align = 'center',eval=!is.na(params$poly$elevdiv)}
 ind<-which(tilelist$tileName=="elevdiv500")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))){
-    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))
-  } else if(!file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/elevdiv_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"))){
+    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"))
+  } else if(!file.exists(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/elevdiv_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/elevdiv_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/elevdiv_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
@@ -585,12 +585,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/elevdiv_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/elevdiv_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"))
   }
 } else {
   m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
@@ -674,18 +674,18 @@ ind<-which(tilelist$tileName=="birdref500")
 ind2<-which(tilelist$tileName=="treeref500")
 
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"))){
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$Name,".png")))
-  } else if(!file.exists(paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/birdref_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"))){
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png")))
+  } else if(!file.exists(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/birdref_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/birdref_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/birdref_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),
     )
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/treeref_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/treeref_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/treeref_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png")))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
@@ -726,8 +726,8 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/birdref_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/birdref_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
@@ -770,12 +770,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/treeref_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/treeref_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/treeref_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png")))
   }
 } else {
   m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
@@ -885,18 +885,18 @@ if (params$RBS){
 ind<-which(tilelist$tileName=="fwshpath")
 ind2<-which(tilelist$tileName=="bwshpath")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"))){
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$Name,".png")))
-  } else if(!file.exists(paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/fwshpath_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"))){
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png")))
+  } else if(!file.exists(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/fwshpath_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/fwshpath_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/fwshpath_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),
     )
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/bwshpath_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/bwshpath_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/bwshpath_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png")))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
@@ -940,8 +940,8 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/fwshpath_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/fwshpath_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
@@ -987,12 +987,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/bwshpath_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/bwshpath_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/bwshpath_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$Name,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png")))
   }
 } else {
   m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
@@ -1105,18 +1105,18 @@ if (params$RBS){
 ind<-which(tilelist$tileName=="soilc500")
 ind2<-which(tilelist$tileName=="treena500")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"))){
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treec_",params$poly$Name,".png")))
-  } else if(!file.exists(paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/soilc_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"))){
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treec_",params$poly$ID,".png")))
+  } else if(!file.exists(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/soilc_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/soilc_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/soilc_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),
     )
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/treec_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/treec_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/treec_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/treec_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treec_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treec_",params$poly$ID,".png")))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
@@ -1157,8 +1157,8 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/soilc_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/soilc_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
@@ -1201,12 +1201,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/treec_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/treec_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/treec_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/treec_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$Name,".png"),paste0(getwd(),"/imgs/treec_",params$poly$Name,".png")))
+    knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treec_",params$poly$ID,".png")))
   }
 } else {
   m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
@@ -1319,14 +1319,14 @@ if(params$fmt=="word_document"){
 ```{r intactness, echo = params$printCode, results = chunktype, out.width=ow, fig.align = 'center',eval=!is.na(params$poly$intact)}
 ind<-which(tilelist$tileName=="intact500")
 if(isFALSE(params$html)){
-  if(file.exists(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))){
-    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))
-  } else if(!file.exists(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png")) & file.exists(paste0(getwd(),"/tmp/intact_",params$poly$Name,".html"))) {
+  if(file.exists(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"))){
+    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"))
+  } else if(!file.exists(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png")) & file.exists(paste0(getwd(),"/tmp/intact_",params$poly$ID,".html"))) {
     webshot::webshot(
-      url = paste0(getwd(),"/tmp/intact_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/intact_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"),
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"))
   } else {
     m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
       data = params$poly,
@@ -1367,12 +1367,12 @@ if(isFALSE(params$html)){
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
-      url = paste0(getwd(),"/tmp/intact_",params$poly$Name,".html"),
-      file=paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"),
+      url = paste0(getwd(),"/tmp/intact_",params$poly$ID,".html"),
+      file=paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"),
       remove_url=F,
       selfcontained=T
     )
-    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$Name,".png"))
+    knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"))
   }
 } else {
   m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
