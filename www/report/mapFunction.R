@@ -41,7 +41,7 @@ mapFunction<-function(opacity=0.75,
         zIndex = 2,
         minZoom = minZoom,
         maxZoom = maxZoom,
-        opacity = 0.8
+        opacity = 1
       )
     ) %>%
     addProviderTiles(
@@ -75,7 +75,7 @@ mapFunction<-function(opacity=0.75,
     ) %>%
     hideGroup("ESRI Imagery") %>% 
     addMiniMap(
-      minimized = T,
+      minimized = F,
       toggleDisplay = T,
       collapsedWidth = 30,
       collapsedHeight = 30,

@@ -11,13 +11,13 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500,x=NULL,y=NULL) {
         ),
         br(),
         fluidRow(
-          if(isTRUE(pa))
+          if(isTRUE(pa)) {
             h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the biome as a whole."
+                climate resilience metrics for the selected protected area(s) and the biome as a whole."
             )
-          else{
+          } else{
             h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the ecoregion as a whole."
+                climate resilience metrics for the selected watershed(s) and the ecoregion as a whole."
             )
           }
           ,style="padding-left:15px; padding-right: 15px;"
@@ -59,13 +59,13 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500,x=NULL,y=NULL) {
         ),
         br(),
         fluidRow(
-          if(isTRUE(pa))
+          if(isTRUE(pa)) {
             h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the biome as a whole."
+                climate resilience metrics for the selected protected area(s) and the biome as a whole."
             )
-          else{
+          } else{
             h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the ecoregion as a whole."
+                climate resilience metrics for the selected watershed(s) and the ecoregion as a whole."
             )
           }
           ,style="padding-left:15px; padding-right: 15px;"
@@ -107,13 +107,13 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500,x=NULL,y=NULL) {
           ),
           br(),
           fluidRow(
-            if(isTRUE(pa))
+            if(isTRUE(pa)) {
               h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the biome as a whole."
+                climate resilience metrics for the selected protected area(s) and the biome as a whole."
               )
-            else{
+            } else{
               h5("Use the dialog below to generate a scatter plot that compares different
-                climate resilience metrics for the selected region(s) and the ecoregion as a whole."
+                climate resilience metrics for the selected watershed(s) and the ecoregion as a whole."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -151,10 +151,16 @@ xyPlotUI <- function(id,reset=T,all=T,pa=F,live=T,height=500,x=NULL,y=NULL) {
       div(class = "xyPlot",
         br(),
         fluidRow(
-          h5("Use the dialog below to generate a scatter plot that compares different
-            climate resilience metrics for the selected region(s) and the ecoregion as a whole."
-          ),
-          style="padding-left:15px; padding-right: 15px;"
+          if(isTRUE(pa)) {
+            h5("Use the dialog below to generate a scatter plot that compares different
+                climate resilience metrics for the selected protected area(s) and the biome as a whole."
+            )
+          } else{
+            h5("Use the dialog below to generate a scatter plot that compares different
+                climate resilience metrics for the selected watershed(s) and the ecoregion as a whole."
+            )
+          }
+          ,style="padding-left:15px; padding-right: 15px;"
         ),
         br(),
         if(isTRUE(live)){

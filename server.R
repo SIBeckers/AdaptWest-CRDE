@@ -1255,8 +1255,6 @@ function(input, output, session) {
                   highlightOptions=highlightOptions(
                     color="blue",weight=2.5)
                 )
-              # selectMultiPolysPAS(mapId = "paexpMap-map",calc=F,data = pas,
-              #                  idfield = "gridcode", addPolys = T, newId = "",nameField = "PA_NAME",group = "rpas")
               }
             })
           }

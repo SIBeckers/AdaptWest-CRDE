@@ -237,7 +237,7 @@ ui <- function(request) {
             title = "3. Required map inputs",
             content = list(
               fluidRow(h4("In order to view any plots or tables, or to generate a report, you must
-                          select an ecoregion on the map and then select a watershed."),
+                          select an ecoregion on the map and then select one or more watersheds."),
                        style="padding-left:15px; padding-right: 15px;")
             )
           ) %>%
@@ -399,7 +399,7 @@ ui <- function(request) {
             title = "3. Required map inputs",
             content = list(
               fluidRow(h4("In order to view any plots or tables, or to generate a report, you must
-                          select an protected area on the map.",
+                          select one or more protected areas on the map.",
                           style="padding-left:15px; padding-right: 15px;"))
             )
           ) %>%

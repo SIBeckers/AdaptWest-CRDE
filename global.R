@@ -146,7 +146,7 @@ appURL = "https://adaptwest.shinyapps.io/climate-resilience-data-explorer" #Wher
 # Global Map Settings ----
   minZoom = 0
   maxZoom = 9
-  zoomcuts <- c(17500,10000,7500,5000,1000, 100, 10, 1, 1,0)
+  zoomcuts <- c(17500, 10000, 7500, 5000, 1000, 100, 10, 1, 1, 0)
   
   
 # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
