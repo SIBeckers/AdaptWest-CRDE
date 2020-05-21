@@ -112,8 +112,6 @@ appURL = "https://adaptwest.shinyapps.io/climate-resilience-data-explorer" #Wher
   panames<-readRDS("./Data/panames.Rds")
   pas <- read_sf(pafile)
   pts <- read_sf(ptsfile)
-  pas <- pas[-c(pas$PA_NAME == "Wildlife Habitat Protection"),]
-  pts <- pts[-c(pts$PA_NAME == "Wildlife Habitat Protection"),]
   
   
 # Watersheds Data ----
