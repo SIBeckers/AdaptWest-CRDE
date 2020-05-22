@@ -13,7 +13,7 @@ Conservation planners and practitioners increasingly wonder how they should revi
 In this Climate Metrics Tour, we review eight key metrics that are used to assess landscape-level climate resilience and vulnerability. The subsequent portions of the Tour are devoted to explaining what each of these metrics represent and why they are relevant to climate adaptation planning. Spatial data shown in this Tour are freely available at the links below.
 
   
-  **Climate Resilience Metric:**
+  **Climate Resilience Metrics:**
   
   * [Climatic dissimilarity](https://adaptwest.databasin.org/pages/climatic-dissimilarity) 
   * [Forward and backward climatic velocity](https://adaptwest.databasin.org/pages/adaptwest-velocitywna)

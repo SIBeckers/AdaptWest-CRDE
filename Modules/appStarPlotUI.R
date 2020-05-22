@@ -14,16 +14,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -43,16 +43,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -71,16 +71,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -104,16 +104,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -133,16 +133,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
@@ -162,16 +162,16 @@ appStarPlotUI <- function(id, live = T,reset=T,all=T,height=600,pa=F) {
           br(),
           fluidRow(
             if(isTRUE(pa)){
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L3 ecoregion(s) of the selected protected area(s)."
               )
             } else {
-              h5("The starplot below integrates multiple climate exposure metrics for 
+              h5("The starplot below integrates multiple climate resilience metrics for 
                 an area of interest to produce a composite 'fingerprint'
                 representing factors affecting climate resilience, and contrasts between the intensity of different climate 
-                exposure stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
+                resilience stressors.", "The starplot is scaled relative to the maximum and minimum of the values found within the L1 ecoregion(s) of the selected watershed(s)."
               )
             }
             ,style="padding-left:15px; padding-right: 15px;"
