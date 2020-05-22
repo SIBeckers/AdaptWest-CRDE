@@ -45,14 +45,14 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
   })
   
   observe({
-      foo<-input$selPoly4Report
-      bar <- which(data[[namecol]]==foo)
-      bar<-data[bar,]
-      rm(foo)
-      names(bar)[which(names(bar)==namecol)]<-"Name"
-      names(bar)[which(names(bar)==idcol)]<-"ID"
-      ROIdata$roi<-bar
-      rm(bar)
+    foo<-input$selPoly4Report
+    bar <- which(data[[namecol]]==foo)
+    bar<-data[bar,]
+    rm(foo)
+    names(bar)[which(names(bar)==namecol)]<-"Name"
+    names(bar)[which(names(bar)==idcol)]<-"ID"
+    ROIdata$roi<-bar
+    rm(bar)
   })
   
   
@@ -83,7 +83,7 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       
       withProgress(message = "Generating report ...",{
         tempReport <- file.path(outputDir, "report_template.Rmd")
-        # file.copy("report_template.Rmd", tempReport, overwrite = TRUE)
+        file.copy("report_template.Rmd", tempReport, overwrite = TRUE)
         if(paramslist$html){
           if(file.exists(file.path(outputDir,"interactive_reports",
               paste0(outname,"_",ROIdata$roi$Name,".",
