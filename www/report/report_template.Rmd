@@ -68,16 +68,18 @@ if(!dir.exists("interactive_reports")){dir.create("interactive_reports")}
 if(!dir.exists("static_reports")){dir.create("static_reports")}
 bds <- st_bbox(params$poly)
 bds <- unname(bds)
-fullmap<-mapFunction()
+fullmap <- mapFunction()
+fullmapInter<-mapFunction(height="500px")
 halfmap<-mapFunction(width="50%")
 fullhalfmap<-mapFunction(height="400px")
+fullhalfmapInter<-mapFunction(height="500")
 cols<-colorNumeric(
   palette="RdYlBu",
   domain=c(0,100),
   reverse=F
 )
 polydata <-params$poly %>%st_drop_geometry() %>% select(Name,intact,elevdiv,fwvelref,bwvelref,brdref,treref,treec,soilc)
-
+eco<-ecos[which(ecos$ecoreg3 == params$poly$ecoreg3),]
 if(isTRUE(params$html)) {
   chunktype = "hold"
 } else {
@@ -141,8 +143,8 @@ In this report, we present data for `r paste(params$park)` on key metrics that c
 
 ```{r REFUGIA_TABLE, echo = params$printCode, results = 'asis',eval = params$table}
 if(isTRUE(params$l1data)) {
-  l1data<-ecol1stats[which(ecol1stats$Name==params$poly$ecoreg1),]
-  l1name<-eco1namekey[which(eco1namekey$ECO1VALUE ==params$poly$ecoreg1),2]
+  l1data<-ecol1stats[which(ecol1stats$Name == params$poly$ecoreg1[1]),]
+  l1name<-eco1namekey[which(eco1namekey$ECO1VALUE == params$poly$ecoreg1[1]),2]
   # l1data[,1]<-as.character(l1data[,1])
   l1data[1,1]<-"L1 Ecoregion"
   # names(l1data)[1]<-"Name"
@@ -153,8 +155,8 @@ if(isTRUE(params$l1data)) {
 }
 
 if(isTRUE(params$l2data)) {
-  l2data<-ecol2stats[which(ecol2stats$Name==params$poly$ecoreg2),]
-  l2name<-eco2namekey[which(eco2namekey$ECO2VALUE==params$poly$ecoreg2),2]
+  l2data<-ecol2stats[which(ecol2stats$Name == params$poly$ecoreg2[1]),]
+  l2name<-eco2namekey[which(eco2namekey$ECO2VALUE == params$poly$ecoreg2[1]),2]
   # l2data[[namecol]]<-as.character(l2data[,1])
   l2data[1,1]<-"L2 EcoRegion"
   # names(l2data)[1]<-"Name"
@@ -166,8 +168,8 @@ if(isTRUE(params$l2data)) {
 
 
 if(isTRUE(params$l3data)) {
-  l3data<-ecol3stats[which(ecol3stats$Name==params$poly$ecoreg3),]
-  l3name<-eco3namekey[which(eco3namekey$ECO3VALUE==params$poly$ecoreg3),2]
+  l3data<-ecol3stats[which(ecol3stats$Name == params$poly$ecoreg3[1]),]
+  l3name<-eco3namekey[which(eco3namekey$ECO3VALUE == params$poly$ecoreg3[1]),2]
   # l3data[,1]<-as.character(l3data[,1])
   l3data[1,1]<-"L3 EcoRegion"
   # names(l3data)[1]<-"Name"
@@ -297,7 +299,7 @@ if(isFALSE(params$html)){
         weight = 5,
         color = "black",
         stroke = T,
-        label= htmlEscape(paste0('Name: ',params$poly$Name))
+        label= ~~htmlEscape(paste0('Name: ',params$poly$Name))
       ) %>%
       addTiles(
         urlTemplate = tilelist$tileSubdir[ind],
@@ -338,8 +340,18 @@ if(isFALSE(params$html)){
     knitr::include_graphics(paste0(getwd(),"/imgs/fwsvel_",params$poly$ID,".png"),dpi=600)
   }
 } else {
-  m <- fullmap %>%
+  m <- fullmapInter %>%
     clearGroup("metrics") %>%
+    addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+    ) %>%
     addPolygons(
       data = params$poly,
       fillColor = NULL,
@@ -347,7 +359,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~~htmlEscape(paste0('Name: ',params$poly$Name)),
     ) %>%
     addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
@@ -374,7 +386,7 @@ if(isFALSE(params$html)){
     addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Forward Climate Refugia"),
+      overlayGroups = c("Place labels","Ecoregion","Forward Climate Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
     fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -426,7 +438,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% 
     addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
@@ -467,7 +479,17 @@ if(isFALSE(params$html)){
     knitr::include_graphics(paste0(getwd(),"/imgs/bwsvel_",params$poly$ID,".png"))
   }
 } else {
-  m <- fullmap %>% clearGroup("metrics") %>%
+  m <- fullmapInter %>% clearGroup("metrics") %>%
+  addPolygons(
+    data = eco,
+    fillColor = NULL,
+    fillOpacity = 0,
+    weight=5,
+    color = "blue",
+    stroke = T,
+    group = "Ecoregion",
+    label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
   addPolygons(
     data = params$poly,
     fillColor = NULL,
@@ -475,7 +497,7 @@ if(isFALSE(params$html)){
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -502,7 +524,7 @@ if(isFALSE(params$html)){
   addLayersControl(
     position = c("topleft"),
     baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-    overlayGroups = c("Place labels","Backward Climate Refugia"),
+    overlayGroups = c("Place labels","Ecoregion","Backward Climate Refugia"),
     options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -546,7 +568,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
       attribution = tilelist$tileAttribution[ind],
@@ -586,14 +608,25 @@ if(isFALSE(params$html)){
     knitr::include_graphics(paste0(getwd(),"/imgs/elevdiv_",params$poly$ID,".png"))
   }
 } else {
-  m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
+  m <- fullmapInter %>% clearGroup("metrics") %>% 
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
+  addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -620,7 +653,7 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Topographic Diversity"),
+      overlayGroups = c("Place labels","Ecoregion","Topographic Diversity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -687,7 +720,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
       attribution = tilelist$tileAttribution[ind],
@@ -731,7 +764,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind2],
       attribution = tilelist$tileAttribution[ind2],
@@ -771,14 +804,25 @@ if(isFALSE(params$html)){
     knitr::include_graphics(c(paste0(getwd(),"/imgs/birdref_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treeref_",params$poly$ID,".png")))
   }
 } else {
-  m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
+  m <- fullhalfmapInter %>% clearGroup("metrics") %>% 
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
+  addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -805,12 +849,22 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Bird Refugia"),
+      overlayGroups = c("Place labels","Ecoregion","Bird Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
-  m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  addPolygons(
+    data = eco,
+    fillColor = NULL,
+    fillOpacity = 0,
+    weight=5,
+    color = "blue",
+    stroke = T,
+    group = "Ecoregion",
+    label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
   addPolygons(
     data = params$poly,
     fillColor = NULL,
@@ -818,7 +872,7 @@ if(isFALSE(params$html)){
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind2],
@@ -845,7 +899,7 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Tree Refugia"),
+      overlayGroups = c("Place labels","Ecoregion","Tree Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -898,7 +952,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
       attribution = tilelist$tileAttribution[ind],
@@ -945,7 +999,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind2],
       attribution = tilelist$tileAttribution[ind2],
@@ -988,14 +1042,25 @@ if(isFALSE(params$html)){
     knitr::include_graphics(c(paste0(getwd(),"/imgs/fwshpath_",params$poly$ID,".png"),paste0(getwd(),"/imgs/bwshpath_",params$poly$ID,".png")))
   }
 } else {
-  m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
+  m <- fullhalfmapInter %>% clearGroup("metrics") %>%
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
+  addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -1025,12 +1090,22 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Forward Climate Connectivity"),
+      overlayGroups = c("Place labels","Ecoregion","Forward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
-  m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
   addPolygons(
     data = params$poly,
     fillColor = NULL,
@@ -1038,7 +1113,7 @@ if(isFALSE(params$html)){
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind2],
@@ -1068,7 +1143,7 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Backward Climate Connectivity"),
+      overlayGroups = c("Place labels","Ecoregion","Backward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -1118,7 +1193,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
       attribution = tilelist$tileAttribution[ind],
@@ -1162,7 +1237,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind2],
       attribution = tilelist$tileAttribution[ind2],
@@ -1202,14 +1277,25 @@ if(isFALSE(params$html)){
     knitr::include_graphics(c(paste0(getwd(),"/imgs/soilc_",params$poly$ID,".png"),paste0(getwd(),"/imgs/treec_",params$poly$ID,".png")))
   }
 } else {
-  m <- fullhalfmap %>% clearGroup("metrics") %>% addPolygons(
+  m <- fullhalfmapInter %>% clearGroup("metrics") %>%
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
+  addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -1236,12 +1322,22 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Soil Carbon Content"),
+      overlayGroups = c("Place labels","Ecoregion","Soil Carbon Content"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   
-  m2 <- fullhalfmap %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
   addPolygons(
     data = params$poly,
     fillColor = NULL,
@@ -1249,7 +1345,7 @@ if(isFALSE(params$html)){
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind2],
@@ -1276,7 +1372,7 @@ if(isFALSE(params$html)){
   addLayersControl(
     position = c("topleft"),
     baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-    overlayGroups = c("Place labels","Tree Carbon Content"),
+    overlayGroups = c("Place labels","Ecoregion","Tree Carbon Content"),
     options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
@@ -1328,7 +1424,7 @@ if(isFALSE(params$html)){
       weight = 5,
       color = "black",
       stroke = T,
-      label= htmlEscape(paste0('Name: ',params$poly$Name))
+      label= ~htmlEscape(paste0('Name: ',params$poly$Name))
     ) %>% addTiles(
       urlTemplate = tilelist$tileSubdir[ind],
       attribution = tilelist$tileAttribution[ind],
@@ -1368,14 +1464,25 @@ if(isFALSE(params$html)){
     knitr::include_graphics(paste0(getwd(),"/imgs/intact_",params$poly$ID,".png"))
   }
 } else {
-  m <- fullmap %>% clearGroup("metrics") %>% addPolygons(
+  m <- fullmapInter %>% clearGroup("metrics") %>% 
+  addPolygons(
+      data = eco,
+      fillColor = NULL,
+      fillOpacity = 0,
+      weight=5,
+      color = "blue",
+      stroke = T,
+      group = "Ecoregion",
+      label = ~htmlEscape(paste0("L3 Ecoregion: ",eco$NA_L3NAME))
+  ) %>%
+  addPolygons(
     data = params$poly,
     fillColor = NULL,
     fillOpacity = 0.00,
     weight = 5,
     color = "black",
     stroke = T,
-    label= htmlEscape(paste0('Name: ',params$poly$Name))
+    label= ~htmlEscape(paste0('Name: ',params$poly$Name))
   ) %>% 
   addTiles(
     urlTemplate = tilelist$tileSubdir[ind],
@@ -1402,9 +1509,9 @@ if(isFALSE(params$html)){
   addLayersControl(
       position = c("topleft"),
       baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
-      overlayGroups = c("Place labels","Intactness"),
+      overlayGroups = c("Place labels","Ecoregion","Intactness"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
-    ) %>%
+  ) %>%
   fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
   m
 }

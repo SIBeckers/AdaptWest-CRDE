@@ -1,4 +1,4 @@
-reportUI <- function(id) {
+reportUI <- function(id,pa=F) {
   ns <- NS(id)
   tagList(
     uiOutput(ns("selPolys")),

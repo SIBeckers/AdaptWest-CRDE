@@ -426,7 +426,7 @@ ui <- function(request) {
             title = "7. Generate a report", 
             content = 
               list(
-                reportUI('paReport')
+                reportUI('paReport',pa=T)
               )
           )
       )
