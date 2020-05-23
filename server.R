@@ -994,6 +994,11 @@ function(input, output, session) {
         output$paexpStarplotDiv <- NULL
         output$paexpXYplotdiv <- NULL
         output$patablediv<-NULL
+        proxy <- leafletProxy("paexpMap-map") %>% hideGroup("Place Labels") %>%
+          clearGroup("pas") %>%
+          clearGroup("rpas") %>%
+          setView(lng = -100, lat = 55, zoom = 3)
+        session$sendCustomMessage(type = "resetValue", message = "climexpMap-map_shape_click")
         mpclickObsPAs$destroy()
         mpcbObs$destroy()
         mpcaObs$destroy()
@@ -1007,7 +1012,7 @@ function(input, output, session) {
         
         proxy <- leafletProxy(mapId = mapId) %>% clearGroup("rpas") %>%addMapPane(name="rpas",zIndex=1000)
         if(isTRUE(calc)){
-          mpClickPAs <- mapclick#input[[paste0(mapId,"_shape_click")]]
+          mpClickPAs <- mapclick
           clickedIdsPAs$ids <- c(clickedIdsPAs$ids, mpClickPAs$id)
           multipolysPAs <- data[data[[idfield]] %in% clickedIdsPAs$ids,]
           multipolysPAs <- multipolysPAs[match(clickedIdsPAs$ids,multipolysPAs[[idfield]]),]

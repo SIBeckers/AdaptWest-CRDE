@@ -36,10 +36,11 @@ appURL = "https://adaptwest.shinyapps.io/climate-resilience-data-explorer" #Wher
 
   #Map Stuff
   library(leaflet)
+  library(mapview)
   library(leafem)
   library(leaflet.extras)
   library(sf)
-  library(mapview)
+  
 
   #Markdown Stuff
   library(markdown)
