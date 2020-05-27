@@ -96,19 +96,22 @@ web-application at <center><h4>
 [https://adaptwest.databasin.org/pages/climate-resilience-data-explorer](https://adaptwest.databasin.org/pages/climate-resilience-data-explorer) </h4></center>
 Additional features and capabilities may be developed and the format of this report and the application layout may change in the future.
 
+#### Cite this app and report as: 
+
+<blockquote>Beckers J, Carroll C. 2020. AdaptWest climate resilience data explorer. doi: [10.5281/zenodo.3824538](https://doi.org/10.5281/zenodo.3824538]).</blockquote>
+
 #### App development was supported by:
 * [AdaptWest](http://adaptwest.databasin.org) (with support from the [Wilburforce Foundation](http://www.wilburforce.org/)) and
 * [Canadian Forest Service of Natural Resources Canada](https://www.nrcan.gc.ca/our-natural-resources/forests-forestry/13497).
 
-```{r logos, echo=F, results = chunktype,out.height="2.2cm", fig.align = 'default',eval = isTRUE(params$fmt %in% c("word_document"))}
-knitr::include_graphics(path=c("wilburforcelogo_report.png","canada-2c-nrcan-cfs-curves_report.png"),dpi = 600)
+```{r logos, echo=F, results = chunktype, out.height="2.2cm",eval = isTRUE(params$fmt %in% c("word_document"))}
+knitr::include_graphics("reportLogos_wd.png",dpi = 600)
+```
+```{r logospdf ,echo =F , results= chunktype, fig.align="center",eval = ,eval = isTRUE(params$fmt %in% c("pdf_document"))}
+knitr::include_graphics("reportLogos.png",dpi = 600)
 ```
 
-`r if(isTRUE(params$html) | params$fmt %in% c('html_document','pdf_document')){"<center>![](wilburforcelogo_report.png){width=44.81%}&nbsp;![](canada-2c-nrcan-cfs-curves_report.png){width=30.6%}</center>"}`
-
-#### Cite this app and report as: 
-
-<blockquote>Beckers J, Carroll C. 2020. AdaptWest climate resilience data explorer. doi: [10.5281/zenodo.3824538](https://doi.org/10.5281/zenodo.3824538]).</blockquote>
+`r if(isTRUE(params$html) | params$fmt %in% c('html_document')){"<center>![](reportLogos.png){width=75.41%}</center>"}`
 ```{r, results = 'asis', echo = F}
 if (params$fmt == "word_document") {
   cat('#####')
