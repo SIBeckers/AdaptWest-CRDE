@@ -29,7 +29,7 @@ ddownBttnUI <- function(id,poly=T){
             min = 0,
             max = 1.0,
             value = 0.85
-          ) #%>%debounce(1000)
+          )
         }
         ,bookmarkButton(
           label = "Bookmark App",

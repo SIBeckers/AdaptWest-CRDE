@@ -17,6 +17,10 @@ function(input, output, session) {
     shinyjs::click("climexpacc-0-heading") # Close the about section initially
     callModule(map, "climexpMap",OSM=F) # Climate Metrics Explorer Map server logic
     callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
+    shiny::updateSliderInput(session,inputId = "climexpMapBttn-polyopacity",label = "Polygon Fill Opacity",
+                             min = 0,
+                             max = 1.0,
+                             value = 0.86)
   },once = T)
   
   #B.  Tab Logic ----- 
@@ -431,7 +435,10 @@ function(input, output, session) {
       callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
       proxy <- leafletProxy("climexpMap-map") # Represents the map so that we can make changes to it
       proxy %>% addMapPane(name = "swds", zIndex=1000)
-      shinyjs::reset("climexpMapBttn-polyopacity")
+      shiny::updateSliderInput(session,inputId = "climexpMapBttn-polyopacity",label = "Polygon Fill Opacity",
+                               min = 0,
+                               max = 1.0,
+                               value = 0.9)
       polygroup("ecoregions")
       #4b) Add tiles to map ----
       tobs<-observe({
