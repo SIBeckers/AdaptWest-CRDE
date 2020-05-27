@@ -431,6 +431,7 @@ function(input, output, session) {
       callModule(ddownBttn,"climexpMapBttn") #Drop Down Menu Button Server logic 
       proxy <- leafletProxy("climexpMap-map") # Represents the map so that we can make changes to it
       proxy %>% addMapPane(name = "swds", zIndex=1000)
+      shinyjs::reset("climexpMapBttn-polyopacity")
       polygroup("ecoregions")
       #4b) Add tiles to map ----
       tobs<-observe({
