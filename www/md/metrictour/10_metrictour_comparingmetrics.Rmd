@@ -18,7 +18,7 @@ A star plot provides a compact way to communicate contrasts between the intensit
 The figure below compares starplot patterns for 9 major protected area complexes within the Yellowstone-to-Yukon (Y2Y) region. The contrast in starplot patterns between southern (e.g., Yellowstone) and northern (e.g., Nahanni) protected areas within Y2Y reflects the long-noted dichotomy between centers of species diversity (hotspots) and wild landscapes (coldspots). Northern protected areas within Y2Y score highly in intactness and protection of soil carbon, whereas southerly protected areas play a greater role in providing macrorefugia as defined by both species models and climatic velocity.
 For more information on patterns of climate resilience within North American protected areas, see this app's **Protected Area Tour** tab. To view and compare maps of climate resilience metrics, see this app's **Climate Resilience Metrics Explorer** tab.
 
-This is the end of the climate resilience metrics tour. Please return to the [Home page](http://cwfis.shinyapps.io/dev_AdaptWest/?_inputs_&tabs="homeTab") or select one of the other tabs in the navigation menu on the top of the page.
+This is the end of the climate resilience metrics tour. Please return to the [Home page](http://adaptwest.shinyapps.io/climate-resilience-data-explorer/?_inputs_&tabs="homeTab") or select one of the other tabs in the navigation menu on the top of the page.
 ```{r, out.width = "100%",fig.align="center",echo=FALSE}
 knitr::include_graphics("../img/parks9forviewer.jpg",dpi=NA)
 ```
