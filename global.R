@@ -11,7 +11,9 @@
 #Detect if we are on shinyapps.io linux machine or a local machine
 if(Sys.info()[['sysname']] == 'Linux'){
   reportStatsStatus = T  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
-  webshot::install_phantomjs() #Needed for ShinyApps.io instance but not to run locally.
+  if(is.null(suppressMessages(webshot:::find_phantom())) | isFALSE(webshot::is_phantomjs_installed())){
+    webshot::install_phantomjs()
+  } #Needed for ShinyApps.io instance but not to run locally.
 } else {
   reportStatsStatus = F  #Keep track of stats globally (T) (e.g. from Dropbox) or locally (F)
 }
