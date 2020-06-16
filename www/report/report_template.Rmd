@@ -22,6 +22,7 @@ params:
   fmt: "" #The report format
   pa: FALSE #Let me know if we are generating a report for a PA or not.
   appURL: ""
+  baseMap: "" #The basemap to show.
 always_allow_html: true 
 header-includes:
 output:
@@ -69,11 +70,11 @@ if(!dir.exists("interactive_reports")){dir.create("interactive_reports")}
 if(!dir.exists("static_reports")){dir.create("static_reports")}
 bds <- st_bbox(params$poly)
 bds <- unname(bds)
-fullmap <- mapFunction()
-fullmapInter<-mapFunction(height="500px")
-halfmap<-mapFunction(width="50%")
-fullhalfmap<-mapFunction(height="400px")
-fullhalfmapInter<-mapFunction(height="500")
+fullmap <- mapFunction(baseMap = params$baseMap)
+fullmapInter<-mapFunction(height="500px",baseMap = params$baseMap)
+halfmap<-mapFunction(width="50%",baseMap = params$baseMap)
+fullhalfmap<-mapFunction(height="400px",baseMap = params$baseMap)
+fullhalfmapInter<-mapFunction(height="500",baseMap = params$baseMap)
 cols<-colorNumeric(
   palette="RdYlBu",
   domain=c(0,100),
@@ -337,11 +338,11 @@ if(isFALSE(params$html)){
       ) %>%
       addLayersControl(
         position = c("topleft"),
-        baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+        baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
         overlayGroups = c("Place labels","Forward Climate Refugia"),
         options = layersControlOptions(collapsed = T, autoZIndex = F)
       ) %>%
-      fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+      showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
       mapview::mapshot(
         x= m,
         url = paste0(getwd(),"/tmp/fwsvel_",params$poly$ID,".html"),
@@ -397,11 +398,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Forward Climate Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4]) %>%
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4]) %>%
     addFullscreenControl(position="topright")
   m
 }
@@ -477,11 +478,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Backward Climate Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/bwsvel_",params$poly$ID,".html"),
@@ -536,11 +537,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
     position = c("topleft"),
-    baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+    baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
     overlayGroups = c("Place labels","Ecoregion","Backward Climate Refugia"),
     options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   m
 }
@@ -607,11 +608,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Topographic Diversity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/elevdiv_",params$poly$ID,".html"),
@@ -666,11 +667,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Topographic Diversity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   m
 }
@@ -763,11 +764,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Bird Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/birdref_",params$poly$ID,".html"),
@@ -807,11 +808,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Tree Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/treeref_",params$poly$ID,".html"),
@@ -866,11 +867,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Bird Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   
   m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -917,11 +918,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Tree Refugia"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   p(m,m2)
 }
@@ -1003,11 +1004,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Forward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/fwshpath_",params$poly$ID,".html"),
@@ -1050,11 +1051,11 @@ if(isFALSE(params$html)){
     ) %>% 
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Backward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/bwshpath_",params$poly$ID,".html"),
@@ -1112,11 +1113,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Forward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   
   m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -1166,11 +1167,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Backward Climate Connectivity"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   p(m,m2)
 }
@@ -1243,11 +1244,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Soil Carbon Content"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/soilc_",params$poly$ID,".html"),
@@ -1287,11 +1288,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Tree Carbon Content"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/treec_",params$poly$ID,".html"),
@@ -1346,11 +1347,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Soil Carbon Content"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   
   m2 <- fullhalfmapInter %>% clearGroup("metrics")%>% clearGroup("metrics") %>%
@@ -1397,11 +1398,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
     position = c("topleft"),
-    baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+    baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
     overlayGroups = c("Place labels","Ecoregion","Tree Carbon Content"),
     options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   p(m,m2)
 }
@@ -1476,11 +1477,11 @@ if(isFALSE(params$html)){
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Intactness"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
-    fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
+    showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])
     mapview::mapshot(
       x= m,
       url = paste0(getwd(),"/tmp/intact_",params$poly$ID,".html"),
@@ -1535,11 +1536,11 @@ if(isFALSE(params$html)){
   ) %>%
   addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels","Ecoregion","Intactness"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
   ) %>%
-  fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
+  showGroup(params$baseMap) %>% fitBounds(lng1 = bds[1],lat1 = bds[2],lng2 = bds[3],lat2 = bds[4])%>%
   addFullscreenControl(position="topright")
   m
 }

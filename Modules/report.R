@@ -73,6 +73,8 @@ report<- function(input, output, session,pa=T,polys=NULL,polys2=NULL,data,nameco
       paramslist$data2 = data
       paramslist$pa  = pa
       paramslist$appURL = appURL
+      paramslist$baseMap = input$mapBase #setdiff(choices,input$mapBase)
+      
       if(!(rpfm=="html_document")){paramslist$html<-FALSE}
       if(isTRUE(pa)){paramslist$poly$ID<-paste0("pa",paramslist$poly$ID)}
       mydownloads<<-rbindlist(

@@ -36,6 +36,22 @@ reportUI <- function(id,pa=F) {
       )
     ),
     br(),
+    div(style="display:inline-block",
+      prettyRadioButtons(
+        inputId = ns("mapBase"),
+        label = "Select basemap for maps",
+        choices = c("ESRI Relief","ESRI Terrain","ESRI Streets"="ESRI Street Map","Stamen Streets"="Stamen Street Map"),
+        inline = T,
+        selected = "Stamen Street Map",
+        status = "success",
+        shape = "round",
+        icon = icon("check"),
+        bigger = T,
+        animation="pulse",
+        width="100%"
+      )
+    ),
+    br(),
     div(style="text-align: center",
         downloadBttn(
         outputId=ns("reportBttn"),

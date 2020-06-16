@@ -1,7 +1,7 @@
 mapFunction<-function(opacity=0.75,
                       OSM=F,
                       width=NULL,
-                      height=NULL) {
+                      height=NULL,baseMap="Esri Relief") {
   m <- leaflet(width=width,height=height,
     options = leafletOptions(
       minZoom = minZoom,
@@ -46,8 +46,19 @@ mapFunction<-function(opacity=0.75,
     ) %>%
     addProviderTiles(
       provider = "Stamen.TonerLite",
-      group="Street Map",
-      layerId="Stamen Toner",
+      group="Stamen Street Map",
+      layerId="StamenStreetMap",
+      options = tileOptions(
+        zIndex = 0,
+        minZoom = minZoom,
+        maxZoom = maxZoom,
+        opacity = 1
+      )
+    ) %>%
+    addProviderTiles(
+      provider = "Esri.WorldStreetMap",
+      group = "ESRI Street Map",
+      layerId = "ESRIStreetMap",
       options = tileOptions(
         zIndex = 0,
         minZoom = minZoom,
@@ -69,11 +80,12 @@ mapFunction<-function(opacity=0.75,
     ) %>%
     addLayersControl(
       position = c("topleft"),
-      baseGroups = c("ESRI Relief","ESRI Terrain","Street Map"),
+      baseGroups = c("ESRI Relief","ESRI Terrain","ESRI Street Map","Stamen Street Map"),
       overlayGroups = c("Place labels"),
       options = layersControlOptions(collapsed = T, autoZIndex = F)
     ) %>%
     hideGroup("ESRI Imagery") %>% 
+    showGroup(baseMap) %>%
     addMiniMap(
       minimized = F,
       toggleDisplay = T,

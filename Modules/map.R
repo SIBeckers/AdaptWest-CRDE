@@ -53,6 +53,28 @@ map <- function(input, output, session, swipe = F,
           opacity = 0.8
         )
       ) %>%
+      addProviderTiles(
+        provider = "Stamen.TonerLite",
+        group = "Stamen Street Map",
+        layerId = "StamenStreetMap",
+        options = tileOptions(
+          zIndex = 0,
+          minZoom = minZoom,
+          maxZoom = maxZoom,
+          opacity = 1
+        )
+      ) %>%
+      addProviderTiles(
+        provider = "Esri.WorldStreetMap",
+        group = "ESRI Street Map",
+        layerId = "ESRIStreetMap",
+        options = tileOptions(
+          zIndex = 0,
+          minZoom = minZoom,
+          maxZoom = maxZoom,
+          opacity = 1
+        )
+      ) %>%
       addMouseCoordinates() %>%
       addEasyButton(
         easyButton(
@@ -68,7 +90,7 @@ map <- function(input, output, session, swipe = F,
       ) %>%
       addLayersControl(
         position = c("topleft"),
-        baseGroups = c("ESRI Relief","ESRI Terrain"),
+        baseGroups = c("ESRI Relief","ESRI Terrain", "ESRI Street Map", "Stamen Street Map"),
         overlayGroups = c("Place labels"),
         options = layersControlOptions(collapsed = T, autoZIndex = F)
       ) %>%
@@ -156,6 +178,28 @@ map <- function(input, output, session, swipe = F,
           opacity = 0.8
         )
       ) %>%
+      addProviderTiles(
+        provider = "Stamen.TonerLite",
+        group = "Stamen Street Map",
+        layerId = "StamenStreetMap",
+        options = tileOptions(
+          zIndex = 0,
+          minZoom = minZoom,
+          maxZoom = maxZoom,
+          opacity = 1
+        )
+      ) %>%
+      addProviderTiles(
+        provider = "Esri.WorldStreetMap",
+        group = "ESRI Street Map",
+        layerId = "ESRIStreetMap",
+        options = tileOptions(
+          zIndex = 0,
+          minZoom = minZoom,
+          maxZoom = maxZoom,
+          opacity = 1
+        )
+      ) %>%
       addMouseCoordinates() %>%
       addEasyButton(
         easyButton(id = "global",
@@ -168,12 +212,12 @@ map <- function(input, output, session, swipe = F,
         position = c("bottomleft"),
         options = scaleBarOptions(maxWidth = 250, imperial = T)
       ) %>%
-      addLayersControl(
-        position = c("topleft"),
-        baseGroups = c("ESRI Relief","ESRI Terrain"),
-        overlayGroups = c("Place labels"),
-        options = layersControlOptions(collapsed = T, autoZIndex = F)
-      ) %>%
+        addLayersControl(
+          position = c("topleft"),
+          baseGroups = c("ESRI Relief","ESRI Terrain", "ESRI Street Map", "Stamen Street Map"),
+          overlayGroups = c("Place labels"),
+          options = layersControlOptions(collapsed = T, autoZIndex = F)
+        ) %>%
       hideGroup("ESRI Imagery") %>% 
       addMiniMap(
         minimized = T,
