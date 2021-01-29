@@ -154,7 +154,7 @@ appURL = "https://adaptwest.shinyapps.io/climate-resilience-data-explorer" #Wher
   
   
 # Tile info for online tiles: COMMENT OUT FOR LOCAL TILES----
-  tiledir <- "http://www.cacpd.org.s3-website-us-west-2.amazonaws.com/tiledirectory" #FOR ONLINE TILES
+  tiledir <-"http://www.cacpd.org.s3-us-west-2.amazonaws.com/tiledirectory" #online tile locations
   tilelist <- fread("./config_files/tilelist.txt") #Replaces above two lines.
   tilelist$tileSubdir <- file.path(tiledir, tilelist$tileSubdir) #FOR ONLINE TILES
   tilevect <- tilelist$tileName
