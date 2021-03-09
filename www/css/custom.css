@@ -240,6 +240,13 @@ a.btn:hover, a.btn:focus, a.btn.focus {
   max-height: calc(100vh - 115px);
 }
 
+
+.info > div:nth-child(5){
+  position: relative;
+  left: 20px;
+}
+
+
 #climexpMain{
   height: calc(100vh - 80px);
 }
@@ -330,6 +337,11 @@ a.btn:hover, a.btn:focus, a.btn.focus {
 #patable{
   table-layout: fixed;
   width: 100%;
+}
+
+.info > div:nth-child(5){
+  position: relative;
+  left: 20px;
 }
 
 #paexpSide {

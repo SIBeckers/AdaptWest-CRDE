@@ -572,13 +572,14 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=c(0,100),
+              alpha=T,
               reverse=F
             )
             proxy %>%
               clearGroup("ecoregions") %>% clearGroup("wds") %>%
               addPolygons(
                 data=ecos,
-                fillColor = ~cols(rescale(na.omit(ecos[[var]]),to=c(100,0))),
+                fillColor = ~cols(rescale(ecos[[var]],to=c(100,0))),
                 stroke = T,
                 weight=1,
                 color="white",
@@ -592,13 +593,13 @@ function(input, output, session) {
               addLegend(
                 position = "bottomright",
                 pal=cols,
-                values=rescale(na.omit(ecos[[var]]),to=c(100,0)),
+                values=rescale(ecos[[var]],to=c(100,0)),
                 title = paste0("Legend:Polygon Fill<br>",nam),
                 opacity = input$"climexpMapBttn-polyopacity",
                 layerId = "climexpPolyLegend",
                 group = "wds",
                 className= "info legend polyLegend",
-                labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(na.omit(ecos[[var]])))), decreasing = T))
+                labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(ecos[[var]],na.rm=T))), decreasing = T))
               )
           } else if(pgroup == "ecoregions" & input$climFillPolys == ""){
             proxy %>%
@@ -642,6 +643,7 @@ function(input, output, session) {
             cols<-colorNumeric(
               palette="RdYlBu",
               domain=c(0,100),
+              alpha=T,
               reverse=F
             )
             proxy %>%
@@ -649,7 +651,7 @@ function(input, output, session) {
               clearGroup("wds") %>%
               addPolygons(
                 data = data,
-                fillColor = ~cols(rescale(na.omit(data[[var]]),to=c(100,0))),
+                fillColor = ~cols(rescale(data[[var]],to=c(100,0))),
                 fillOpacity=input$"climexpMapBttn-polyopacity",
                 weight = 1,
                 color = "white",
@@ -669,7 +671,7 @@ function(input, output, session) {
                 layerId = "climexpPolyLegend",
                 group = "wds",
                 className= "info legend polyLegend",
-                labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(na.omit(data[[var]])))), decreasing = T))
+                labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(data[[var]],na.rm=T))), decreasing = T))
               )
           } 
         })
@@ -1223,13 +1225,14 @@ function(input, output, session) {
               cols<-colorNumeric(
                 palette="RdYlBu",
                 domain=c(0,100),
+                alpha=T,
                 reverse=F
               )
               proxy %>%
                 clearGroup("pas") %>%
                 addPolygons(
                   data = rps,
-                  fillColor = ~cols(rescale(na.omit(rps[[var]]),to=c(100,0))),
+                  fillColor = ~cols(rescale(rps[[var]],to=c(100,0))),
                   fillOpacity = input$"paexpMapBttn-polyopacity",
                   weight = 1,
                   stroke = T,
@@ -1243,16 +1246,14 @@ function(input, output, session) {
                 addLegend(
                   position = "bottomright",
                   pal=cols,
-                  values=rescale(na.omit(rps[[var]]),to=c(100,0)),
+                  values=rescale(rps[[var]],to=c(100,0)),
                   title = paste0("Legend:Polygon Fill<br>",nam),
                   opacity = input$"paexpMapBttn-polyopacity",
                   layerId = "paexpPolyLegend",
                   # group = "wds",
                   className= "info legend polyLegend",
-                  labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(na.omit(rps[[var]])))), decreasing = T))
+                  labFormat = labelFormat(transform = function(x) sort(pretty(rescale(x,to=range(rps[[var]],na.rm=T))), decreasing = T))
                 )
-              # selectMultiPolysPAS(mapId = "paexpMap-map",calc=F,data = pas,
-              #                  idfield = "gridcode", addPolys = T, newId = "",nameField = "PA_NAME",group = "rpas")
             } else {
               proxy %>%
                 clearGroup("pas") %>%
